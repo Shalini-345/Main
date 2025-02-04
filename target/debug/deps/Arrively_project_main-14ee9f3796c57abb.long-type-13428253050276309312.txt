@@ -1,0 +1,1 @@
+fn(actix_web::web::Json<NewUserForm>, Data<Arc<{type error}, {type error}>>) -> impl futures_lite::Future<Output = impl Responder> {login_user}
