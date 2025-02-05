@@ -1,16 +1,16 @@
-use diesel::r2d2::{self, ConnectionManager};
-use diesel::PgConnection;
+use sea_orm::{DatabaseConnection, DbErr};
 use std::env;
 use dotenv::dotenv;
 
-pub(crate) type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
-
-pub fn establish_connection_pool() -> Pool {
+pub async fn establish_connection_pool() -> Result<DatabaseConnection, DbErr> {
     dotenv().ok();
+
+    // Load DATABASE_URL from .env file
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set in .env file");
-    let manager = ConnectionManager::<PgConnection>::new(database_url);
-    r2d2::Pool::builder()
-        .build(manager)
-        .expect("Failed to create pool.")
+
+    println!("Connecting to database: {}", database_url); // Debugging output
+
+    // Establish the database connection using sea_orm
+    sea_orm::Database::connect(&database_url).await
 }
