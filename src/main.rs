@@ -2,7 +2,7 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder, post};
 use sea_orm::{ActiveModelTrait, EntityTrait, DatabaseConnection, QueryFilter, ColumnTrait};
 use bcrypt::{hash, verify};
 use std::sync::Arc;
-use log::{info, error}; // Add log imports
+use log::{info, error};
 
 mod db;
 mod entities {
@@ -74,6 +74,9 @@ async fn login_user(
 async fn main() -> std::io::Result<()> {
     env_logger::init(); // Initialize logging
 
+    // Log the start of main function
+    info!("Starting application...");
+
     // Try to establish the database connection pool using sea_orm
     let pool = match db::establish_connection_pool().await {
         Ok(pool) => pool,
@@ -83,6 +86,10 @@ async fn main() -> std::io::Result<()> {
         }
     };
 
+    // Log after database connection is established
+    info!("Database connection established successfully!");
+
+    // Log server start
     info!("Starting server on 0.0.0.0:8080");
 
     HttpServer::new(move || {
