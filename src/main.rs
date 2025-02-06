@@ -1,8 +1,9 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder, post};
+use actix_web::{web, App, HttpResponse, HttpServer, post, ResponseError};
 use sea_orm::{ActiveModelTrait, EntityTrait, DatabaseConnection, QueryFilter, ColumnTrait};
 use bcrypt::{hash, verify};
 use std::sync::Arc;
 use log::{info, error};
+use std::fmt;
 
 mod db;
 mod entities {
@@ -24,15 +25,36 @@ pub struct NewUserForm {
     pub email: String,
 }
 
+// Custom Error Type for HttpResponse
+#[derive(Debug)]
+pub struct AppError {
+    pub message: String,
+}
+
+impl fmt::Display for AppError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+
+impl ResponseError for AppError {
+    fn error_response(&self) -> HttpResponse {
+        HttpResponse::InternalServerError().body(self.message.clone())
+    }
+}
+
 #[post("/users/register")]
 async fn register_user(
     new_user: web::Json<NewUserForm>,
     pool: web::Data<Arc<DatabaseConnection>>,
-) -> impl Responder {
-    info!("Received user registration request: {:?}", new_user);
+) -> Result<HttpResponse, actix_web::Error> {
+    info!("Received user registration request for username: {}", new_user.username);
 
     let db = pool.get_ref();
-    let hashed_password = hash(new_user.password.clone(), 4).unwrap();
+    let hashed_password = hash(new_user.password.clone(), 4)
+        .map_err(|_| AppError {
+            message: "Password hashing failed".to_string(),
+        })?;
 
     let new_user_active_model = entities::userentity::ActiveModel {
         username: sea_orm::ActiveValue::Set(new_user.username.clone()),
@@ -45,12 +67,15 @@ async fn register_user(
         .filter(entities::userentity::Column::Username.eq(&new_user.username))
         .one(db.as_ref()).await
     {
-        Ok(Some(_)) => HttpResponse::Ok().body("User already exists"),
+        Ok(Some(_)) => Ok(HttpResponse::BadRequest().body("User already exists")),
         Ok(None) => {
-            new_user_active_model.insert(db.as_ref()).await.unwrap();
-            HttpResponse::Ok().body("User registered successfully")
+            new_user_active_model.insert(db.as_ref()).await
+                .map_err(|_| AppError {
+                    message: "Error registering user".to_string(),
+                })?;
+            Ok(HttpResponse::Created().body("User registered successfully"))
         }
-        Err(_) => HttpResponse::InternalServerError().body("Error"),
+        Err(_) => Ok(HttpResponse::InternalServerError().body("Database error")),
     }
 }
 
@@ -58,7 +83,7 @@ async fn register_user(
 async fn login_user(
     login_data: web::Json<NewUserForm>,
     pool: web::Data<Arc<DatabaseConnection>>,
-) -> impl Responder {
+) -> Result<HttpResponse, actix_web::Error> {
     info!("Received login request for username: {}", login_data.username);
 
     let db = pool.get_ref();
@@ -68,9 +93,9 @@ async fn login_user(
         .one(db.as_ref()).await
     {
         Ok(Some(user)) if verify(&login_data.password, &user.password_hash).unwrap() => {
-            HttpResponse::Ok().body("Login successful")
+            Ok(HttpResponse::Ok().body("Login successful"))
         }
-        _ => HttpResponse::Unauthorized().body("Invalid credentials"),
+        _ => Ok(HttpResponse::Unauthorized().body("Invalid credentials")),
     }
 }
 
