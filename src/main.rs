@@ -10,7 +10,7 @@ mod entities {
     // other entities
 }
 
-#[derive(serde::Deserialize, serde::Serialize,Debug)]
+#[derive(serde::Deserialize, serde::Serialize, Debug)] // Added Debug for logging
 pub struct NewUserForm {
     pub username: String,
     pub password: String,
@@ -73,7 +73,6 @@ async fn main() -> std::io::Result<()> {
 
     info!("Starting application...");
 
-    // Try to establish the database connection pool using sea_orm
     let pool = match db::establish_connection_pool().await {
         Ok(pool) => pool,
         Err(e) => {
