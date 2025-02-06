@@ -25,7 +25,6 @@ pub struct NewUserForm {
     pub email: String,
 }
 
-// Custom Error Type for HttpResponse
 #[derive(Debug)]
 pub struct AppError {
     pub message: String,
@@ -65,7 +64,7 @@ async fn register_user(
         ..Default::default()
     };
 
-    // Checking if user already exists
+    
     info!("Checking if user with username {} already exists...", new_user.username);
     match entities::userentity::Entity::find()
         .filter(entities::userentity::Column::Username.eq(&new_user.username))
@@ -76,7 +75,7 @@ async fn register_user(
             Ok(HttpResponse::BadRequest().body("User already exists"))
         }
         Ok(None) => {
-            // Inserting the new user into the database
+            
             info!("Inserting new user into the database...");
             new_user_active_model.insert(db.as_ref()).await
                 .map_err(|_| AppError {
@@ -100,7 +99,6 @@ async fn login_user(
 
     let db = pool.get_ref();
 
-    // Checking if user exists in the database
     info!("Checking if user with username {} exists in the database...", login_data.username);
     match entities::userentity::Entity::find()
         .filter(entities::userentity::Column::Username.eq(&login_data.username))
@@ -119,7 +117,7 @@ async fn login_user(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    env_logger::init(); // Initialize logging
+    env_logger::init(); 
 
     info!("Starting application...");
 
@@ -133,6 +131,7 @@ async fn main() -> std::io::Result<()> {
 
     info!("Database connection established successfully!");
 
+   
     info!("Starting Actix server on 0.0.0.0:8080");
 
     HttpServer::new(move || {
@@ -141,9 +140,9 @@ async fn main() -> std::io::Result<()> {
             .service(register_user)
             .service(login_user)
     })
-    .bind("0.0.0.0:8080")?
-    .run()
-    .await?;
+    .bind("0.0.0.0:8080")?  
+    .run()                    
+    .await?;                   
 
     info!("Server is running at http://0.0.0.0:8080");
 
