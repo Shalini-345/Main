@@ -4,18 +4,16 @@ use dotenv::dotenv;
 use tokio::time::{timeout, Duration};
 
 pub async fn establish_connection_pool() -> Result<DatabaseConnection, DbErr> {
-    dotenv().ok(); // Load environment variables from .env file
+    dotenv().ok(); 
 
-    // Get database URL or exit if it's not set
     let database_url = env::var("DATABASE_URL").unwrap_or_else(|_| {
         eprintln!("❌ DATABASE_URL must be set in the .env file");
         std::process::exit(1);
     });
 
-    println!("🔄 Connecting to database at: {}", database_url); // Debug output
+    println!("🔄 Connecting to database at: {}", database_url); 
     println!("⚡ Attempting database connection...");
-    
-    // Add a 5-second timeout to prevent hanging
+
     let db_result = timeout(Duration::from_secs(5), Database::connect(&database_url)).await;
 
     match db_result {
@@ -29,7 +27,7 @@ pub async fn establish_connection_pool() -> Result<DatabaseConnection, DbErr> {
         }
         Err(_) => {
             eprintln!("⏳ Database connection timed out after 5 seconds!");
-            Err(DbErr::Conn(RuntimeErr::Internal("Database connection timed out".to_string()))) // ✅ FIXED
+            Err(DbErr::Conn(RuntimeErr::Internal("Database connection timed out".to_string())))
         }
     }
 }
