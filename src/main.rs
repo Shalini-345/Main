@@ -51,6 +51,8 @@ async fn register_user(
     info!("Received user registration request for username: {}", new_user.username);
 
     let db = pool.get_ref();
+
+    info!("Hashing password for new user...");
     let hashed_password = hash(new_user.password.clone(), 4)
         .map_err(|_| AppError {
             message: "Password hashing failed".to_string(),
@@ -63,19 +65,29 @@ async fn register_user(
         ..Default::default()
     };
 
+    // Checking if user already exists
+    info!("Checking if user with username {} already exists...", new_user.username);
     match entities::userentity::Entity::find()
         .filter(entities::userentity::Column::Username.eq(&new_user.username))
         .one(db.as_ref()).await
     {
-        Ok(Some(_)) => Ok(HttpResponse::BadRequest().body("User already exists")),
+        Ok(Some(_)) => {
+            info!("User with username {} already exists.", new_user.username);
+            Ok(HttpResponse::BadRequest().body("User already exists"))
+        }
         Ok(None) => {
+            // Inserting the new user into the database
+            info!("Inserting new user into the database...");
             new_user_active_model.insert(db.as_ref()).await
                 .map_err(|_| AppError {
                     message: "Error registering user".to_string(),
                 })?;
             Ok(HttpResponse::Created().body("User registered successfully"))
         }
-        Err(_) => Ok(HttpResponse::InternalServerError().body("Database error")),
+        Err(_) => {
+            error!("Database error occurred while checking for existing user.");
+            Ok(HttpResponse::InternalServerError().body("Database error"))
+        }
     }
 }
 
@@ -88,14 +100,20 @@ async fn login_user(
 
     let db = pool.get_ref();
 
+    // Checking if user exists in the database
+    info!("Checking if user with username {} exists in the database...", login_data.username);
     match entities::userentity::Entity::find()
         .filter(entities::userentity::Column::Username.eq(&login_data.username))
         .one(db.as_ref()).await
     {
         Ok(Some(user)) if verify(&login_data.password, &user.password_hash).unwrap() => {
+            info!("Login successful for user: {}", login_data.username);
             Ok(HttpResponse::Ok().body("Login successful"))
         }
-        _ => Ok(HttpResponse::Unauthorized().body("Invalid credentials")),
+        _ => {
+            info!("Login failed for user: {}", login_data.username);
+            Ok(HttpResponse::Unauthorized().body("Invalid credentials"))
+        }
     }
 }
 
