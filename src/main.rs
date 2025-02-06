@@ -7,17 +7,10 @@ use log::{info, error};
 mod db;
 mod entities {
     pub mod userentity;
-    pub mod rideentity;
-    pub mod driverentity;
-    pub mod faviorate;
-    pub mod helpsupport;
-    pub mod payment;
-    pub mod recentlocation;
-    pub mod settings;
-    pub mod vehicleentity;
+    // other entities
 }
 
-#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(serde::Deserialize, serde::Serialize,Debug)]
 pub struct NewUserForm {
     pub username: String,
     pub password: String,
@@ -29,6 +22,8 @@ async fn register_user(
     new_user: web::Json<NewUserForm>,
     pool: web::Data<Arc<DatabaseConnection>>,
 ) -> impl Responder {
+    info!("Received user registration request: {:?}", new_user); // Log the incoming request
+
     let db = pool.get_ref();
     let hashed_password = hash(new_user.password.clone(), 4).unwrap();
 
@@ -57,6 +52,8 @@ async fn login_user(
     login_data: web::Json<NewUserForm>,
     pool: web::Data<Arc<DatabaseConnection>>,
 ) -> impl Responder {
+    info!("Received login request for username: {}", login_data.username);
+
     let db = pool.get_ref();
 
     match entities::userentity::Entity::find()
@@ -74,7 +71,6 @@ async fn login_user(
 async fn main() -> std::io::Result<()> {
     env_logger::init(); // Initialize logging
 
-    // Log the start of main function
     info!("Starting application...");
 
     // Try to establish the database connection pool using sea_orm
@@ -86,11 +82,9 @@ async fn main() -> std::io::Result<()> {
         }
     };
 
-    // Log after database connection is established
     info!("Database connection established successfully!");
 
-    // Log server start
-    info!("Starting server on 0.0.0.0:8080");
+    info!("Starting Actix server on 0.0.0.0:8080");
 
     HttpServer::new(move || {
         App::new()
@@ -100,5 +94,9 @@ async fn main() -> std::io::Result<()> {
     })
     .bind("0.0.0.0:8080")?
     .run()
-    .await
+    .await?;
+
+    info!("Server is running at http://0.0.0.0:8080");
+
+    Ok(())
 }
