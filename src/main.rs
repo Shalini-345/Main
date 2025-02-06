@@ -64,7 +64,6 @@ async fn register_user(
         ..Default::default()
     };
 
-    
     info!("Checking if user with username {} already exists...", new_user.username);
     match entities::userentity::Entity::find()
         .filter(entities::userentity::Column::Username.eq(&new_user.username))
@@ -75,7 +74,6 @@ async fn register_user(
             Ok(HttpResponse::BadRequest().body("User already exists"))
         }
         Ok(None) => {
-            
             info!("Inserting new user into the database...");
             new_user_active_model.insert(db.as_ref()).await
                 .map_err(|_| AppError {
@@ -117,7 +115,7 @@ async fn login_user(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    env_logger::init(); 
+    env_logger::init();
 
     info!("Starting application...");
 
@@ -131,8 +129,8 @@ async fn main() -> std::io::Result<()> {
 
     info!("Database connection established successfully!");
 
-   
-    info!("Starting Actix server on 0.0.0.0:8080");
+    // Starting Actix server on port 8081
+    info!("Starting Actix server on 0.0.0.0:8081");
 
     HttpServer::new(move || {
         App::new()
@@ -140,11 +138,11 @@ async fn main() -> std::io::Result<()> {
             .service(register_user)
             .service(login_user)
     })
-    .bind("0.0.0.0:8080")?  
-    .run()                    
-    .await?;                   
+    .bind("0.0.0.0:8081")?  // Change the port to 8081
+    .run()
+    .await?;
 
-    info!("Server is running at http://0.0.0.0:8080");
+    info!("Server is running at http://0.0.0.0:8081");
 
     Ok(())
 }
