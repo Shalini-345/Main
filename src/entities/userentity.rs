@@ -1,6 +1,5 @@
-use sea_orm::DeriveRelation; 
 use sea_orm::entity::prelude::*;
-use chrono::NaiveDateTime;  // Assuming your DateTime field is from chrono
+use sea_orm::{DeriveRelation, EntityTrait};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "users")]
@@ -18,11 +17,11 @@ pub struct Model {
     pub profile_photo: Option<String>,
     pub remember_token: Option<String>,
     pub password_reset_token: Option<String>,
-    pub password_reset_expires: Option<NaiveDateTime>,  // Adjusted type for DateTime
+    pub password_reset_expires: Option<DateTime>,
     pub about_me: Option<String>,
     pub languages: Option<String>,
-    pub created_at: NaiveDateTime,  // Adjusted type for DateTime
-    pub updated_at: NaiveDateTime,  // Adjusted type for DateTime
+    pub created_at: DateTime,
+    pub updated_at: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

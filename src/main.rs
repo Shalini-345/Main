@@ -7,10 +7,17 @@ use log::{info, error};
 mod db;
 mod entities {
     pub mod userentity;
-    // other entities
+    pub mod faviorate;
+    pub mod helpsupport;
+    pub mod payment;
+    pub mod recentlocation;
+    pub mod rideentity;
+    pub mod settings;
+    pub mod vehicleentity;
+    pub mod driverentity;
 }
 
-#[derive(serde::Deserialize, serde::Serialize, Debug)] // Added Debug for logging
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
 pub struct NewUserForm {
     pub username: String,
     pub password: String,
@@ -22,7 +29,7 @@ async fn register_user(
     new_user: web::Json<NewUserForm>,
     pool: web::Data<Arc<DatabaseConnection>>,
 ) -> impl Responder {
-    info!("Received user registration request: {:?}", new_user); // Log the incoming request
+    info!("Received user registration request: {:?}", new_user);
 
     let db = pool.get_ref();
     let hashed_password = hash(new_user.password.clone(), 4).unwrap();
