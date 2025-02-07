@@ -4,6 +4,8 @@ use bcrypt::{hash, verify};
 use std::sync::Arc;
 use log::{info, error};
 use std::fmt;
+use migration::{Migrator, MigratorTrait};
+
 
 mod db;
 mod entities {
