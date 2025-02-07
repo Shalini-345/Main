@@ -1,3 +1,4 @@
+
 [package]
 name = "migration"
 version = "0.1.0"
@@ -13,3 +14,4 @@ async-std = { version = "1", features = ["attributes", "tokio1"] }
 tokio = { version = "1", features = ["full"] }
 sea-orm-migration = "1.1"
 sea-orm = { version = "1.1", features = ["sqlx-postgres", "runtime-tokio-native-tls"] }
+
