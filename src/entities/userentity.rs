@@ -1,5 +1,5 @@
 use sea_orm::entity::prelude::*;
-use sea_orm::{DeriveRelation, EntityTrait};
+use sea_orm::DeriveRelation;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "users")]
