@@ -4,8 +4,10 @@ use bcrypt::{hash, verify};
 use std::sync::Arc;
 use log::{info, error};
 use std::fmt;
+
 use sea_orm_migration::prelude::*;
 use migration::{Migrator, MigratorTrait};
+
 
 mod db;
 mod entities {
