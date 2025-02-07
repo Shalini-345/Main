@@ -26,4 +26,5 @@ sea-orm-migration = "1.1.4"
 sqlx = { version = "0.6", features = ["postgres", "chrono", "runtime-tokio-native-tls"] }
 log = "0.4"
 env_logger = "0.9"
+migration = { path = "./migration" }
 

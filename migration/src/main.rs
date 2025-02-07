@@ -1,5 +1,6 @@
 use sea_orm_migration::prelude::*;
-use sea_orm_migration::Migrator;
+use migration::{Migrator, MigratorTrait};
+
 
 #[async_std::main]
 async fn main() {
