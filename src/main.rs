@@ -42,7 +42,10 @@ impl ResponseError for AppError {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok(); // ✅ Load environment variables
-    env_logger::init(); // ✅ Initialize logging
+    //env_logger::init(); // ✅ Initialize logging
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Info) // Set the minimum log level
+        .init();
 
     info!("🚀 Starting the application...");
 
