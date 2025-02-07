@@ -4,7 +4,8 @@ use bcrypt::{hash, verify};
 use std::sync::Arc;
 use log::{info, error};
 use std::fmt;
-
+use sea_orm_migration::prelude::*;
+use migration::{Migrator, MigratorTrait};
 
 mod db;
 mod entities {
@@ -120,17 +121,26 @@ async fn main() -> std::io::Result<()> {
 
     info!("Starting application...");
 
+    // Establish database connection
     let pool = match db::establish_connection_pool().await {
-        Ok(pool) => pool,
+        Ok(pool) => Arc::new(pool),
         Err(e) => {
             error!("Failed to establish database connection: {}", e);
             return Err(std::io::Error::new(std::io::ErrorKind::Other, "Database connection failed"));
         }
     };
 
-    info!("Database connection established successfully!");
+    info!("✅ Database connection established successfully!");
 
-    info!("Starting Actix server on 0.0.0.0:8080");
+    // Run pending migrations
+    info!("⚡ Running database migrations...");
+    if let Err(err) = run_migrations(&pool).await {
+        error!("❌ Migration failed: {}", err);
+        return Err(std::io::Error::new(std::io::ErrorKind::Other, "Migration failed"));
+    }
+    info!("✅ Migrations completed successfully!");
+
+    info!("🚀 Starting Actix server on 0.0.0.0:8081...");
 
     HttpServer::new(move || {
         App::new()
@@ -142,7 +152,15 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await?;
 
-    info!("Server is running at http://0.0.0.0:8080");
+    info!("✅ Server is running at http://0.0.0.0:8081");
 
     Ok(())
+}
+
+// Function to run database migrations
+async fn run_migrations(db: &DatabaseConnection) -> Result<(), DbErr> {
+    Migrator::up(db, None).await.map_err(|e| {
+        error!("Migration error: {}", e);
+        e
+    })
 }
