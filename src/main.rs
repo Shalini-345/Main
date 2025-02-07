@@ -5,6 +5,7 @@ use std::sync::Arc;
 use log::{info, error};
 use std::fmt;
 
+
 mod db;
 mod entities {
     pub mod userentity;
@@ -129,8 +130,7 @@ async fn main() -> std::io::Result<()> {
 
     info!("Database connection established successfully!");
 
-    // Starting Actix server on port 8081
-    info!("Starting Actix server on 0.0.0.0:8081");
+    info!("Starting Actix server on 0.0.0.0:8080");
 
     HttpServer::new(move || {
         App::new()
@@ -138,11 +138,11 @@ async fn main() -> std::io::Result<()> {
             .service(register_user)
             .service(login_user)
     })
-    .bind("0.0.0.0:8081")?  // Change the port to 8081
+    .bind("0.0.0.0:8081")?  
     .run()
     .await?;
 
-    info!("Server is running at http://0.0.0.0:8081");
+    info!("Server is running at http://0.0.0.0:8080");
 
     Ok(())
 }
