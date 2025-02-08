@@ -9,7 +9,7 @@ use migration::{Migrator, MigratorTrait};
 use db::establish_connection_pool;
 
 mod db;
-mod controllers; // Added this to correctly reference your controllers
+mod controllers; // Ensure controllers module is correctly referenced
 mod entities {
     pub mod userentity;
     pub mod faviorate;
@@ -39,7 +39,7 @@ impl ResponseError for AppError {
     }
 }
 
-// ✅ Added a simple route for `/`
+// ✅ Added a simple route for `/` to verify if the server is running
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("Welcome to Arrively API!")
 }
@@ -56,7 +56,7 @@ async fn main() -> std::io::Result<()> {
     let pool = match establish_connection_pool().await {
         Ok(pool) => Arc::new(pool),
         Err(e) => {
-            error!(" Failed to establish database connection: {}", e);
+            error!("❌ Failed to establish database connection: {}", e);
             return Err(std::io::Error::new(std::io::ErrorKind::Other, "Database connection failed"));
         }
     };
@@ -66,7 +66,7 @@ async fn main() -> std::io::Result<()> {
     // Run pending migrations
     info!("⚡ Running database migrations...");
     if let Err(err) = run_migrations(&*pool).await {
-        error!(" Migration failed: {}", err);
+        error!("❌ Migration failed: {}", err);
         return Err(std::io::Error::new(std::io::ErrorKind::Other, "Migration failed"));
     }
     info!("✅ Migrations completed successfully!");
@@ -77,8 +77,8 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))
-            .route("/", web::get().to(index)) // ✅ Added this line for the root route
-            .service(controllers::register_user) // Make sure these exist in `controllers.rs`
+            .route("/", web::get().to(index)) // ✅ Added root route
+            .service(controllers::register_user) // Ensure this exists in `controllers.rs`
             .service(controllers::login_user)
     })
     .bind("0.0.0.0:8081")?  
@@ -89,7 +89,7 @@ async fn main() -> std::io::Result<()> {
 
 async fn run_migrations(db: &DatabaseConnection) -> Result<(), DbErr> {
     Migrator::up(db, None).await.map_err(|e| {
-        error!("Migration error: {}", e);
+        error!("❌ Migration error: {}", e);
         e
     })
 }
