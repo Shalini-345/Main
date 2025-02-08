@@ -27,7 +27,7 @@ async fn register_user(
     }
 
     // ✅ HASH password safely
-    let password_hash = match hash(new_user.password.clone(), DEFAULT_COST) {
+    let password = match hash(new_user.password.clone(), DEFAULT_COST) {
         Ok(hash) => hash,
         Err(err) => {
             error!("Password hashing failed: {:?}", err);
@@ -38,7 +38,7 @@ async fn register_user(
     let new_user_active_model = ActiveModel {
         username: sea_orm::ActiveValue::Set(new_user.username.clone()),
         email: sea_orm::ActiveValue::Set(new_user.email.clone()),
-        password_hash: sea_orm::ActiveValue::Set(password_hash),
+        password: sea_orm::ActiveValue::Set(password),
         ..Default::default()
     };
 
@@ -94,7 +94,7 @@ async fn login_user(
     {
         Ok(Some(user)) => {
             info!("User found: {}", login_data.username);
-            match verify(&login_data.password, &user.password_hash) {
+            match verify(&login_data.password, &user.password) {
                 Ok(true) => {
                     info!("Login successful for user: {}", login_data.username);
                     Ok(HttpResponse::Ok().body("Login successful"))

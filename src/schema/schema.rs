@@ -31,7 +31,7 @@ pub struct ActiveModel {
     pub id: ActiveValue<i32>,
     pub username: ActiveValue<String>,
     pub email: ActiveValue<String>,
-    pub password_hash: ActiveValue<String>,
+    pub password: ActiveValue<String>,
     pub first_name: ActiveValue<Option<String>>,
     pub last_name: ActiveValue<Option<String>>,
     pub phone: ActiveValue<Option<String>>,
