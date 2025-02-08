@@ -76,11 +76,13 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .wrap(actix_web::middleware::Logger::default()) // ✅ Add logging middleware
             .app_data(web::Data::new(pool.clone()))
-            .route("/", web::get().to(index)) // ✅ Added root route
-            .service(controllers::register_user) // Ensure this exists in `controllers.rs`
+            .route("/", web::get().to(index)) 
+            .service(controllers::register_user)
             .service(controllers::login_user)
     })
+    
     .bind("0.0.0.0:8081")?  
     .run()
     .await?;
