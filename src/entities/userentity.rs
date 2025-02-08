@@ -9,19 +9,7 @@ pub struct Model {
     pub id: i32,
     pub email: String,
     pub password: String,
-    pub first_name: String,
-    pub last_name: String,
-    pub phone: String,
-    pub city: String,
-    pub state: String,
-    pub profile_photo: Option<String>,
-    pub remember_token: Option<String>,
-    pub password_reset_token: Option<String>,
-    pub password_reset_expires: Option<DateTime>,
-    pub about_me: Option<String>,
-    pub languages: Option<String>,
-    pub created_at: DateTime,
-    pub updated_at: DateTime,
+    
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
