@@ -1,9 +1,8 @@
-use actix_web::{post, web, HttpResponse, Error};
+use actix_web::{get, post, web, HttpResponse, Error};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use log::{info, error};
 use serde::{Deserialize, Serialize};
-
 use crate::entities::userentity::{self, ActiveModel, Entity};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -20,13 +19,11 @@ async fn register_user(
 ) -> Result<HttpResponse, Error> {
     info!("Received user registration request for username: {}", new_user.username);
 
-    // ✅ CHECK if database connection is valid by running a simple query
     if let Err(err) = Entity::find().one(db.as_ref()).await {
         error!("Database connection error: {:?}", err);
         return Ok(HttpResponse::InternalServerError().body("Database connection is not available"));
     }
 
-    // ✅ HASH password safely
     let password = match hash(new_user.password.clone(), DEFAULT_COST) {
         Ok(hash) => hash,
         Err(err) => {
@@ -35,14 +32,6 @@ async fn register_user(
         }
     };
 
-    let new_user_active_model = ActiveModel {
-        username: sea_orm::ActiveValue::Set(new_user.username.clone()),
-        email: sea_orm::ActiveValue::Set(new_user.email.clone()),
-        password: sea_orm::ActiveValue::Set(password),
-        ..Default::default()
-    };
-
-    // ✅ CHECK if the user already exists
     match Entity::find()
         .filter(userentity::Column::Username.eq(&new_user.username))
         .one(db.as_ref())
@@ -52,16 +41,20 @@ async fn register_user(
             info!("User already exists: {}", new_user.username);
             return Ok(HttpResponse::Conflict().body("User already exists"));
         }
-        Ok(None) => {
-            info!("User does not exist, proceeding with registration...");
-        }
+        Ok(None) => info!("User does not exist, proceeding with registration..."),
         Err(err) => {
             error!("Database error occurred while checking user existence: {:?}", err);
             return Ok(HttpResponse::InternalServerError().body("Database error"));
         }
     }
 
-    // ✅ INSERT new user
+    let new_user_active_model = ActiveModel {
+        username: sea_orm::ActiveValue::Set(new_user.username.clone()),
+        email: sea_orm::ActiveValue::Set(new_user.email.clone()),
+        password: sea_orm::ActiveValue::Set(password),
+        ..Default::default()
+    };
+
     match new_user_active_model.insert(db.as_ref()).await {
         Ok(_) => {
             info!("User registered successfully: {}", new_user.username);
@@ -81,7 +74,6 @@ async fn login_user(
 ) -> Result<HttpResponse, Error> {
     info!("Received login request for username: {}", login_data.username);
 
-    // ✅ CHECK if database is available by running a simple query
     if let Err(err) = Entity::find().one(db.as_ref()).await {
         error!("Database connection error: {:?}", err);
         return Ok(HttpResponse::InternalServerError().body("Database connection is not available"));
@@ -116,6 +108,17 @@ async fn login_user(
         Err(err) => {
             error!("Database error while fetching user data: {:?}", err);
             Ok(HttpResponse::InternalServerError().body("Database error"))
+        }
+    }
+}
+
+#[get("/users")]
+async fn get_users(db: web::Data<DatabaseConnection>) -> Result<HttpResponse, Error> {
+    match Entity::find().all(db.as_ref()).await {
+        Ok(users) => Ok(HttpResponse::Ok().json(users)),
+        Err(err) => {
+            error!("Error fetching users: {:?}", err);
+            Ok(HttpResponse::InternalServerError().body("Error fetching users"))
         }
     }
 }

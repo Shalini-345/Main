@@ -1,15 +1,15 @@
 use sea_orm::entity::prelude::*;
 use sea_orm::DeriveRelation;
+use serde::{Serialize, Deserialize}; 
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, DeriveEntityModel)] 
 #[sea_orm(table_name = "users")]
 pub struct Model {
     #[sea_orm(primary_key)]
+    pub id: i32, 
     pub username: String,
-    pub id: i32,
     pub email: String,
     pub password: String,
-    
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
