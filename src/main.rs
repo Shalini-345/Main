@@ -21,7 +21,7 @@ mod entities {
     pub mod driverentity;
 }
 
-use controllers::{register_user, login_user}; 
+use controllers::{register_user, login_user, get_users}; 
 #[derive(Debug)]
 pub struct AppError {
     pub message: String,
@@ -79,6 +79,7 @@ async fn main() -> std::io::Result<()> {
             .route("/", web::get().to(index)) 
             .service(register_user)
             .service(login_user)
+            .service(get_users)
     })
     .bind("0.0.0.0:8081")?  
     .run()
