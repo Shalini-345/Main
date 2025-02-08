@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpResponse, HttpServer, ResponseError};
+use actix_web::{web, App, HttpResponse, HttpServer, Responder, ResponseError};
 use sea_orm::DatabaseConnection;
 use std::sync::Arc;
 use log::{info, error};
@@ -9,7 +9,7 @@ use migration::{Migrator, MigratorTrait};
 use db::establish_connection_pool;
 
 mod db;
-mod controllers;
+mod controllers; // Added this to correctly reference your controllers
 mod entities {
     pub mod userentity;
     pub mod faviorate;
@@ -39,6 +39,11 @@ impl ResponseError for AppError {
     }
 }
 
+// ✅ Added a simple route for `/`
+async fn index() -> impl Responder {
+    HttpResponse::Ok().body("Welcome to Arrively API!")
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok(); 
@@ -64,22 +69,21 @@ async fn main() -> std::io::Result<()> {
         error!(" Migration failed: {}", err);
         return Err(std::io::Error::new(std::io::ErrorKind::Other, "Migration failed"));
     }
-    info!(" Migrations completed successfully!");
+    info!("✅ Migrations completed successfully!");
 
-    info!(" Starting Actix server on 0.0.0.0:8081...");
+    info!("🚀 Starting Actix server on 0.0.0.0:8081...");
+    info!("🌍 Server is running at http://0.0.0.0:8081");
 
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))
-            .service(controllers::register_user)
+            .route("/", web::get().to(index)) // ✅ Added this line for the root route
+            .service(controllers::register_user) // Make sure these exist in `controllers.rs`
             .service(controllers::login_user)
     })
     .bind("0.0.0.0:8081")?  
     .run()
     .await?;
-
-    info!("Server is running at http://0.0.0.0:8081");
-
     Ok(())
 }
 
