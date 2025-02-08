@@ -41,19 +41,17 @@ impl ResponseError for AppError {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    dotenv().ok(); // ✅ Load environment variables
-    //env_logger::init(); // ✅ Initialize logging
+    dotenv().ok(); 
     env_logger::builder()
-        .filter_level(log::LevelFilter::Info) // Set the minimum log level
+        .filter_level(log::LevelFilter::Info) 
         .init();
 
     info!("🚀 Starting the application...");
 
-    // Establish database connection
     let pool = match establish_connection_pool().await {
         Ok(pool) => Arc::new(pool),
         Err(e) => {
-            error!("❌ Failed to establish database connection: {}", e);
+            error!(" Failed to establish database connection: {}", e);
             return Err(std::io::Error::new(std::io::ErrorKind::Other, "Database connection failed"));
         }
     };
@@ -63,12 +61,12 @@ async fn main() -> std::io::Result<()> {
     // Run pending migrations
     info!("⚡ Running database migrations...");
     if let Err(err) = run_migrations(&*pool).await {
-        error!("❌ Migration failed: {}", err);
+        error!(" Migration failed: {}", err);
         return Err(std::io::Error::new(std::io::ErrorKind::Other, "Migration failed"));
     }
-    info!("✅ Migrations completed successfully!");
+    info!(" Migrations completed successfully!");
 
-    info!("🚀 Starting Actix server on 0.0.0.0:8081...");
+    info!(" Starting Actix server on 0.0.0.0:8081...");
 
     HttpServer::new(move || {
         App::new()
@@ -80,12 +78,11 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await?;
 
-    info!("✅ Server is running at http://0.0.0.0:8081");
+    info!("Server is running at http://0.0.0.0:8081");
 
     Ok(())
 }
 
-// Function to run database migrations
 async fn run_migrations(db: &DatabaseConnection) -> Result<(), DbErr> {
     Migrator::up(db, None).await.map_err(|e| {
         error!("Migration error: {}", e);
