@@ -1,6 +1,5 @@
 use actix_web::{web, App, HttpResponse, HttpServer, Responder, ResponseError};
 use sea_orm::DatabaseConnection;
-use std::sync::Arc;
 use log::{info, error};
 use std::fmt;
 use dotenv::dotenv;
@@ -9,7 +8,7 @@ use migration::{Migrator, MigratorTrait};
 use db::establish_connection_pool;
 
 mod db;
-mod controllers; // Ensure controllers module is correctly referenced
+mod controllers;
 mod entities {
     pub mod userentity;
     pub mod faviorate;
@@ -22,6 +21,7 @@ mod entities {
     pub mod driverentity;
 }
 
+use controllers::{register_user, login_user}; 
 #[derive(Debug)]
 pub struct AppError {
     pub message: String,
@@ -39,7 +39,6 @@ impl ResponseError for AppError {
     }
 }
 
-// ✅ Added a simple route for `/` to verify if the server is running
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("Welcome to Arrively API!")
 }
@@ -51,47 +50,46 @@ async fn main() -> std::io::Result<()> {
         .filter_level(log::LevelFilter::Info) 
         .init();
 
-    info!("🚀 Starting the application...");
+    info!(" Starting the application...");
 
     let pool = match establish_connection_pool().await {
-        Ok(pool) => Arc::new(pool),
+        Ok(pool) => web::Data::new(pool), 
         Err(e) => {
-            error!("❌ Failed to establish database connection: {}", e);
+            error!(" Failed to establish database connection: {}", e);
             return Err(std::io::Error::new(std::io::ErrorKind::Other, "Database connection failed"));
         }
     };
 
-    info!("✅ Database connection established successfully!");
+    info!("Database connection established successfully!");
 
-    // Run pending migrations
-    info!("⚡ Running database migrations...");
-    if let Err(err) = run_migrations(&*pool).await {
-        error!("❌ Migration failed: {}", err);
+    info!(" Running database migrations...");
+    if let Err(err) = run_migrations(pool.get_ref()).await { 
+        error!(" Migration failed: {}", err);
         return Err(std::io::Error::new(std::io::ErrorKind::Other, "Migration failed"));
     }
-    info!("✅ Migrations completed successfully!");
+    info!("Migrations completed successfully!");
 
-    info!("🚀 Starting Actix server on 0.0.0.0:8081...");
-    info!("🌍 Server is running at http://0.0.0.0:8081");
+    info!("Starting Actix server on 0.0.0.0:8081...");
+    info!(" Server is running at http://0.0.0.0:8081");
 
     HttpServer::new(move || {
         App::new()
-            .wrap(actix_web::middleware::Logger::default()) // ✅ Add logging middleware
-            .app_data(web::Data::new(pool.clone()))
+            .wrap(actix_web::middleware::Logger::default()) 
+            .app_data(pool.clone()) 
             .route("/", web::get().to(index)) 
-            .service(controllers::register_user)
-            .service(controllers::login_user)
+            .service(register_user)
+            .service(login_user)
     })
-    
     .bind("0.0.0.0:8081")?  
     .run()
     .await?;
+    
     Ok(())
 }
 
 async fn run_migrations(db: &DatabaseConnection) -> Result<(), DbErr> {
     Migrator::up(db, None).await.map_err(|e| {
-        error!("❌ Migration error: {}", e);
+        error!(" Migration error: {}", e);
         e
     })
 }

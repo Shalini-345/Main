@@ -12,8 +12,8 @@ pub async fn establish_connection_pool() -> Result<DatabaseConnection, DbErr> {
         }
     };
 
-    info!("🔄 Connecting to database at: {}", database_url);
-    info!("⚡ Attempting database connection...");
+    info!("Connecting to database at: {}", database_url);
+    info!("Attempting database connection...");
 
     let db_result = timeout(Duration::from_secs(10), Database::connect(&database_url)).await;
 
