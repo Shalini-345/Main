@@ -30,15 +30,14 @@ async fn register_user(
 ) -> Result<HttpResponse, Error> {
     info!("Received user registration request for username: {}", new_user.username);
 
-    if let Err(err) = new_user.validate() {
-        let error_messages: Vec<String> = err.field_errors()
-            .iter()
-            .map(|(field, errors)| format!("{}: {}", field, errors.iter().map(|e| e.to_string()).collect::<Vec<_>>().join(", ")))
-            .collect();
+    if let Err(_err) = new_user.validate() {
+        //let error_messages: Vec<String> = err.field_errors()
+           // .iter()
+            //.map(|(field, errors)| format!("{}: {}", field, errors.iter().map(|e| e.to_string()).collect::<Vec<_>>().join(", ")))
+            //.collect();
 
-        return Ok(HttpResponse::BadRequest().json(serde_json::json!({
-            "error": error_messages.join("; ")
-        })));
+            return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
+    
     }
 
     let existing_user = Entity::find()
