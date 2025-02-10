@@ -34,12 +34,12 @@ async fn register_user(
 
     // Validate input
     if let Err(err) = new_user.validate() {
-        return Ok(HttpResponse::BadRequest().json(err));
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": err.to_string() })));
     }
 
     // Validate email format
     if !is_valid_email(&new_user.email) {
-        return Ok(HttpResponse::BadRequest().json({ "error"; "Invalid email format" }));
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
     }
 
     // Check if user already exists (both email & username)
@@ -54,7 +54,7 @@ async fn register_user(
         .map_err(|_| actix_web::error::ErrorInternalServerError("Database error while checking user existence"))?;
 
     if existing_user.is_some() {
-        return Ok(HttpResponse::Conflict().json({ "error"; "User already exists" }));
+        return Ok(HttpResponse::Conflict().json(serde_json::json!({ "error": "User already exists" })));
     }
 
     // Hash password
@@ -70,7 +70,7 @@ async fn register_user(
     };
 
     new_user_active_model.insert(db.as_ref()).await
-        .map(|_| HttpResponse::Created().json({ "message"; "User registered successfully" }))
+        .map(|_| HttpResponse::Created().json(serde_json::json!({ "message": "User registered successfully" })))
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error registering user"))
 }
 
@@ -82,7 +82,7 @@ async fn login_user(
 ) -> Result<HttpResponse, Error> {
     // Validate email format before checking database
     if !is_valid_email(&login_data.email) {
-        return Ok(HttpResponse::BadRequest().json({ "error"; "Invalid email format" }));
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
     }
 
     // Find user by email and username
@@ -98,7 +98,7 @@ async fn login_user(
 
     let user = match user {
         Some(user) => user,
-        None => return Ok(HttpResponse::Unauthorized().json({ "error"; "Invalid credentials" })),
+        None => return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid credentials" }))),
     };
 
     // Verify password
@@ -106,7 +106,7 @@ async fn login_user(
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error verifying password"))?;
 
     if !is_password_valid {
-        return Ok(HttpResponse::Unauthorized().json({ "error";"Invalid credentials" }));
+        return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid credentials" })));
     }
 
     // Generate access and refresh tokens
@@ -127,27 +127,29 @@ async fn login_user(
 async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Result<HttpResponse, Error> {
     let auth_header = req.headers().get("Authorization");
 
-    if let Some(auth_header) = auth_header {
-        if let Ok(token) = auth_header.to_str() {
-            if let Ok(_) = AuthTokenClaims::validate_token(token) {
-                // Fetch all users excluding passwords
-                let users = Entity::find()
-                    .all(db.as_ref())
-                    .await
-                    .map_err(|_| actix_web::error::ErrorInternalServerError("Error fetching users"))?
-                    .into_iter()
-                    .map(|user| serde_json::json!({
-                        "id": user.id,
-                        "username": user.username,
-                        "email": user.email,
-                    }))
-                    .collect::<Vec<_>>();
+    if let Some(auth_value) = auth_header {
+        if let Ok(auth_str) = auth_value.to_str() {
+            if auth_str.starts_with("Bearer ") {
+                let token = &auth_str[7..];
+                if let Ok(_) = AuthTokenClaims::validate_token(token) {
+                    let users = Entity::find()
+                        .all(db.as_ref())
+                        .await
+                        .map_err(|_| actix_web::error::ErrorInternalServerError("Error fetching users"))?
+                        .into_iter()
+                        .map(|user| serde_json::json!({
+                            "id": user.id,
+                            "username": user.username,
+                            "email": user.email,
+                        }))
+                        .collect::<Vec<_>>();
 
-                return Ok(HttpResponse::Ok().json(users));
+                    return Ok(HttpResponse::Ok().json(users));
+                }
             }
         }
-        return Ok(HttpResponse::Unauthorized().json({ "error"; "Invalid token" }));
+        return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid token" })));
     }
 
-    Ok(HttpResponse::Unauthorized().json({ "error"; "Missing token" }))
+    Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Missing token" })))
 }

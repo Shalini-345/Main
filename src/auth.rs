@@ -6,7 +6,7 @@ const SECRET_KEY: &[u8] = b"your-secret-key"; // Replace with a secure key
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AuthTokenClaims {
-    pub sub: String,
+    pub sub: i32,
     pub exp: usize,
 }
 
@@ -15,7 +15,7 @@ impl AuthTokenClaims {
     pub fn new(user_id: i32, duration_hours: i64) -> Self {
         let expiration = Utc::now() + Duration::hours(duration_hours);
         Self {
-            sub: user_id.to_string(),
+            sub: user_id,
             exp: expiration.timestamp() as usize,
         }
     }
@@ -31,11 +31,11 @@ impl AuthTokenClaims {
 
     /// Validates a JWT token
     pub fn validate_token(token: &str) -> Result<AuthTokenClaims, jsonwebtoken::errors::Error> {
-        let token_data = decode::<AuthTokenClaims>(
+        decode::<AuthTokenClaims>(
             token,
             &DecodingKey::from_secret(SECRET_KEY),
             &Validation::default(),
-        )?;
-        Ok(token_data.claims)
+        )
+        .map(|token_data| token_data.claims)
     }
 }
