@@ -25,6 +25,8 @@ jobs:
           name: arrively-artifact
           path: target/release/arrively-project-main 
 
+  
+
   deploy-to-ec2:
     needs: deploy
     runs-on: ubuntu-latest
@@ -40,12 +42,19 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           EC2_USER: ubuntu
-          EC2_HOST: 13.60.21.29  # Replace with your EC2 instance public IPv4
+          EC2_HOST: 13.60.21.29  
         run: |
           echo "$SSH_PRIVATE_KEY" > my-ec2-keypair.pem
           chmod 600 my-ec2-keypair.pem
-          scp -i my-ec2-keypair.pem arrively-project-main $EC2_USER@$EC2_HOST:/mnt/arrively-project/Arrively-project-main/
-          ssh -i my-ec2-keypair.pem $EC2_USER@$EC2_HOST <<EOF
+          
+          
+          export SSH_OPTS="-o StrictHostKeyChecking=no"
+
+          
+          scp -i my-ec2-keypair.pem $SSH_OPTS arrively-project-main $EC2_USER@$EC2_HOST:/mnt/arrively-project/Arrively-project-main/
+          
+          
+          ssh -i my-ec2-keypair.pem $SSH_OPTS $EC2_USER@$EC2_HOST <<EOF
             sudo systemctl restart arrively.service
           EOF
 
