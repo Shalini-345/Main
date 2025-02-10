@@ -9,6 +9,7 @@ use db::establish_connection_pool;
 
 mod db;
 mod controllers;
+mod auth;
 mod entities {
     pub mod userentity;
     pub mod faviorate;

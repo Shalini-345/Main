@@ -1,14 +1,19 @@
-use actix_web::{get, post, web, HttpResponse, Error};
-use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait};
+use actix_web::{get, post, web, HttpResponse, Error, HttpRequest};
+use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition};
 use bcrypt::{hash, verify, DEFAULT_COST};
-use log::{info, error};
+use log::info;
 use serde::{Deserialize, Serialize};
+use validator::Validate;
+use crate::auth::AuthTokenClaims;
 use crate::entities::userentity::{self, ActiveModel, Entity};
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Validate)]
 pub struct NewUser {
+    #[validate(length(min = 3))]
     pub username: String,
+    #[validate(email)]
     pub email: String,
+    #[validate(length(min = 6))]
     pub password: String,
 }
 
@@ -19,52 +24,37 @@ async fn register_user(
 ) -> Result<HttpResponse, Error> {
     info!("Received user registration request for username: {}", new_user.username);
 
-    if let Err(err) = Entity::find().one(db.as_ref()).await {
-        error!("Database connection error: {:?}", err);
-        return Ok(HttpResponse::InternalServerError().body("Database connection is not available"));
+    if let Err(err) = new_user.validate() {
+        return Ok(HttpResponse::BadRequest().json(err));
     }
 
-    let password = match hash(new_user.password.clone(), DEFAULT_COST) {
-        Ok(hash) => hash,
-        Err(err) => {
-            error!("Password hashing failed: {:?}", err);
-            return Ok(HttpResponse::InternalServerError().body("Failed to hash password"));
-        }
-    };
-
-    match Entity::find()
-        .filter(userentity::Column::Username.eq(&new_user.username))
+    let existing_user = Entity::find()
+        .filter(
+            Condition::any()
+                .add(userentity::Column::Username.eq(&new_user.username))
+                .add(userentity::Column::Email.eq(&new_user.email)),
+        )
         .one(db.as_ref())
         .await
-    {
-        Ok(Some(_)) => {
-            info!("User already exists: {}", new_user.username);
-            return Ok(HttpResponse::Conflict().body("User already exists"));
-        }
-        Ok(None) => info!("User does not exist, proceeding with registration..."),
-        Err(err) => {
-            error!("Database error occurred while checking user existence: {:?}", err);
-            return Ok(HttpResponse::InternalServerError().body("Database error"));
-        }
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error while checking user existence"))?;
+
+    if existing_user.is_some() {
+        return Ok(HttpResponse::Conflict().body("User already exists"));
     }
+
+    let password_hash = hash(&new_user.password, DEFAULT_COST)
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to hash password"))?;
 
     let new_user_active_model = ActiveModel {
         username: sea_orm::ActiveValue::Set(new_user.username.clone()),
         email: sea_orm::ActiveValue::Set(new_user.email.clone()),
-        password: sea_orm::ActiveValue::Set(password),
+        password: sea_orm::ActiveValue::Set(password_hash),
         ..Default::default()
     };
 
-    match new_user_active_model.insert(db.as_ref()).await {
-        Ok(_) => {
-            info!("User registered successfully: {}", new_user.username);
-            Ok(HttpResponse::Created().body("User registered successfully"))
-        }
-        Err(err) => {
-            error!("Database error while inserting user: {:?}", err);
-            Ok(HttpResponse::InternalServerError().body("Error registering user"))
-        }
-    }
+    new_user_active_model.insert(db.as_ref()).await
+        .map(|_| HttpResponse::Created().body("User registered successfully"))
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Error registering user"))
 }
 
 #[post("/users/login")]
@@ -72,53 +62,55 @@ async fn login_user(
     login_data: web::Json<NewUser>,
     db: web::Data<DatabaseConnection>,
 ) -> Result<HttpResponse, Error> {
-    info!("Received login request for username: {}", login_data.username);
-
-    if let Err(err) = Entity::find().one(db.as_ref()).await {
-        error!("Database connection error: {:?}", err);
-        return Ok(HttpResponse::InternalServerError().body("Database connection is not available"));
-    }
-
-    match Entity::find()
+    let user = Entity::find()
         .filter(userentity::Column::Username.eq(&login_data.username))
         .one(db.as_ref())
         .await
-    {
-        Ok(Some(user)) => {
-            info!("User found: {}", login_data.username);
-            match verify(&login_data.password, &user.password) {
-                Ok(true) => {
-                    info!("Login successful for user: {}", login_data.username);
-                    Ok(HttpResponse::Ok().body("Login successful"))
-                }
-                Ok(false) => {
-                    info!("Invalid credentials for user: {}", login_data.username);
-                    Ok(HttpResponse::Unauthorized().body("Invalid credentials"))
-                }
-                Err(err) => {
-                    error!("Error verifying password: {:?}", err);
-                    Ok(HttpResponse::InternalServerError().body("Error verifying password"))
-                }
-            }
-        }
-        Ok(None) => {
-            info!("User not found: {}", login_data.username);
-            Ok(HttpResponse::Unauthorized().body("Invalid credentials"))
-        }
-        Err(err) => {
-            error!("Database error while fetching user data: {:?}", err);
-            Ok(HttpResponse::InternalServerError().body("Database error"))
-        }
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error while fetching user"))?;
+
+    let user = match user {
+        Some(user) => user,
+        None => return Ok(HttpResponse::Unauthorized().body("Invalid credentials")),
+    };
+
+    let is_password_valid = verify(&login_data.password, &user.password)
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Error verifying password"))?;
+
+    if !is_password_valid {
+        return Ok(HttpResponse::Unauthorized().body("Invalid credentials"));
     }
+
+    let claims = AuthTokenClaims::new(user.id);
+    let token = claims.generate_token()
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Token generation failed"))?;
+
+    Ok(HttpResponse::Ok().json(serde_json::json!({ "token": token })))
 }
 
 #[get("/users")]
-async fn get_users(db: web::Data<DatabaseConnection>) -> Result<HttpResponse, Error> {
-    match Entity::find().all(db.as_ref()).await {
-        Ok(users) => Ok(HttpResponse::Ok().json(users)),
-        Err(err) => {
-            error!("Error fetching users: {:?}", err);
-            Ok(HttpResponse::InternalServerError().body("Error fetching users"))
+async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Result<HttpResponse, Error> {
+    let auth_header = req.headers().get("Authorization");
+
+    if let Some(auth_header) = auth_header {
+        if let Ok(token) = auth_header.to_str() {
+            if let Ok(_) = AuthTokenClaims::validate_token(token) {
+                let users = Entity::find()
+                    .all(db.as_ref())
+                    .await
+                    .map_err(|_| actix_web::error::ErrorInternalServerError("Error fetching users"))?
+                    .into_iter()
+                    .map(|user| serde_json::json!({
+                        "id": user.id,
+                        "username": user.username,
+                        "email": user.email,
+                    }))
+                    .collect::<Vec<_>>();
+
+                return Ok(HttpResponse::Ok().json(users));
+            }
         }
+        return Ok(HttpResponse::Unauthorized().body("Invalid token"));
     }
+
+    Ok(HttpResponse::Unauthorized().body("Missing token"))
 }
