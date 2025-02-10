@@ -4,6 +4,7 @@ use bcrypt::{hash, verify, DEFAULT_COST};
 use log::info;
 use serde::{Deserialize, Serialize};
 use validator::Validate;
+use regex::Regex;
 use crate::auth::AuthTokenClaims;
 use crate::entities::userentity::{self, ActiveModel, Entity};
 
@@ -17,6 +18,13 @@ pub struct NewUser {
     pub password: String,
 }
 
+/// Email validation function
+fn is_valid_email(email: &str) -> bool {
+    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
+    email_regex.is_match(email)
+}
+
+/// **Register User**
 #[post("/users/register")]
 async fn register_user(
     new_user: web::Json<NewUser>,
@@ -24,10 +32,17 @@ async fn register_user(
 ) -> Result<HttpResponse, Error> {
     info!("Received user registration request for username: {}", new_user.username);
 
+    // Validate input
     if let Err(err) = new_user.validate() {
         return Ok(HttpResponse::BadRequest().json(err));
     }
 
+    // Validate email format
+    if !is_valid_email(&new_user.email) {
+        return Ok(HttpResponse::BadRequest().json({ "error"; "Invalid email format" }));
+    }
+
+    // Check if user already exists (both email & username)
     let existing_user = Entity::find()
         .filter(
             Condition::any()
@@ -39,12 +54,14 @@ async fn register_user(
         .map_err(|_| actix_web::error::ErrorInternalServerError("Database error while checking user existence"))?;
 
     if existing_user.is_some() {
-        return Ok(HttpResponse::Conflict().body("User already exists"));
+        return Ok(HttpResponse::Conflict().json({ "error"; "User already exists" }));
     }
 
+    // Hash password
     let password_hash = hash(&new_user.password, DEFAULT_COST)
         .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to hash password"))?;
 
+    // Insert new user
     let new_user_active_model = ActiveModel {
         username: sea_orm::ActiveValue::Set(new_user.username.clone()),
         email: sea_orm::ActiveValue::Set(new_user.email.clone()),
@@ -53,40 +70,59 @@ async fn register_user(
     };
 
     new_user_active_model.insert(db.as_ref()).await
-        .map(|_| HttpResponse::Created().body("User registered successfully"))
+        .map(|_| HttpResponse::Created().json({ "message"; "User registered successfully" }))
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error registering user"))
 }
 
+/// **Login User**
 #[post("/users/login")]
 async fn login_user(
     login_data: web::Json<NewUser>,
     db: web::Data<DatabaseConnection>,
 ) -> Result<HttpResponse, Error> {
+    // Validate email format before checking database
+    if !is_valid_email(&login_data.email) {
+        return Ok(HttpResponse::BadRequest().json({ "error"; "Invalid email format" }));
+    }
+
+    // Find user by email and username
     let user = Entity::find()
-        .filter(userentity::Column::Username.eq(&login_data.username))
+        .filter(
+            Condition::all()
+                .add(userentity::Column::Email.eq(&login_data.email))
+                .add(userentity::Column::Username.eq(&login_data.username)),
+        )
         .one(db.as_ref())
         .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Database error while fetching user"))?;
 
     let user = match user {
         Some(user) => user,
-        None => return Ok(HttpResponse::Unauthorized().body("Invalid credentials")),
+        None => return Ok(HttpResponse::Unauthorized().json({ "error"; "Invalid credentials" })),
     };
 
+    // Verify password
     let is_password_valid = verify(&login_data.password, &user.password)
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error verifying password"))?;
 
     if !is_password_valid {
-        return Ok(HttpResponse::Unauthorized().body("Invalid credentials"));
+        return Ok(HttpResponse::Unauthorized().json({ "error";"Invalid credentials" }));
     }
 
-    let claims = AuthTokenClaims::new(user.id);
-    let token = claims.generate_token()
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Token generation failed"))?;
+    // Generate access and refresh tokens
+    let access_token = AuthTokenClaims::new(user.id, 24).generate_token()
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Access token generation failed"))?;
 
-    Ok(HttpResponse::Ok().json(serde_json::json!({ "token": token })))
+    let refresh_token = AuthTokenClaims::new(user.id, 168).generate_token()
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Refresh token generation failed"))?;
+
+    Ok(HttpResponse::Ok().json(serde_json::json!({
+        "access_token": access_token,
+        "refresh_token": refresh_token
+    })))
 }
 
+/// **Get Users (Protected Route)**
 #[get("/users")]
 async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Result<HttpResponse, Error> {
     let auth_header = req.headers().get("Authorization");
@@ -94,6 +130,7 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
     if let Some(auth_header) = auth_header {
         if let Ok(token) = auth_header.to_str() {
             if let Ok(_) = AuthTokenClaims::validate_token(token) {
+                // Fetch all users excluding passwords
                 let users = Entity::find()
                     .all(db.as_ref())
                     .await
@@ -109,8 +146,8 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
                 return Ok(HttpResponse::Ok().json(users));
             }
         }
-        return Ok(HttpResponse::Unauthorized().body("Invalid token"));
+        return Ok(HttpResponse::Unauthorized().json({ "error"; "Invalid token" }));
     }
 
-    Ok(HttpResponse::Unauthorized().body("Missing token"))
+    Ok(HttpResponse::Unauthorized().json({ "error"; "Missing token" }))
 }

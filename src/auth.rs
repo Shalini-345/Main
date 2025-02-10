@@ -12,8 +12,8 @@ pub struct AuthTokenClaims {
 
 impl AuthTokenClaims {
     /// Creates a new token claim
-    pub fn new(user_id: i32) -> Self {
-        let expiration = Utc::now() + Duration::hours(24); // Token expires in 24 hours
+    pub fn new(user_id: i32, duration_hours: i64) -> Self {
+        let expiration = Utc::now() + Duration::hours(duration_hours);
         Self {
             sub: user_id.to_string(),
             exp: expiration.timestamp() as usize,
