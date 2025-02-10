@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use chrono::{Utc, Duration};
 
-const SECRET_KEY: &[u8] = b"your-secret-key"; // Replace with a secure key
+const SECRET_KEY: &[u8] = b"your-secret-key"; 
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct AuthTokenClaims {
@@ -11,7 +11,6 @@ pub struct AuthTokenClaims {
 }
 
 impl AuthTokenClaims {
-    /// Creates a new token claim
     pub fn new(user_id: i32, duration_hours: i64) -> Self {
         let expiration = Utc::now() + Duration::hours(duration_hours);
         Self {
@@ -20,7 +19,6 @@ impl AuthTokenClaims {
         }
     }
 
-    /// Generates a JWT token
     pub fn generate_token(&self) -> Result<String, jsonwebtoken::errors::Error> {
         encode(
             &Header::default(),
@@ -29,7 +27,6 @@ impl AuthTokenClaims {
         )
     }
 
-    /// Validates a JWT token
     pub fn validate_token(token: &str) -> Result<AuthTokenClaims, jsonwebtoken::errors::Error> {
         decode::<AuthTokenClaims>(
             token,
