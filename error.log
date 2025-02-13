@@ -1,0 +1,700 @@
+[2025-02-10T03:36:20Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T03:36:20Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T03:36:20Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T03:36:20Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T03:36:20Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T03:36:20Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T03:36:20Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T03:36:20Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.721224ms elapsed_secs=0.002721224
+[2025-02-10T03:36:20Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T03:36:20Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T03:36:20Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.871885ms elapsed_secs=0.001871885
+[2025-02-10T03:36:20Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T03:36:20Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.268732ms elapsed_secs=0.001268732
+[2025-02-10T03:36:20Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T03:36:20Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.236434ms elapsed_secs=0.001236434
+[2025-02-10T03:36:20Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.941718ms elapsed_secs=0.002941718
+[2025-02-10T03:36:20Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T03:36:20Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.401508ms elapsed_secs=0.001401508
+[2025-02-10T03:36:20Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T03:36:20Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T03:36:20Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T03:36:20Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T03:36:20Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T03:36:20Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T03:37:24Z INFO  actix_web::middleware::logger] 13.60.21.29 "GET / HTTP/1.1" 200 24 "-" "curl/8.5.0" 0.000031
+[2025-02-10T03:42:42Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T04:44:13Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T04:44:13Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T04:44:13Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T04:44:13Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T04:44:13Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T04:44:13Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T04:44:13Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T04:44:13Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T04:44:13Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T04:44:13Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T04:44:13Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T04:44:13Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.69534ms elapsed_secs=0.00269534
+[2025-02-10T04:44:13Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T04:44:13Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T04:44:13Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.18447ms elapsed_secs=0.00118447
+[2025-02-10T04:44:13Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T04:44:13Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.152804ms elapsed_secs=0.001152804
+[2025-02-10T04:44:13Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T04:44:13Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.179183ms elapsed_secs=0.001179183
+[2025-02-10T04:44:13Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.415306ms elapsed_secs=0.003415306
+[2025-02-10T04:44:13Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T04:44:13Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=4.888251ms elapsed_secs=0.004888251
+[2025-02-10T04:44:13Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T04:44:13Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T04:44:13Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T04:44:13Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T04:44:13Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T04:44:13Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T04:45:52Z INFO  actix_web::middleware::logger] 13.60.21.29 "GET / HTTP/1.1" 200 24 "-" "curl/8.5.0" 0.000075
+[2025-02-10T04:46:21Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=5 rows_returned=5 elapsed=2.875986ms elapsed_secs=0.002875986
+[2025-02-10T04:46:21Z INFO  actix_web::middleware::logger] 152.59.194.91 "GET /users HTTP/1.1" 200 643 "-" "PostmanRuntime/7.43.0" 0.004390
+[2025-02-10T04:46:26Z INFO  arrively_project_main::controllers] Received login request for username: kirti
+[2025-02-10T04:46:26Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=10.903532ms elapsed_secs=0.010903532
+[2025-02-10T04:46:27Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=3.271215ms elapsed_secs=0.003271215
+[2025-02-10T04:46:27Z INFO  arrively_project_main::controllers] User found: kirti
+[2025-02-10T04:46:27Z INFO  arrively_project_main::controllers] Login successful for user: kirti
+[2025-02-10T04:46:27Z INFO  actix_web::middleware::logger] 152.59.194.91 "POST /users/login HTTP/1.1" 200 16 "-" "PostmanRuntime/7.43.0" 0.483173
+[2025-02-10T04:47:28Z INFO  actix_web::middleware::logger] 152.59.194.91 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36" 0.000031
+[2025-02-10T04:47:29Z INFO  actix_web::middleware::logger] 152.59.194.91 "GET /favicon.ico HTTP/1.1" 404 0 "http://13.60.21.29:8081/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36" 0.000028
+[2025-02-10T04:50:18Z INFO  actix_web::middleware::logger] 152.59.194.91 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36" 0.000031
+[2025-02-10T04:56:51Z INFO  arrively_project_main::controllers] Received login request for username: kirti
+[2025-02-10T04:56:51Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=1.337376ms elapsed_secs=0.001337376
+[2025-02-10T04:56:51Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=1.275957ms elapsed_secs=0.001275957
+[2025-02-10T04:56:51Z INFO  arrively_project_main::controllers] User found: kirti
+[2025-02-10T04:56:51Z INFO  arrively_project_main::controllers] Login successful for user: kirti
+[2025-02-10T04:56:51Z INFO  actix_web::middleware::logger] 152.59.194.91 "POST /users/login HTTP/1.1" 200 16 "-" "PostmanRuntime/7.43.0" 0.312081
+[2025-02-10T04:57:01Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=5 rows_returned=5 elapsed=1.263679ms elapsed_secs=0.001263679
+[2025-02-10T04:57:01Z INFO  actix_web::middleware::logger] 152.59.194.91 "GET /users HTTP/1.1" 200 643 "-" "PostmanRuntime/7.43.0" 0.002698
+[2025-02-10T04:57:19Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti
+[2025-02-10T04:57:19Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=2.704536ms elapsed_secs=0.002704536
+[2025-02-10T04:57:19Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=2.931085ms elapsed_secs=0.002931085
+[2025-02-10T04:57:19Z INFO  arrively_project_main::controllers] User already exists: kirti
+[2025-02-10T04:57:19Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 409 19 "-" "PostmanRuntime/7.43.0" 0.454438
+[2025-02-10T04:57:38Z INFO  arrively_project_main::controllers] Received login request for username: kirti
+[2025-02-10T04:57:38Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=1.346411ms elapsed_secs=0.001346411
+[2025-02-10T04:57:38Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=1.295485ms elapsed_secs=0.001295485
+[2025-02-10T04:57:38Z INFO  arrively_project_main::controllers] User found: kirti
+[2025-02-10T04:57:38Z INFO  arrively_project_main::controllers] Login successful for user: kirti
+[2025-02-10T04:57:38Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/login HTTP/1.1" 200 16 "-" "PostmanRuntime/7.43.0" 0.331120
+[2025-02-10T04:57:50Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=5 rows_returned=5 elapsed=2.509756ms elapsed_secs=0.002509756
+[2025-02-10T04:57:50Z INFO  actix_web::middleware::logger] 152.59.243.204 "GET /users HTTP/1.1" 200 643 "-" "PostmanRuntime/7.43.0" 0.003879
+[2025-02-10T04:59:11Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti
+[2025-02-10T04:59:11Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=1.324951ms elapsed_secs=0.001324951
+[2025-02-10T04:59:12Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=1.321165ms elapsed_secs=0.001321165
+[2025-02-10T04:59:12Z INFO  arrively_project_main::controllers] User already exists: kirti
+[2025-02-10T04:59:12Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 409 19 "-" "PostmanRuntime/7.43.0" 0.327668
+[2025-02-10T04:59:21Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti
+[2025-02-10T04:59:21Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=1.372308ms elapsed_secs=0.001372308
+[2025-02-10T04:59:21Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=1.3484ms elapsed_secs=0.0013484
+[2025-02-10T04:59:21Z INFO  arrively_project_main::controllers] User already exists: kirti
+[2025-02-10T04:59:21Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 409 19 "-" "PostmanRuntime/7.43.0" 0.370654
+[2025-02-10T04:59:45Z INFO  arrively_project_main::controllers] Received user registration request for username: john
+[2025-02-10T04:59:45Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=1.401749ms elapsed_secs=0.001401749
+[2025-02-10T04:59:45Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=0 elapsed=1.716118ms elapsed_secs=0.001716118
+[2025-02-10T04:59:45Z INFO  arrively_project_main::controllers] User does not exist, proceeding with registration...
+[2025-02-10T04:59:45Z INFO  sqlx::query] summary="INSERT INTO \"users\" (\"username\", …" db.statement="\n\nINSERT INTO \"users\" (\"username\", \"email\", \"password\") VALUES ($1, $2, $3) RETURNING \"id\", \"username\", \"email\", \"password\"\n" rows_affected=0 rows_returned=1 elapsed=4.799055ms elapsed_secs=0.004799055
+[2025-02-10T04:59:45Z INFO  arrively_project_main::controllers] User registered successfully: john
+[2025-02-10T04:59:45Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 201 28 "-" "PostmanRuntime/7.43.0" 0.402266
+[2025-02-10T05:00:54Z INFO  arrively_project_main::controllers] Received user registration request for username: john
+[2025-02-10T05:00:54Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=1.503966ms elapsed_secs=0.001503966
+[2025-02-10T05:00:54Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=1.317675ms elapsed_secs=0.001317675
+[2025-02-10T05:00:54Z INFO  arrively_project_main::controllers] User already exists: john
+[2025-02-10T05:00:54Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 409 19 "-" "PostmanRuntime/7.43.0" 0.341239
+[2025-02-10T05:06:18Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=6 rows_returned=6 elapsed=1.218395ms elapsed_secs=0.001218395
+[2025-02-10T05:06:18Z INFO  actix_web::middleware::logger] 152.59.243.204 "GET /users HTTP/1.1" 200 765 "-" "PostmanRuntime/7.43.0" 0.002706
+[2025-02-10T05:09:53Z INFO  arrively_project_main::controllers] Received login request for username: kirti
+[2025-02-10T05:09:53Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" LIMIT $1\n" rows_affected=0 rows_returned=1 elapsed=1.296931ms elapsed_secs=0.001296931
+[2025-02-10T05:09:53Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=1.266248ms elapsed_secs=0.001266248
+[2025-02-10T05:09:53Z INFO  arrively_project_main::controllers] User found: kirti
+[2025-02-10T05:09:54Z INFO  arrively_project_main::controllers] Login successful for user: kirti
+[2025-02-10T05:09:54Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/login HTTP/1.1" 200 16 "-" "PostmanRuntime/7.43.0" 0.392991
+[2025-02-10T05:55:22Z INFO  actix_web::middleware::logger] 162.243.43.180 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" 0.000030
+[2025-02-10T05:55:22Z INFO  actix_web::middleware::logger] 162.243.43.180 "GET /login HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" 0.000027
+[2025-02-10T06:12:29Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T06:12:29Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T06:12:29Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T06:12:30Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T06:12:30Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T06:12:30Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T06:12:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:12:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=22.284313ms elapsed_secs=0.022284313
+[2025-02-10T06:12:30Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T06:12:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:12:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.513661ms elapsed_secs=0.002513661
+[2025-02-10T06:12:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:12:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.267552ms elapsed_secs=0.003267552
+[2025-02-10T06:12:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:12:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.166972ms elapsed_secs=0.002166972
+[2025-02-10T06:12:30Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=6.225726ms elapsed_secs=0.006225726
+[2025-02-10T06:12:30Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T06:12:30Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.231093ms elapsed_secs=0.001231093
+[2025-02-10T06:12:30Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T06:12:30Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T06:12:30Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T06:12:30Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T06:12:30Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T06:12:30Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T06:13:22Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T06:13:22Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T06:13:22Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T06:13:22Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T06:13:22Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T06:13:22Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T06:13:22Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:13:22Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.005741ms elapsed_secs=0.003005741
+[2025-02-10T06:13:22Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T06:13:22Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:13:22Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.205846ms elapsed_secs=0.001205846
+[2025-02-10T06:13:22Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:13:22Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.46879ms elapsed_secs=0.00146879
+[2025-02-10T06:13:22Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:13:22Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.193166ms elapsed_secs=0.001193166
+[2025-02-10T06:13:22Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.026366ms elapsed_secs=0.003026366
+[2025-02-10T06:13:22Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T06:13:22Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.190956ms elapsed_secs=0.001190956
+[2025-02-10T06:13:22Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T06:13:22Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T06:13:22Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T06:13:22Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T06:13:22Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T06:13:22Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T06:14:02Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T06:14:02Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:14:02Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:14:02Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T06:14:03Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T06:14:03Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T06:14:03Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T06:14:03Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T06:14:03Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T06:14:03Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T06:14:03Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:14:03Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.387877ms elapsed_secs=0.003387877
+[2025-02-10T06:14:03Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T06:14:03Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:14:03Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.211234ms elapsed_secs=0.001211234
+[2025-02-10T06:14:03Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:14:03Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.153379ms elapsed_secs=0.001153379
+[2025-02-10T06:14:03Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:14:03Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.195765ms elapsed_secs=0.001195765
+[2025-02-10T06:14:03Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.877352ms elapsed_secs=0.002877352
+[2025-02-10T06:14:03Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T06:14:03Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.156526ms elapsed_secs=0.001156526
+[2025-02-10T06:14:03Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T06:14:03Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T06:14:03Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T06:14:03Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T06:14:03Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T06:14:03Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T06:14:37Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T06:14:37Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T06:14:37Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:14:37Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:21:17Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T06:21:17Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T06:21:17Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T06:21:17Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T06:21:17Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T06:21:17Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T06:21:17Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:21:17Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.623322ms elapsed_secs=0.002623322
+[2025-02-10T06:21:17Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T06:21:17Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:21:17Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.164398ms elapsed_secs=0.001164398
+[2025-02-10T06:21:17Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:21:17Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.166315ms elapsed_secs=0.001166315
+[2025-02-10T06:21:17Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:21:17Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.137122ms elapsed_secs=0.001137122
+[2025-02-10T06:21:17Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.729112ms elapsed_secs=0.002729112
+[2025-02-10T06:21:17Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T06:21:17Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.119704ms elapsed_secs=0.001119704
+[2025-02-10T06:21:17Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T06:21:17Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T06:21:17Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T06:21:17Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T06:21:17Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T06:21:17Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T06:23:47Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 401 13 "-" "PostmanRuntime/7.43.0" 0.000032
+[2025-02-10T06:23:58Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti
+[2025-02-10T06:23:58Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 82 "-" "PostmanRuntime/7.43.0" 0.001142
+[2025-02-10T06:27:46Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 LIMIT $2\n" rows_affected=0 rows_returned=1 elapsed=3.170848ms elapsed_secs=0.003170848
+[2025-02-10T06:27:46Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 401 19 "-" "PostmanRuntime/7.43.0" 0.451224
+[2025-02-10T06:47:54Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T06:47:54Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T06:47:54Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:47:54Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:47:55Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T06:47:55Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T06:47:55Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T06:47:55Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T06:47:55Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T06:47:55Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T06:47:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:47:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.524696ms elapsed_secs=0.002524696
+[2025-02-10T06:47:55Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T06:47:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:47:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.153918ms elapsed_secs=0.001153918
+[2025-02-10T06:47:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:47:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.16382ms elapsed_secs=0.00116382
+[2025-02-10T06:47:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:47:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.244084ms elapsed_secs=0.001244084
+[2025-02-10T06:47:55Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.90816ms elapsed_secs=0.00290816
+[2025-02-10T06:47:55Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T06:47:55Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.227494ms elapsed_secs=0.001227494
+[2025-02-10T06:47:55Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T06:47:55Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T06:47:55Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T06:47:55Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T06:47:55Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T06:47:55Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T06:48:52Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T06:48:52Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:48:52Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T06:48:52Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T06:48:53Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T06:48:53Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T06:48:53Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T06:48:53Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T06:48:53Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T06:48:53Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T06:48:53Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:48:53Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.477636ms elapsed_secs=0.002477636
+[2025-02-10T06:48:53Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T06:48:53Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:48:53Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.129462ms elapsed_secs=0.001129462
+[2025-02-10T06:48:53Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:48:53Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.149681ms elapsed_secs=0.001149681
+[2025-02-10T06:48:53Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T06:48:53Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.120879ms elapsed_secs=0.001120879
+[2025-02-10T06:48:53Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.761552ms elapsed_secs=0.002761552
+[2025-02-10T06:48:53Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T06:48:53Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=2.972748ms elapsed_secs=0.002972748
+[2025-02-10T06:48:53Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T06:48:53Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T06:48:53Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T06:48:53Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T06:48:53Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T06:48:53Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T06:49:35Z INFO  actix_web::middleware::logger] 127.0.0.1 "GET /users/register HTTP/1.1" 404 0 "-" "curl/8.5.0" 0.000029
+[2025-02-10T06:50:22Z INFO  arrively_project_main::controllers] Received user registration request for username: testuser
+[2025-02-10T06:50:22Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=3.099738ms elapsed_secs=0.003099738
+[2025-02-10T06:50:22Z INFO  actix_web::middleware::logger] 127.0.0.1 "POST /users/register HTTP/1.1" 409 21 "-" "curl/8.5.0" 0.006769
+[2025-02-10T06:51:48Z INFO  arrively_project_main::controllers] Received user registration request for username: firstuser
+[2025-02-10T06:51:48Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=1.363797ms elapsed_secs=0.001363797
+[2025-02-10T06:51:49Z INFO  sqlx::query] summary="INSERT INTO \"users\" (\"username\", …" db.statement="\n\nINSERT INTO \"users\" (\"username\", \"email\", \"password\") VALUES ($1, $2, $3) RETURNING \"id\", \"username\", \"email\", \"password\"\n" rows_affected=0 rows_returned=1 elapsed=4.640718ms elapsed_secs=0.004640718
+[2025-02-10T06:51:49Z INFO  actix_web::middleware::logger] 127.0.0.1 "POST /users/register HTTP/1.1" 201 30 "-" "curl/8.5.0" 0.456194
+[2025-02-10T06:52:20Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=2.688017ms elapsed_secs=0.002688017
+[2025-02-10T06:52:20Z INFO  actix_web::middleware::logger] 127.0.0.1 "POST /users/login HTTP/1.1" 200 276 "-" "curl/8.5.0" 0.319138
+[2025-02-10T06:55:58Z INFO  actix_web::middleware::logger] 127.0.0.1 "GET /users HTTP/1.1" 401 15 "-" "curl/8.5.0" 0.000098
+[2025-02-10T06:59:38Z INFO  arrively_project_main::controllers] Received user registration request for username: testuser
+[2025-02-10T06:59:38Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 78 "-" "PostmanRuntime/7.43.0" 0.000100
+[2025-02-10T07:00:15Z INFO  arrively_project_main::controllers] Received user registration request for username: testuser
+[2025-02-10T07:00:15Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 78 "-" "PostmanRuntime/7.43.0" 0.000105
+[2025-02-10T07:01:24Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 401 15 "-" "PostmanRuntime/7.43.0" 0.000036
+[2025-02-10T07:01:36Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 401 15 "-" "PostmanRuntime/7.43.0" 0.000039
+[2025-02-10T07:01:41Z INFO  arrively_project_main::controllers] Received user registration request for username: testuser
+[2025-02-10T07:01:41Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 78 "-" "PostmanRuntime/7.43.0" 0.000087
+[2025-02-10T07:04:17Z INFO  arrively_project_main::controllers] Received user registration request for username: validuser
+[2025-02-10T07:04:17Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=3.003455ms elapsed_secs=0.003003455
+[2025-02-10T07:04:17Z INFO  sqlx::query] summary="INSERT INTO \"users\" (\"username\", …" db.statement="\n\nINSERT INTO \"users\" (\"username\", \"email\", \"password\") VALUES ($1, $2, $3) RETURNING \"id\", \"username\", \"email\", \"password\"\n" rows_affected=0 rows_returned=1 elapsed=5.361194ms elapsed_secs=0.005361194
+[2025-02-10T07:04:17Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 201 30 "-" "PostmanRuntime/7.43.0" 0.373348
+[2025-02-10T07:04:28Z INFO  arrively_project_main::controllers] Received user registration request for username: validuser
+[2025-02-10T07:04:28Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.329434ms elapsed_secs=0.001329434
+[2025-02-10T07:04:28Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 409 21 "-" "PostmanRuntime/7.43.0" 0.003854
+[2025-02-10T07:05:00Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 401 15 "-" "PostmanRuntime/7.43.0" 0.000038
+[2025-02-10T07:06:38Z INFO  actix_web::middleware::logger] 184.105.139.92 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" 0.000029
+[2025-02-10T07:07:32Z INFO  actix_web::middleware::logger] 184.105.139.84 "GET /favicon.ico HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/109.0" 0.000027
+[2025-02-10T07:07:58Z INFO  actix_web::middleware::logger] 184.105.139.108 "GET /?format=json HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" 0.000029
+[2025-02-10T07:08:20Z INFO  actix_web::middleware::logger] 184.105.139.108 "CONNECT  HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" 0.000053
+[2025-02-10T07:19:28Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T07:19:28Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:19:28Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:19:28Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T07:19:28Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T07:19:28Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T07:19:28Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T07:19:28Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T07:19:28Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T07:19:28Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T07:19:28Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:19:28Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=4.050623ms elapsed_secs=0.004050623
+[2025-02-10T07:19:28Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T07:19:28Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:19:28Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.261058ms elapsed_secs=0.001261058
+[2025-02-10T07:19:28Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:19:28Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.041112ms elapsed_secs=0.002041112
+[2025-02-10T07:19:28Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:19:28Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.204661ms elapsed_secs=0.001204661
+[2025-02-10T07:19:28Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.864178ms elapsed_secs=0.002864178
+[2025-02-10T07:19:28Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T07:19:28Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.147138ms elapsed_secs=0.001147138
+[2025-02-10T07:19:28Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T07:19:28Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T07:19:28Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T07:19:28Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T07:19:28Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T07:19:28Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T07:20:10Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T07:20:10Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T07:20:10Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:20:10Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:20:11Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T07:20:11Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T07:20:11Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T07:20:11Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T07:20:11Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T07:20:11Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T07:20:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:20:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.547631ms elapsed_secs=0.002547631
+[2025-02-10T07:20:11Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T07:20:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:20:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.324279ms elapsed_secs=0.001324279
+[2025-02-10T07:20:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:20:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.230369ms elapsed_secs=0.001230369
+[2025-02-10T07:20:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:20:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.155424ms elapsed_secs=0.001155424
+[2025-02-10T07:20:11Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.016718ms elapsed_secs=0.003016718
+[2025-02-10T07:20:11Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T07:20:11Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.173805ms elapsed_secs=0.001173805
+[2025-02-10T07:20:11Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T07:20:11Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T07:20:11Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T07:20:11Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T07:20:11Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T07:20:11Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T07:20:33Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti
+[2025-02-10T07:20:33Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 172 "-" "PostmanRuntime/7.43.0" 0.000125
+[2025-02-10T07:20:39Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti
+[2025-02-10T07:20:39Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 172 "-" "PostmanRuntime/7.43.0" 0.000085
+[2025-02-10T07:22:33Z INFO  arrively_project_main::controllers] Received user registration request for username: testuser
+[2025-02-10T07:22:33Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 83 "-" "PostmanRuntime/7.43.0" 0.000082
+[2025-02-10T07:22:55Z INFO  arrively_project_main::controllers] Received user registration request for username: testuser
+[2025-02-10T07:22:55Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 83 "-" "PostmanRuntime/7.43.0" 0.000087
+[2025-02-10T07:28:05Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.001075
+[2025-02-10T07:34:54Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T07:34:54Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:34:54Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:34:54Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T07:34:54Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T07:34:54Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T07:34:54Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T07:34:55Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T07:34:55Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T07:34:55Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T07:34:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:34:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.786055ms elapsed_secs=0.002786055
+[2025-02-10T07:34:55Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T07:34:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:34:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.171662ms elapsed_secs=0.001171662
+[2025-02-10T07:34:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:34:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.179338ms elapsed_secs=0.001179338
+[2025-02-10T07:34:55Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:34:55Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.187311ms elapsed_secs=0.001187311
+[2025-02-10T07:34:55Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.89667ms elapsed_secs=0.00289667
+[2025-02-10T07:34:55Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T07:34:55Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.219283ms elapsed_secs=0.001219283
+[2025-02-10T07:34:55Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T07:34:55Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T07:34:55Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T07:34:55Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T07:34:55Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T07:34:55Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T07:36:14Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T07:36:14Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:36:14Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T07:36:14Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T07:36:14Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T07:36:14Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T07:36:14Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T07:36:14Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T07:36:14Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T07:36:14Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T07:36:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:36:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.69901ms elapsed_secs=0.00269901
+[2025-02-10T07:36:14Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T07:36:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:36:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.515568ms elapsed_secs=0.001515568
+[2025-02-10T07:36:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:36:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.498629ms elapsed_secs=0.001498629
+[2025-02-10T07:36:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T07:36:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.377388ms elapsed_secs=0.001377388
+[2025-02-10T07:36:14Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=4.548356ms elapsed_secs=0.004548356
+[2025-02-10T07:36:14Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T07:36:14Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.199399ms elapsed_secs=0.001199399
+[2025-02-10T07:36:14Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T07:36:14Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T07:36:14Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T07:36:14Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T07:36:14Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T07:36:14Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T07:37:38Z INFO  actix_web::middleware::logger] 127.0.0.1 "POST /users/login HTTP/1.1" 400 68 "-" "curl/8.5.0" 0.000056
+[2025-02-10T07:38:29Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=35.068892ms elapsed_secs=0.035068892
+[2025-02-10T07:38:30Z INFO  actix_web::middleware::logger] 127.0.0.1 "POST /users/login HTTP/1.1" 401 31 "-" "curl/8.5.0" 0.430681
+[2025-02-10T07:41:32Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T07:41:32Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 83 "-" "PostmanRuntime/7.43.0" 0.000101
+[2025-02-10T07:42:04Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T07:42:04Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 85 "-" "PostmanRuntime/7.43.0" 0.001113
+[2025-02-10T07:42:42Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T07:42:42Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=3.272947ms elapsed_secs=0.003272947
+[2025-02-10T07:42:42Z INFO  sqlx::query] summary="INSERT INTO \"users\" (\"username\", …" db.statement="\n\nINSERT INTO \"users\" (\"username\", \"email\", \"password\") VALUES ($1, $2, $3) RETURNING \"id\", \"username\", \"email\", \"password\"\n" rows_affected=0 rows_returned=1 elapsed=7.021274ms elapsed_secs=0.007021274
+[2025-02-10T07:42:42Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 201 42 "-" "PostmanRuntime/7.43.0" 0.478306
+[2025-02-10T07:43:16Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.358762ms elapsed_secs=0.001358762
+[2025-02-10T07:43:17Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 200 272 "-" "PostmanRuntime/7.43.0" 0.428362
+[2025-02-10T07:48:47Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 401 25 "-" "PostmanRuntime/7.43.0" 0.000059
+[2025-02-10T07:49:36Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T07:49:36Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=3.043343ms elapsed_secs=0.003043343
+[2025-02-10T07:49:36Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.43.0" 0.004518
+[2025-02-10T07:49:57Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T07:49:57Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 76 "-" "PostmanRuntime/7.43.0" 0.000089
+[2025-02-10T07:50:17Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T07:50:17Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.452062ms elapsed_secs=0.001452062
+[2025-02-10T07:50:17Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.43.0" 0.002901
+[2025-02-10T07:50:45Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=2.735189ms elapsed_secs=0.002735189
+[2025-02-10T07:50:45Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 200 272 "-" "PostmanRuntime/7.43.0" 0.374738
+[2025-02-10T08:02:24Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=9 rows_returned=9 elapsed=2.690696ms elapsed_secs=0.002690696
+[2025-02-10T08:02:24Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 200 506 "-" "PostmanRuntime/7.43.0" 0.009029
+[2025-02-10T08:11:46Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T08:11:46Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T08:11:46Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T08:11:46Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T08:11:47Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T08:11:47Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T08:11:47Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T08:11:47Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T08:11:47Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T08:11:47Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T08:11:47Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T08:11:47Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.577296ms elapsed_secs=0.002577296
+[2025-02-10T08:11:47Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T08:11:47Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T08:11:47Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.175969ms elapsed_secs=0.001175969
+[2025-02-10T08:11:47Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T08:11:47Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.162638ms elapsed_secs=0.001162638
+[2025-02-10T08:11:47Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T08:11:47Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.268976ms elapsed_secs=0.001268976
+[2025-02-10T08:11:47Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.949078ms elapsed_secs=0.002949078
+[2025-02-10T08:11:47Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T08:11:47Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.233484ms elapsed_secs=0.001233484
+[2025-02-10T08:11:47Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T08:11:47Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T08:11:47Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T08:11:47Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T08:11:47Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T08:11:47Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T08:12:17Z INFO  actix_web::middleware::logger] 13.60.21.29 "GET /users HTTP/1.1" 401 25 "-" "curl/8.5.0" 0.000048
+[2025-02-10T08:14:11Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36" 0.000035
+[2025-02-10T08:14:26Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T08:14:26Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T08:14:27Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T08:17:10Z INFO  actix_web::middleware::logger] 103.109.144.44 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.000035
+[2025-02-10T08:17:11Z INFO  actix_web::middleware::logger] 103.109.144.44 "GET /favicon.ico HTTP/1.1" 404 0 "http://13.60.21.29:8081/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.000027
+[2025-02-10T08:17:16Z INFO  actix_web::middleware::logger] 103.109.144.44 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.000028
+[2025-02-10T08:18:20Z INFO  actix_web::middleware::logger] 103.109.144.44 "GET /users HTTP/1.1" 401 25 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.000038
+[2025-02-10T08:18:45Z INFO  actix_web::middleware::logger] 103.109.144.44 "GET /users HTTP/1.1" 401 25 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" 0.000039
+[2025-02-10T08:23:15Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T08:23:15Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=8.330793ms elapsed_secs=0.008330793
+[2025-02-10T08:23:15Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.43.0" 0.011181
+[2025-02-10T08:23:21Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=5.989717ms elapsed_secs=0.005989717
+[2025-02-10T08:23:22Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 200 272 "-" "PostmanRuntime/7.43.0" 0.335207
+[2025-02-10T08:23:37Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.375075ms elapsed_secs=0.001375075
+[2025-02-10T08:23:38Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 200 272 "-" "PostmanRuntime/7.43.0" 0.388662
+[2025-02-10T08:23:47Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=9 rows_returned=9 elapsed=2.588529ms elapsed_secs=0.002588529
+[2025-02-10T08:23:47Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 200 506 "-" "PostmanRuntime/7.43.0" 0.004044
+[2025-02-10T08:25:54Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T08:25:54Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.43523ms elapsed_secs=0.00143523
+[2025-02-10T08:25:54Z INFO  actix_web::middleware::logger] 103.109.144.44 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.42.0" 0.003034
+[2025-02-10T08:28:09Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti sree
+[2025-02-10T08:28:09Z INFO  actix_web::middleware::logger] 103.109.144.44 "POST /users/register HTTP/1.1" 400 99 "-" "PostmanRuntime/7.42.0" 0.000154
+[2025-02-10T08:28:47Z INFO  arrively_project_main::controllers] Received user registration request for username: kirti sree
+[2025-02-10T08:28:47Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=1.35441ms elapsed_secs=0.00135441
+[2025-02-10T08:28:47Z INFO  sqlx::query] summary="INSERT INTO \"users\" (\"username\", …" db.statement="\n\nINSERT INTO \"users\" (\"username\", \"email\", \"password\") VALUES ($1, $2, $3) RETURNING \"id\", \"username\", \"email\", \"password\"\n" rows_affected=0 rows_returned=1 elapsed=4.554444ms elapsed_secs=0.004554444
+[2025-02-10T08:28:47Z INFO  actix_web::middleware::logger] 103.109.144.44 "POST /users/register HTTP/1.1" 201 42 "-" "PostmanRuntime/7.42.0" 0.439618
+[2025-02-10T08:29:25Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.397816ms elapsed_secs=0.001397816
+[2025-02-10T08:29:25Z INFO  actix_web::middleware::logger] 103.109.144.44 "POST /users/login HTTP/1.1" 200 272 "-" "PostmanRuntime/7.42.0" 0.344948
+[2025-02-10T08:30:00Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=10 rows_returned=10 elapsed=2.620687ms elapsed_secs=0.002620687
+[2025-02-10T08:30:00Z INFO  actix_web::middleware::logger] 103.109.144.44 "GET /users HTTP/1.1" 200 572 "-" "PostmanRuntime/7.42.0" 0.004043
+[2025-02-10T09:06:37Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T09:06:37Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=3.488063ms elapsed_secs=0.003488063
+[2025-02-10T09:06:37Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.43.0" 0.137159
+[2025-02-10T09:06:51Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T09:06:51Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 400 77 "-" "PostmanRuntime/7.43.0" 0.000077
+[2025-02-10T09:07:20Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T09:07:20Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 400 74 "-" "PostmanRuntime/7.43.0" 0.000414
+[2025-02-10T09:07:27Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T09:07:27Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.322752ms elapsed_secs=0.001322752
+[2025-02-10T09:07:27Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.43.0" 0.002720
+[2025-02-10T09:07:37Z INFO  arrively_project_main::controllers] Received user registration request for username: sdasd
+[2025-02-10T09:07:37Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=1.329639ms elapsed_secs=0.001329639
+[2025-02-10T09:07:37Z INFO  sqlx::query] summary="INSERT INTO \"users\" (\"username\", …" db.statement="\n\nINSERT INTO \"users\" (\"username\", \"email\", \"password\") VALUES ($1, $2, $3) RETURNING \"id\", \"username\", \"email\", \"password\"\n" rows_affected=0 rows_returned=1 elapsed=4.766563ms elapsed_secs=0.004766563
+[2025-02-10T09:07:37Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 201 42 "-" "PostmanRuntime/7.43.0" 0.430932
+[2025-02-10T09:07:51Z INFO  arrively_project_main::controllers] Received user registration request for username: sdfsdf
+[2025-02-10T09:07:51Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 400 78 "-" "PostmanRuntime/7.43.0" 0.000097
+[2025-02-10T09:08:03Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=2.687642ms elapsed_secs=0.002687642
+[2025-02-10T09:08:03Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/login HTTP/1.1" 200 272 "-" "PostmanRuntime/7.43.0" 0.385336
+[2025-02-10T09:08:14Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T09:08:15Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T09:08:29Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=11 rows_returned=11 elapsed=3.385955ms elapsed_secs=0.003385955
+[2025-02-10T09:08:29Z INFO  actix_web::middleware::logger] 152.59.243.204 "GET /users HTTP/1.1" 200 625 "-" "PostmanRuntime/7.43.0" 0.005029
+[2025-02-10T09:11:04Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.339891ms elapsed_secs=0.001339891
+[2025-02-10T09:11:05Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/login HTTP/1.1" 401 31 "-" "PostmanRuntime/7.43.0" 0.368974
+[2025-02-10T09:11:15Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/login HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.000982
+[2025-02-10T09:11:23Z INFO  arrively_project_main::controllers] Received user registration request for username: sdfsdf
+[2025-02-10T09:11:23Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 400 78 "-" "PostmanRuntime/7.43.0" 0.000094
+[2025-02-10T09:16:52Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=11 rows_returned=11 elapsed=1.287121ms elapsed_secs=0.001287121
+[2025-02-10T09:16:52Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 200 625 "-" "PostmanRuntime/7.43.0" 0.002747
+[2025-02-10T09:17:37Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T09:17:37Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=1.393895ms elapsed_secs=0.001393895
+[2025-02-10T09:17:37Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.43.0" 0.002913
+[2025-02-10T09:17:44Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=4.110772ms elapsed_secs=0.004110772
+[2025-02-10T09:17:44Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 200 272 "-" "PostmanRuntime/7.43.0" 0.385739
+[2025-02-10T09:17:55Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\"\n" rows_affected=11 rows_returned=11 elapsed=2.454812ms elapsed_secs=0.002454812
+[2025-02-10T09:17:55Z INFO  actix_web::middleware::logger] 152.59.194.88 "GET /users HTTP/1.1" 200 625 "-" "PostmanRuntime/7.43.0" 0.003830
+[2025-02-10T09:19:49Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.000723
+[2025-02-10T09:20:08Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-10T09:20:08Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=1 elapsed=2.675587ms elapsed_secs=0.002675587
+[2025-02-10T09:20:08Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 409 35 "-" "PostmanRuntime/7.43.0" 0.004181
+[2025-02-10T09:20:29Z INFO  arrively_project_main::controllers] Received user registration request for username: secondus
+[2025-02-10T09:20:29Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=17.88164ms elapsed_secs=0.01788164
+[2025-02-10T09:20:29Z INFO  sqlx::query] summary="INSERT INTO \"users\" (\"username\", …" db.statement="\n\nINSERT INTO \"users\" (\"username\", \"email\", \"password\") VALUES ($1, $2, $3) RETURNING \"id\", \"username\", \"email\", \"password\"\n" rows_affected=0 rows_returned=1 elapsed=24.92201ms elapsed_secs=0.02492201
+[2025-02-10T09:20:29Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 201 42 "-" "PostmanRuntime/7.43.0" 0.354577
+[2025-02-10T09:20:50Z INFO  arrively_project_main::controllers] Received user registration request for username: secondus
+[2025-02-10T09:20:50Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 76 "-" "PostmanRuntime/7.43.0" 0.000090
+[2025-02-10T09:29:50Z INFO  arrively_project_main::controllers] Received user registration request for username: secondus
+[2025-02-10T09:29:50Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 76 "-" "PostmanRuntime/7.43.0" 0.000084
+[2025-02-10T09:31:27Z INFO  arrively_project_main::controllers] Received user registration request for username: secondus
+[2025-02-10T09:31:27Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 76 "-" "PostmanRuntime/7.43.0" 0.017171
+[2025-02-10T09:32:14Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-10T09:32:15Z INFO  actix_server::accept] accept thread stopped
+[2025-02-10T09:32:15Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-10T09:32:15Z INFO  arrively_project_main]  Starting the application...
+[2025-02-10T09:32:15Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-10T09:32:15Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-10T09:32:15Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-10T09:32:15Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-10T09:32:15Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-10T09:32:15Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T09:32:15Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.930119ms elapsed_secs=0.002930119
+[2025-02-10T09:32:15Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-10T09:32:15Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T09:32:15Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.352909ms elapsed_secs=0.001352909
+[2025-02-10T09:32:15Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T09:32:15Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.347363ms elapsed_secs=0.001347363
+[2025-02-10T09:32:15Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-10T09:32:15Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.34217ms elapsed_secs=0.00134217
+[2025-02-10T09:32:15Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.558897ms elapsed_secs=0.003558897
+[2025-02-10T09:32:15Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-10T09:32:15Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.210895ms elapsed_secs=0.001210895
+[2025-02-10T09:32:15Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-10T09:32:15Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-10T09:32:15Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-10T09:32:15Z INFO  actix_server::builder] starting 2 workers
+[2025-02-10T09:32:15Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-10T09:32:15Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-10T09:33:43Z INFO  arrively_project_main::controllers] Received user registration request for username: secondus
+[2025-02-10T09:33:43Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.018120
+[2025-02-10T09:33:52Z INFO  arrively_project_main::controllers] Received user registration request for username: secondus
+[2025-02-10T09:33:52Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.000086
+[2025-02-10T09:33:58Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/login HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.010048
+[2025-02-10T09:34:13Z INFO  arrively_project_main::controllers] Received user registration request for username: secondus
+[2025-02-10T09:34:13Z INFO  actix_web::middleware::logger] 152.59.194.88 "POST /users/register HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.000077
+[2025-02-10T09:35:45Z INFO  arrively_project_main::controllers] Received user registration request for username: sdfsdf
+[2025-02-10T09:35:45Z INFO  actix_web::middleware::logger] 152.59.243.204 "POST /users/register HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.000075
+[2025-02-10T10:26:50Z INFO  actix_web::middleware::logger] 92.255.57.58 "GET /jars HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" 0.000040
+[2025-02-10T10:31:15Z INFO  actix_web::middleware::logger] 92.255.57.58 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" 0.000050
+[2025-02-10T10:31:54Z INFO  actix_web::middleware::logger] 92.255.57.58 "POST /service/extdirect HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" 0.000027
+[2025-02-10T10:40:54Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T13:19:16Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T13:19:31Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T13:20:01Z INFO  actix_web::middleware::logger] 104.234.115.139 "GET / HTTP/1.1" 200 24 "-" "'Mozilla/5.0 (compatible; GenomeCrawlerd/1.0; +https://www.nokia.com/genomecrawler)'" 0.000039
+[2025-02-10T13:21:28Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T13:21:34Z INFO  actix_web::middleware::logger] 104.234.115.139 "GET /favicon.ico HTTP/1.1" 404 0 "-" "'Mozilla/5.0 (compatible; GenomeCrawlerd/1.0; +https://www.nokia.com/genomecrawler)'" 0.000027
+[2025-02-10T16:30:26Z INFO  actix_web::middleware::logger] 45.55.153.86 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (compatible; InternetMeasurement/1.0; +https://internet-measurement.com/)" 0.000030
+[2025-02-10T18:09:39Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T18:09:44Z INFO  actix_web::middleware::logger] 165.154.138.165 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0" 0.000029
+[2025-02-10T18:09:49Z INFO  actix_web::middleware::logger] 165.154.138.165 "GET /favicon.ico HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11" 0.000028
+[2025-02-10T18:09:49Z INFO  actix_web::middleware::logger] 165.154.138.165 "GET /robots.txt HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11" 0.000028
+[2025-02-10T18:09:49Z INFO  actix_web::middleware::logger] 165.154.138.165 "GET /sitemap.xml HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11" 0.000027
+[2025-02-10T18:09:49Z INFO  actix_web::middleware::logger] 165.154.138.165 "GET /config.json HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11" 0.000027
+[2025-02-10T20:53:40Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-10T20:53:40Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-11T01:09:03Z INFO  actix_web::middleware::logger] 65.49.20.105 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.156 Not(A:Brand/24 YaBrowser/24.4.1.901 Yowser/2.5  Safari/537.36" 0.000030
+[2025-02-11T01:09:38Z INFO  actix_web::middleware::logger] 65.49.20.97 "GET /favicon.ico HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" 0.000043
+[2025-02-11T01:09:59Z INFO  actix_web::middleware::logger] 65.49.20.73 "GET /?format=json HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" 0.000030
+[2025-02-11T01:10:21Z INFO  actix_web::middleware::logger] 65.49.20.77 "CONNECT  HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" 0.000027
+[2025-02-11T01:53:54Z INFO  actix_web::middleware::logger] 4.151.38.208 "GET /manager/text/list HTTP/1.1" 404 0 "-" "Mozilla/5.0 zgrab/0.x" 0.000026
+[2025-02-11T08:59:56Z INFO  actix_web::middleware::logger] 147.185.132.97 "GET / HTTP/1.0" 200 24 "-" "Expanse, a Palo Alto Networks company, searches across the global IPv4 space multiple times per day to identify customers&#39; presences on the Internet. If you would like to be excluded from our scans, please send IP addresses/domains to: scaninfo@paloaltonetworks.com" 0.000033
+[2025-02-11T09:34:26Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-11T13:49:09Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-11T13:56:59Z INFO  actix_web::middleware::logger] 143.198.181.140 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (compatible)" 0.000030
+[2025-02-11T13:56:59Z INFO  actix_web::middleware::logger] 143.198.181.140 "GET /favicon.ico HTTP/1.1" 404 0 "http://13.60.21.29:8081/" "Mozilla/5.0 (compatible)" 0.000030
+[2025-02-11T16:17:07Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T02:17:38Z INFO  actix_web::middleware::logger] 198.235.24.164 "GET / HTTP/1.0" 200 24 "-" "Expanse, a Palo Alto Networks company, searches across the global IPv4 space multiple times per day to identify customers&#39; presences on the Internet. If you would like to be excluded from our scans, please send IP addresses/domains to: scaninfo@paloaltonetworks.com" 0.000030
+[2025-02-12T02:38:00Z INFO  actix_web::middleware::logger] 91.224.92.10 "GET / HTTP/1.1" 200 24 "-" "-" 0.000029
+[2025-02-12T03:12:12Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T03:12:12Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T03:17:35Z INFO  actix_web::middleware::logger] 65.49.1.95 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" 0.000054
+[2025-02-12T03:17:52Z INFO  actix_web::middleware::logger] 65.49.1.95 "GET /favicon.ico HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; rv:108.0) Gecko/20100101 Firefox/108.0" 0.000028
+[2025-02-12T03:17:56Z INFO  actix_web::middleware::logger] 65.49.1.101 "GET /?format=json HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0" 0.000029
+[2025-02-12T03:17:59Z INFO  actix_web::middleware::logger] 65.49.1.102 "CONNECT  HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0" 0.000029
+[2025-02-12T04:05:23Z INFO  actix_web::middleware::logger] 205.210.31.82 "GET / HTTP/1.1" 200 24 "-" "Expanse, a Palo Alto Networks company, searches across the global IPv4 space multiple times per day to identify customers&#39; presences on the Internet. If you would like to be excluded from our scans, please send IP addresses/domains to: scaninfo@paloaltonetworks.com" 0.000030
+[2025-02-12T04:32:19Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T07:12:21Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T08:26:40Z INFO  actix_web::middleware::logger] 46.19.143.26 "GET / HTTP/1.1" 200 24 "-" "-" 0.000030
+[2025-02-12T09:26:21Z INFO  actix_web::middleware::logger] 45.92.19.136 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" 0.000028
+[2025-02-12T09:44:54Z INFO  actix_web::middleware::logger] 170.64.154.131 "GET /aaa9 HTTP/1.1" 404 0 "-" "Mozilla/5.0 zgrab/0.x" 0.000027
+[2025-02-12T09:45:00Z INFO  actix_web::middleware::logger] 170.64.154.131 "GET /aab8 HTTP/1.1" 404 0 "-" "Mozilla/5.0 zgrab/0.x" 0.000030
+[2025-02-12T09:45:07Z INFO  actix_web::middleware::logger] 170.64.154.131 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 zgrab/0.x" 0.000031
+[2025-02-12T11:14:47Z INFO  actix_web::middleware::logger] 18.118.189.107 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0.0.0 Safari/537.36" 0.000028
+[2025-02-12T11:14:48Z INFO  actix_web::middleware::logger] 18.118.189.107 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0.0.0 Safari/537.36" 0.000033
+[2025-02-12T11:14:59Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T11:15:04Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T11:15:09Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-12T11:52:51Z INFO  actix_web::middleware::logger] 92.255.57.58 "GET /jars HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" 0.000026
+[2025-02-12T16:45:26Z INFO  actix_web::middleware::logger] 161.35.90.53 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" 0.000029
+[2025-02-12T16:45:26Z INFO  actix_web::middleware::logger] 161.35.90.53 "GET /login HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" 0.000026
+[2025-02-12T17:07:43Z INFO  actix_web::middleware::logger] 172.169.4.28 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 zgrab/0.x" 0.000030
+[2025-02-13T00:07:17Z INFO  actix_web::middleware::logger] 216.218.206.82 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 YaBrowser/24.1.0.0 Safari/537.36" 0.000028
+[2025-02-13T00:08:10Z INFO  actix_web::middleware::logger] 216.218.206.86 "GET /favicon.ico HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Windows NT 10.0; rv:108.0) Gecko/20100101 Firefox/108.0" 0.000032
+[2025-02-13T00:08:34Z INFO  actix_web::middleware::logger] 216.218.206.78 "GET /?format=json HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" 0.000048
+[2025-02-13T00:08:56Z INFO  actix_web::middleware::logger] 216.218.206.102 "CONNECT  HTTP/1.1" 404 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" 0.000030
+[2025-02-13T00:56:01Z INFO  actix_web::middleware::logger] 205.210.31.129 "GET / HTTP/1.1" 200 24 "-" "Expanse, a Palo Alto Networks company, searches across the global IPv4 space multiple times per day to identify customers&#39; presences on the Internet. If you would like to be excluded from our scans, please send IP addresses/domains to: scaninfo@paloaltonetworks.com" 0.000028
+[2025-02-13T01:33:38Z INFO  actix_web::middleware::logger] 198.235.24.129 "GET / HTTP/1.0" 200 24 "-" "Expanse, a Palo Alto Networks company, searches across the global IPv4 space multiple times per day to identify customers&#39; presences on the Internet. If you would like to be excluded from our scans, please send IP addresses/domains to: scaninfo@paloaltonetworks.com" 0.000031
+[2025-02-13T03:40:05Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-13T05:33:20Z INFO  actix_web::middleware::logger] 103.109.144.41 "GET /favicon.ico HTTP/1.1" 404 0 "http://13.60.21.29:8081/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" 0.000027
+[2025-02-13T05:33:22Z INFO  actix_web::middleware::logger] 103.109.144.41 "GET /users HTTP/1.1" 401 25 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" 0.000045
+[2025-02-13T05:40:35Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-13T07:40:29Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-13T07:40:29Z INFO  actix_server::accept] accept thread stopped
+[2025-02-13T07:40:29Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T07:40:29Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T07:40:29Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T07:40:29Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T07:40:29Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T07:40:30Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T07:40:30Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T07:40:30Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T07:40:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:40:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=15.946678ms elapsed_secs=0.015946678
+[2025-02-13T07:40:30Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T07:40:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:40:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.410314ms elapsed_secs=0.003410314
+[2025-02-13T07:40:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:40:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.332304ms elapsed_secs=0.001332304
+[2025-02-13T07:40:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:40:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.349997ms elapsed_secs=0.001349997
+[2025-02-13T07:40:30Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.467443ms elapsed_secs=0.003467443
+[2025-02-13T07:40:30Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-13T07:40:30Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.302705ms elapsed_secs=0.001302705
+[2025-02-13T07:40:30Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-13T07:40:30Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-13T07:40:30Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-13T07:40:30Z INFO  actix_server::builder] starting 2 workers
+[2025-02-13T07:40:30Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-13T07:40:30Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081

@@ -1,0 +1,84 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.99s
+     Running `target/debug/arrively-project-main`
+[2025-02-08T08:45:32Z INFO  arrively_project_main] 🚀 Starting the application...
+[2025-02-08T08:45:32Z INFO  arrively_project_main::db] 🔄 Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-08T08:45:32Z INFO  arrively_project_main::db] ⚡ Attempting database connection...
+[2025-02-08T08:45:32Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-08T08:45:32Z INFO  arrively_project_main] ✅ Database connection established successfully!
+[2025-02-08T08:45:32Z INFO  arrively_project_main] ⚡ Running database migrations...
+[2025-02-08T08:45:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:45:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.995276ms elapsed_secs=0.002995276
+[2025-02-08T08:45:32Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-08T08:45:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:45:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.395572ms elapsed_secs=0.001395572
+[2025-02-08T08:45:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:45:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=4.039489ms elapsed_secs=0.004039489
+[2025-02-08T08:45:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:45:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.261671ms elapsed_secs=0.001261671
+[2025-02-08T08:45:32Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=1 rows_returned=1 elapsed=3.343753ms elapsed_secs=0.003343753
+[2025-02-08T08:45:32Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-08T08:45:32Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.218412ms elapsed_secs=0.001218412
+[2025-02-08T08:45:32Z INFO  arrively_project_main] ✅ Migrations completed successfully!
+[2025-02-08T08:45:32Z INFO  arrively_project_main] 🚀 Starting Actix server on 0.0.0.0:8081...
+[2025-02-08T08:45:32Z INFO  arrively_project_main] 🌍 Server is running at http://0.0.0.0:8081
+Error: Os { code: 98, kind: AddrInUse, message: "Address already in use" }
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.29s
+     Running `target/debug/arrively-project-main`
+[2025-02-08T08:50:13Z INFO  arrively_project_main] 🚀 Starting the application...
+[2025-02-08T08:50:13Z INFO  arrively_project_main::db] 🔄 Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-08T08:50:13Z INFO  arrively_project_main::db] ⚡ Attempting database connection...
+[2025-02-08T08:50:14Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-08T08:50:14Z INFO  arrively_project_main] ✅ Database connection established successfully!
+[2025-02-08T08:50:14Z INFO  arrively_project_main] ⚡ Running database migrations...
+[2025-02-08T08:50:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:50:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.925681ms elapsed_secs=0.002925681
+[2025-02-08T08:50:14Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-08T08:50:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:50:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.312299ms elapsed_secs=0.001312299
+[2025-02-08T08:50:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:50:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.30858ms elapsed_secs=0.00130858
+[2025-02-08T08:50:14Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T08:50:14Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.235951ms elapsed_secs=0.001235951
+[2025-02-08T08:50:14Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=1 rows_returned=1 elapsed=4.561175ms elapsed_secs=0.004561175
+[2025-02-08T08:50:14Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-08T08:50:14Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.233749ms elapsed_secs=0.001233749
+[2025-02-08T08:50:14Z INFO  arrively_project_main] ✅ Migrations completed successfully!
+[2025-02-08T08:50:14Z INFO  arrively_project_main] 🚀 Starting Actix server on 0.0.0.0:8081...
+[2025-02-08T08:50:14Z INFO  arrively_project_main] 🌍 Server is running at http://0.0.0.0:8081
+[2025-02-08T08:50:14Z INFO  actix_server::builder] starting 2 workers
+[2025-02-08T08:50:14Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-08T08:50:14Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-08T08:54:38Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+[2025-02-08T08:54:38Z ERROR actix_http::h1::dispatcher] stream error: request parse error: invalid Header provided
+   Compiling Arrively-project-main v0.1.0 (/mnt/arrively-project/Arrively-project-main)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 52.61s
+     Running `target/debug/arrively-project-main`
+[2025-02-08T09:04:56Z INFO  arrively_project_main] 🚀 Starting the application...
+[2025-02-08T09:04:56Z INFO  arrively_project_main::db] 🔄 Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-08T09:04:56Z INFO  arrively_project_main::db] ⚡ Attempting database connection...
+[2025-02-08T09:04:56Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-08T09:04:56Z INFO  arrively_project_main] ✅ Database connection established successfully!
+[2025-02-08T09:04:56Z INFO  arrively_project_main] ⚡ Running database migrations...
+[2025-02-08T09:04:56Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T09:04:56Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.746037ms elapsed_secs=0.002746037
+[2025-02-08T09:04:56Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-08T09:04:56Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T09:04:56Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.390074ms elapsed_secs=0.001390074
+[2025-02-08T09:04:56Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T09:04:56Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.31395ms elapsed_secs=0.00131395
+[2025-02-08T09:04:56Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-08T09:04:56Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.573796ms elapsed_secs=0.001573796
+[2025-02-08T09:04:56Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=1 rows_returned=1 elapsed=2.95944ms elapsed_secs=0.00295944
+[2025-02-08T09:04:56Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-08T09:04:56Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.205543ms elapsed_secs=0.001205543
+[2025-02-08T09:04:56Z INFO  arrively_project_main] ✅ Migrations completed successfully!
+[2025-02-08T09:04:56Z INFO  arrively_project_main] 🚀 Starting Actix server on 0.0.0.0:8081...
+[2025-02-08T09:04:56Z INFO  arrively_project_main] 🌍 Server is running at http://0.0.0.0:8081
+[2025-02-08T09:04:56Z INFO  actix_server::builder] starting 2 workers
+[2025-02-08T09:04:56Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-08T09:04:56Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-08T09:06:18Z INFO  actix_web::middleware::logger] 127.0.0.1 "POST /users/register HTTP/1.1" 500 96 "-" "curl/8.5.0" 0.000209
+[2025-02-08T09:45:14Z INFO  actix_web::middleware::logger] 127.0.0.1 "POST /users/register HTTP/1.1" 500 96 "-" "curl/8.5.0" 0.016978
+[2025-02-08T09:55:50Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-08T09:55:50Z INFO  actix_server::accept] accept thread stopped
+[2025-02-08T09:55:50Z INFO  actix_server::worker] shutting down idle worker
