@@ -698,3 +698,565 @@
 [2025-02-13T07:40:30Z INFO  actix_server::builder] starting 2 workers
 [2025-02-13T07:40:30Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
 [2025-02-13T07:40:30Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-13T07:48:10Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-13T07:48:10Z INFO  actix_server::accept] accept thread stopped
+[2025-02-13T07:48:10Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T07:48:10Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T07:48:10Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T07:48:10Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T07:48:10Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T07:48:10Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T07:48:10Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T07:48:10Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T07:48:10Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:48:10Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.690444ms elapsed_secs=0.002690444
+[2025-02-13T07:48:10Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T07:48:10Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:48:10Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.250639ms elapsed_secs=0.001250639
+[2025-02-13T07:48:10Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:48:10Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.200081ms elapsed_secs=0.001200081
+[2025-02-13T07:48:10Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T07:48:10Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.148061ms elapsed_secs=0.001148061
+[2025-02-13T07:48:10Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.913032ms elapsed_secs=0.002913032
+[2025-02-13T07:48:10Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-13T07:48:10Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.152285ms elapsed_secs=0.001152285
+[2025-02-13T07:48:10Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-13T07:48:10Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-13T07:48:10Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-13T07:48:10Z INFO  actix_server::builder] starting 2 workers
+[2025-02-13T07:48:10Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-13T07:48:10Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-13T07:55:41Z INFO  actix_web::middleware::logger] 159.65.219.252 "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (compatible; InternetMeasurement/1.0; +https://internet-measurement.com/)" 0.000034
+[2025-02-13T08:06:29Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T08:06:29Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T08:06:29Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.461347ms elapsed_secs=0.003461347
+[2025-02-13T08:06:29Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.18686ms elapsed_secs=0.00118686
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.460465ms elapsed_secs=0.002460465
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.94728ms elapsed_secs=0.00294728
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=9.543473ms elapsed_secs=0.009543473
+[2025-02-13T08:06:29Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T08:06:29Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T08:06:29Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T08:06:29Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T08:06:29Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=7.286051ms elapsed_secs=0.007286051
+[2025-02-13T08:06:29Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.627848ms elapsed_secs=0.001627848
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.160951ms elapsed_secs=0.002160951
+[2025-02-13T08:06:29Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=4.158894ms elapsed_secs=0.004158894
+[2025-02-13T08:06:29Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.855625ms elapsed_secs=0.003855625
+[2025-02-13T08:06:29Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T08:06:29Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T08:06:29Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T08:06:29Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T08:06:30Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T08:06:30Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T08:06:30Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=24.866772ms elapsed_secs=0.024866772
+[2025-02-13T08:06:30Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.570736ms elapsed_secs=0.003570736
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=8.577718ms elapsed_secs=0.008577718
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.413281ms elapsed_secs=0.001413281
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=7.331798ms elapsed_secs=0.007331798
+[2025-02-13T08:06:30Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T08:06:30Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T08:06:30Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T08:06:30Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T08:06:30Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T08:06:30Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T08:06:30Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T08:06:30Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.529566ms elapsed_secs=0.002529566
+[2025-02-13T08:06:30Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.155304ms elapsed_secs=0.001155304
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.182985ms elapsed_secs=0.001182985
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.209122ms elapsed_secs=0.001209122
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.006732ms elapsed_secs=0.003006732
+[2025-02-13T08:06:30Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T08:06:30Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T08:06:30Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T08:06:30Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T08:06:30Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T08:06:30Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T08:06:30Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T08:06:30Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.492937ms elapsed_secs=0.002492937
+[2025-02-13T08:06:30Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.177821ms elapsed_secs=0.001177821
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.160338ms elapsed_secs=0.001160338
+[2025-02-13T08:06:30Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.130362ms elapsed_secs=0.001130362
+[2025-02-13T08:06:30Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.918275ms elapsed_secs=0.002918275
+[2025-02-13T08:06:30Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T08:06:30Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:00:48Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:00:48Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:00:48Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:00:48Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:00:48Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:00:48Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:00:48Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:48Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.153044ms elapsed_secs=0.003153044
+[2025-02-13T10:00:48Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:00:48Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:48Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.422354ms elapsed_secs=0.001422354
+[2025-02-13T10:00:48Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:48Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.248911ms elapsed_secs=0.001248911
+[2025-02-13T10:00:48Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:48Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.24682ms elapsed_secs=0.00124682
+[2025-02-13T10:00:48Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.299501ms elapsed_secs=0.003299501
+[2025-02-13T10:00:48Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:00:48Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:00:48Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:00:48Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:00:48Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:00:49Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:00:49Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.530138ms elapsed_secs=0.002530138
+[2025-02-13T10:00:49Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.161522ms elapsed_secs=0.001161522
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.173954ms elapsed_secs=0.001173954
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.399582ms elapsed_secs=0.001399582
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.91284ms elapsed_secs=0.00291284
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:00:49Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:00:49Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:00:49Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.56371ms elapsed_secs=0.00256371
+[2025-02-13T10:00:49Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.243123ms elapsed_secs=0.001243123
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.247713ms elapsed_secs=0.001247713
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.203815ms elapsed_secs=0.001203815
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.001631ms elapsed_secs=0.003001631
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:00:49Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:00:49Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:00:49Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.092462ms elapsed_secs=0.003092462
+[2025-02-13T10:00:49Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.358509ms elapsed_secs=0.001358509
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.374687ms elapsed_secs=0.001374687
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.349365ms elapsed_secs=0.001349365
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=4.136503ms elapsed_secs=0.004136503
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:00:49Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:00:49Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:00:49Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:00:49Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.555067ms elapsed_secs=0.002555067
+[2025-02-13T10:00:49Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.190468ms elapsed_secs=0.001190468
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.174123ms elapsed_secs=0.001174123
+[2025-02-13T10:00:49Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.176221ms elapsed_secs=0.001176221
+[2025-02-13T10:00:49Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.818518ms elapsed_secs=0.002818518
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:00:49Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:41:35Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:41:35Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:41:35Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:41:35Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:41:35Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:41:35Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:41:35Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:35Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.472274ms elapsed_secs=0.002472274
+[2025-02-13T10:41:35Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:41:35Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:35Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.180785ms elapsed_secs=0.001180785
+[2025-02-13T10:41:35Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:35Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.239559ms elapsed_secs=0.001239559
+[2025-02-13T10:41:35Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:35Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.152962ms elapsed_secs=0.001152962
+[2025-02-13T10:41:35Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.633557ms elapsed_secs=0.003633557
+[2025-02-13T10:41:35Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:41:35Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:41:36Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:41:36Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:41:36Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.528752ms elapsed_secs=0.002528752
+[2025-02-13T10:41:36Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.184752ms elapsed_secs=0.001184752
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.167458ms elapsed_secs=0.001167458
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.205857ms elapsed_secs=0.001205857
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.950095ms elapsed_secs=0.002950095
+[2025-02-13T10:41:36Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:41:36Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:41:36Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:41:36Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:41:36Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.474186ms elapsed_secs=0.002474186
+[2025-02-13T10:41:36Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.247584ms elapsed_secs=0.001247584
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.173897ms elapsed_secs=0.001173897
+[2025-02-13T10:41:36Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.149826ms elapsed_secs=0.001149826
+[2025-02-13T10:41:36Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.754389ms elapsed_secs=0.002754389
+[2025-02-13T10:41:36Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:41:36Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:41:36Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:41:36Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:41:37Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:41:37Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:41:37Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.490846ms elapsed_secs=0.002490846
+[2025-02-13T10:41:37Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.13493ms elapsed_secs=0.00113493
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.133014ms elapsed_secs=0.001133014
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.21058ms elapsed_secs=0.00121058
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.811798ms elapsed_secs=0.002811798
+[2025-02-13T10:41:37Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:41:37Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T10:41:37Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T10:41:37Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T10:41:37Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T10:41:37Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T10:41:37Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T10:41:37Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=2.463812ms elapsed_secs=0.002463812
+[2025-02-13T10:41:37Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.163864ms elapsed_secs=0.001163864
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.232374ms elapsed_secs=0.001232374
+[2025-02-13T10:41:37Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.198382ms elapsed_secs=0.001198382
+[2025-02-13T10:41:37Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=2.949492ms elapsed_secs=0.002949492
+[2025-02-13T10:41:37Z ERROR arrively_project_main]  Migration error: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+[2025-02-13T10:41:37Z ERROR arrively_project_main]  Migration failed: Custom Error: Migration file of version 'm20250213_073143_create_drivers_table' is missing, this migration has been applied but its file is missing
+Error: Custom { kind: Other, error: "Migration failed" }
+[2025-02-13T15:49:10Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:49:10Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:49:10Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:49:10Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:49:10Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:49:10Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:49:10Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:49:10Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:49:10Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:49:10Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:49:10Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:49:10Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:49:10Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:49:10Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:49:10Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:49:11Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:49:11Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:49:11Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:49:11Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:49:11Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:49:11Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:49:11Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:49:11Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:49:11Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:49:11Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:55:47Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:55:47Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:55:47Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:55:47Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:55:47Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:55:47Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:55:47Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:55:47Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:55:47Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:55:47Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:55:47Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:55:47Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:55:47Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:55:48Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:55:48Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:55:48Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:55:48Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:55:48Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:56:33Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:56:33Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:56:33Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:56:33Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:56:33Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:56:33Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:56:33Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:56:33Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:56:33Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:56:33Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:56:33Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:56:33Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:56:33Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:56:33Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:56:33Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:56:34Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:56:34Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:56:34Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:56:34Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:56:34Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:56:34Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:56:34Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:56:34Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:56:34Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:56:34Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:59:34Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:59:34Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:59:34Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:59:34Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:59:34Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:59:34Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:59:34Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:59:34Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:59:34Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:59:34Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:59:34Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:59:34Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:59:34Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:59:34Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:59:34Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:59:35Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:59:35Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:59:35Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:59:35Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:59:35Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T15:59:35Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T15:59:35Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T15:59:35Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T15:59:35Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T15:59:35Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:01:31Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:01:31Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:01:31Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:01:31Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:01:31Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:01:31Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:01:31Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:01:31Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:01:31Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:01:31Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:01:31Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:01:31Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:01:31Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:01:32Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:01:32Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:01:32Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:01:32Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:01:32Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:09:32Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:09:32Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:09:32Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:09:32Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:09:32Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:09:33Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:09:33Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:09:33Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:09:33Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:09:33Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:09:33Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:09:33Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:09:33Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:09:33Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:09:33Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:09:33Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:09:33Z ERROR arrively_project_main::db]  Database connection failed: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+[2025-02-13T16:09:33Z ERROR arrively_project_main]  Failed to establish database connection: Connection Error: error communicating with database: failed to lookup address information: Name or service not known
+Error: Custom { kind: Other, error: "Database connection failed" }
+[2025-02-13T16:10:08Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:10:08Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:10:08Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:10:08Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T16:10:08Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T16:10:08Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T16:10:08Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:10:08Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.532672ms elapsed_secs=0.001532672
+[2025-02-13T16:10:08Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T16:10:08Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:10:08Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=197.895µs elapsed_secs=0.000197895
+[2025-02-13T16:10:08Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:10:08Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=250.979µs elapsed_secs=0.000250979
+[2025-02-13T16:10:08Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:10:08Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=288.298µs elapsed_secs=0.000288298
+[2025-02-13T16:10:08Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=1.170115ms elapsed_secs=0.001170115
+[2025-02-13T16:10:08Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-13T16:10:08Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=168.636µs elapsed_secs=0.000168636
+[2025-02-13T16:10:08Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-13T16:10:08Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-13T16:10:08Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-13T16:10:08Z INFO  actix_server::builder] starting 2 workers
+[2025-02-13T16:10:08Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-13T16:10:08Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-13T16:10:49Z INFO  arrively_project_main::controllers] Received user registration request for username: seconduser
+[2025-02-13T16:10:49Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=533.515µs elapsed_secs=0.000533515
+[2025-02-13T16:10:49Z INFO  actix_web::middleware::logger] 152.58.236.188 "POST /users/register HTTP/1.1" 500 44 "-" "PostmanRuntime/7.43.0" 0.002246
+[2025-02-13T16:11:01Z INFO  actix_web::middleware::logger] 152.58.236.188 "POST /drivers HTTP/1.1" 400 105 "-" "PostmanRuntime/7.43.0" 0.000065
+[2025-02-13T16:11:31Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:11:31Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:11:31Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T16:11:31Z INFO  sqlx::query] summary="SELECT \"drivers\".\"id\", \"drivers\".\"first_name\", \"drivers\".\"last_name\", …" db.statement="\n\nSELECT \"drivers\".\"id\", \"drivers\".\"first_name\", \"drivers\".\"last_name\", \"drivers\".\"email\", \"drivers\".\"phone\", \"drivers\".\"photo\", \"drivers\".\"rating\", \"drivers\".\"total_rides\", \"drivers\".\"about_me\", \"drivers\".\"from_location\", \"drivers\".\"languages\", \"drivers\".\"is_pilot\", \"drivers\".\"license_number\", \"drivers\".\"verification_status\", \"drivers\".\"current_lat\", \"drivers\".\"current_lng\", \"drivers\".\"availability_status\", \"drivers\".\"created_at\", \"drivers\".\"updated_at\" FROM \"drivers\"\n" rows_affected=0 rows_returned=0 elapsed=4.865695ms elapsed_secs=0.004865695
+[2025-02-13T16:11:31Z INFO  actix_web::middleware::logger] 152.58.236.188 "GET /drivers HTTP/1.1" 200 2 "-" "PostmanRuntime/7.43.0" 0.087054
+[2025-02-13T16:12:48Z INFO  actix_web::middleware::logger] 152.58.236.188 "POST /users/login HTTP/1.1" 400 32 "-" "PostmanRuntime/7.43.0" 0.001804
+[2025-02-13T16:13:28Z INFO  arrively_project_main::controllers] Received user registration request for username: shalini
+[2025-02-13T16:13:28Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"username\" = $1 OR \"users\".\"email\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=356.001µs elapsed_secs=0.000356001
+[2025-02-13T16:13:28Z INFO  actix_web::middleware::logger] 152.58.236.188 "POST /users/register HTTP/1.1" 500 44 "-" "PostmanRuntime/7.43.0" 0.000994
+[2025-02-13T16:14:57Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-13T16:14:57Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T16:14:57Z INFO  actix_server::accept] accept thread stopped
+[2025-02-13T16:14:57Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T16:14:57Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:14:57Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:14:57Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:14:57Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T16:14:57Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T16:14:57Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T16:14:57Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:14:57Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.080049ms elapsed_secs=0.001080049
+[2025-02-13T16:14:57Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T16:14:57Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:14:57Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=332.337µs elapsed_secs=0.000332337
+[2025-02-13T16:14:57Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:14:57Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=195.148µs elapsed_secs=0.000195148
+[2025-02-13T16:14:57Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:14:57Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=193.24µs elapsed_secs=0.00019324
+[2025-02-13T16:14:57Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=1.249275ms elapsed_secs=0.001249275
+[2025-02-13T16:14:57Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-13T16:14:57Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=143.693µs elapsed_secs=0.000143693
+[2025-02-13T16:14:57Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-13T16:14:57Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-13T16:14:57Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-13T16:14:57Z INFO  actix_server::builder] starting 2 workers
+[2025-02-13T16:14:57Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-13T16:14:57Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
+[2025-02-13T16:16:34Z INFO  actix_web::middleware::logger] 13.60.21.29 "GET /users HTTP/1.1" 401 25 "-" "curl/8.5.0" 0.000054
+[2025-02-13T16:17:22Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=342.852µs elapsed_secs=0.000342852
+[2025-02-13T16:17:22Z INFO  actix_web::middleware::logger] 152.58.236.188 "POST /users/login HTTP/1.1" 500 34 "-" "PostmanRuntime/7.43.0" 0.002381

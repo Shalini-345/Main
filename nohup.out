@@ -82,3 +82,29 @@ Error: Os { code: 98, kind: AddrInUse, message: "Address already in use" }
 [2025-02-08T09:55:50Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
 [2025-02-08T09:55:50Z INFO  actix_server::accept] accept thread stopped
 [2025-02-08T09:55:50Z INFO  actix_server::worker] shutting down idle worker
+   Compiling migration v0.1.0 (/mnt/arrively-project/Arrively-project-main/migration)
+   Compiling Arrively-project-main v0.1.0 (/mnt/arrively-project/Arrively-project-main)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 06s
+     Running `target/debug/arrively-project-main`
+[2025-02-13T08:00:10Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T08:00:10Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.cluster-c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T08:00:10Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T08:00:11Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T08:00:11Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T08:00:11Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T08:00:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:00:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=3.697481ms elapsed_secs=0.003697481
+[2025-02-13T08:00:11Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T08:00:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:00:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.47592ms elapsed_secs=0.00147592
+[2025-02-13T08:00:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:00:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.37796ms elapsed_secs=0.00137796
+[2025-02-13T08:00:11Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T08:00:11Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=1.575224ms elapsed_secs=0.001575224
+[2025-02-13T08:00:11Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=3.335121ms elapsed_secs=0.003335121
+[2025-02-13T08:00:11Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-13T08:00:11Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=1.29333ms elapsed_secs=0.00129333
+[2025-02-13T08:00:11Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-13T08:00:11Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-13T08:00:11Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+Error: Os { code: 98, kind: AddrInUse, message: "Address already in use" }
