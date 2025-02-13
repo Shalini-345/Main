@@ -1260,3 +1260,32 @@ Error: Custom { kind: Other, error: "Database connection failed" }
 [2025-02-13T16:16:34Z INFO  actix_web::middleware::logger] 13.60.21.29 "GET /users HTTP/1.1" 401 25 "-" "curl/8.5.0" 0.000054
 [2025-02-13T16:17:22Z INFO  sqlx::query] summary="SELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", …" db.statement="\n\nSELECT \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"password\" FROM \"users\" WHERE \"users\".\"email\" = $1 AND \"users\".\"username\" = $2 LIMIT $3\n" rows_affected=0 rows_returned=0 elapsed=342.852µs elapsed_secs=0.000342852
 [2025-02-13T16:17:22Z INFO  actix_web::middleware::logger] 152.58.236.188 "POST /users/login HTTP/1.1" 500 34 "-" "PostmanRuntime/7.43.0" 0.002381
+[2025-02-13T16:23:33Z INFO  actix_web::middleware::logger] 13.60.21.29 "GET /users HTTP/1.1" 401 25 "-" "curl/8.5.0" 0.000038
+[2025-02-13T16:27:32Z INFO  actix_server::server] SIGTERM received; starting graceful shutdown
+[2025-02-13T16:27:32Z INFO  actix_server::accept] accept thread stopped
+[2025-02-13T16:27:32Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T16:27:32Z INFO  actix_server::worker] shutting down idle worker
+[2025-02-13T16:27:32Z INFO  arrively_project_main]  Starting the application...
+[2025-02-13T16:27:32Z INFO  arrively_project_main::db] Connecting to database at: postgres://postgres:Shalini-123@arrively-db.c3e2m6ic0v75.eu-north-1.rds.amazonaws.com:5432/arrively-db
+[2025-02-13T16:27:32Z INFO  arrively_project_main::db] Attempting database connection...
+[2025-02-13T16:27:32Z INFO  arrively_project_main::db]  Database connection successful!
+[2025-02-13T16:27:32Z INFO  arrively_project_main] Database connection established successfully!
+[2025-02-13T16:27:32Z INFO  arrively_project_main]  Running database migrations...
+[2025-02-13T16:27:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:27:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=761.094µs elapsed_secs=0.000761094
+[2025-02-13T16:27:32Z INFO  sea_orm_migration::migrator] Applying all pending migrations
+[2025-02-13T16:27:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:27:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=214.733µs elapsed_secs=0.000214733
+[2025-02-13T16:27:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:27:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=161.202µs elapsed_secs=0.000161202
+[2025-02-13T16:27:32Z INFO  sqlx::postgres::notice] relation "seaql_migrations" already exists, skipping
+[2025-02-13T16:27:32Z INFO  sqlx::query] summary="CREATE TABLE IF NOT …" db.statement="\n\nCREATE TABLE IF NOT EXISTS \"seaql_migrations\" ( \"version\" varchar NOT NULL PRIMARY KEY, \"applied_at\" bigint NOT NULL )\n" rows_affected=0 rows_returned=0 elapsed=235.76µs elapsed_secs=0.00023576
+[2025-02-13T16:27:32Z INFO  sqlx::query] summary="SELECT \"version\", \"applied_at\" FROM …" db.statement="\n\nSELECT \"version\", \"applied_at\" FROM \"seaql_migrations\" ORDER BY \"version\" ASC\n" rows_affected=2 rows_returned=2 elapsed=1.029298ms elapsed_secs=0.001029298
+[2025-02-13T16:27:32Z INFO  sea_orm_migration::migrator] No pending migrations
+[2025-02-13T16:27:32Z INFO  sqlx::query] summary="COMMIT" db.statement="" rows_affected=0 rows_returned=0 elapsed=213.795µs elapsed_secs=0.000213795
+[2025-02-13T16:27:32Z INFO  arrively_project_main] Migrations completed successfully!
+[2025-02-13T16:27:32Z INFO  arrively_project_main] Starting Actix server on 0.0.0.0:8081...
+[2025-02-13T16:27:32Z INFO  arrively_project_main]  Server is running at http://0.0.0.0:8081
+[2025-02-13T16:27:32Z INFO  actix_server::builder] starting 2 workers
+[2025-02-13T16:27:32Z INFO  actix_server::server] Actix runtime found; starting in Actix runtime
+[2025-02-13T16:27:32Z INFO  actix_server::server] starting service: "actix-web-service-0.0.0.0:8081", workers: 2, listening on: 0.0.0.0:8081
