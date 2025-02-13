@@ -9,6 +9,7 @@ use crate::auth::AuthTokenClaims;
 use crate::entities::userentity::{self, ActiveModel, Entity};
 use crate::entities::driverentity;
 use crate::db::establish_connection_pool;
+use serde_json::json;
 
 #[derive(Debug, Deserialize, Serialize, Validate)]
 pub struct NewUser {
@@ -181,17 +182,29 @@ async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder
                 current_lat: Set(driver.current_lat),
                 current_lng: Set(driver.current_lng),
                 availability_status: Set(driver.availability_status.clone()),
+                created_at: Set(driver.created_at),  
+                updated_at: Set(driver.updated_at),  
                 ..Default::default()
             };
 
             match driverentity::Entity::insert(new_driver).exec(&db).await {
-                Ok(_) => HttpResponse::Created().finish(),
+                Ok(inserted) => {
+                    let response = json!({
+                        "message": "Driver created successfully!",
+                        "driver_id": inserted.last_insert_id,
+                        "email": driver.email,
+                        "created_at": driver.created_at,
+                        "updated_at": driver.updated_at
+                    });
+                    HttpResponse::Created().json(response)
+                },
                 Err(_) => HttpResponse::InternalServerError().body("Error creating driver"),
             }
         }
         Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
     }
 }
+
 
 // Function to configure routes
 pub fn configure(cfg: &mut web::ServiceConfig) {
