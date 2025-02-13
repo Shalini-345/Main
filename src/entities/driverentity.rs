@@ -1,10 +1,8 @@
-// Driver/Captain Entity
-use sea_orm::DeriveRelation; 
 use sea_orm::entity::prelude::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "drivers")]
-#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
@@ -17,16 +15,17 @@ pub struct Model {
     pub total_rides: i32,
     pub about_me: String,
     pub from_location: String,
-    pub languages: String,
+    pub languages: Vec<String>, 
     pub is_pilot: bool,
     pub license_number: String,
     pub verification_status: String,
     pub current_lat: f64,
     pub current_lng: f64,
     pub availability_status: String,
-    pub created_at: DateTime,
-    pub updated_at: DateTime,
+    pub created_at: DateTimeWithTimeZone, 
+    pub updated_at: DateTimeWithTimeZone,
 }
+
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
