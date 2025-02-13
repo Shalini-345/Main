@@ -1,9 +1,10 @@
 // Driver/Captain Entity
 use sea_orm::DeriveRelation; 
 use sea_orm::entity::prelude::*;
+
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "drivers")]
-
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,

@@ -1,5 +1,5 @@
-use actix_web::{get, post, web, HttpResponse, Error, HttpRequest};
-use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition};
+use actix_web::{get, post, web, HttpResponse, Error, HttpRequest, Responder};
+use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use log::info;
 use serde::{Deserialize, Serialize};
@@ -7,6 +7,8 @@ use validator::Validate;
 use regex::Regex;
 use crate::auth::AuthTokenClaims;
 use crate::entities::userentity::{self, ActiveModel, Entity};
+use crate::entities::driverentity;
+use crate::db::establish_connection_pool;
 
 #[derive(Debug, Deserialize, Serialize, Validate)]
 pub struct NewUser {
@@ -30,14 +32,8 @@ async fn register_user(
 ) -> Result<HttpResponse, Error> {
     info!("Received user registration request for username: {}", new_user.username);
 
-    if let Err(_err) = new_user.validate() {
-        //let error_messages: Vec<String> = err.field_errors()
-           // .iter()
-            //.map(|(field, errors)| format!("{}: {}", field, errors.iter().map(|e| e.to_string()).collect::<Vec<_>>().join(", ")))
-            //.collect();
-
-            return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
-    
+    if let Err(_) = new_user.validate() {
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
     }
 
     let existing_user = Entity::find()
@@ -61,15 +57,13 @@ async fn register_user(
         })));
     }
 
-    // Hash password
     let password_hash = hash(&new_user.password, DEFAULT_COST)
         .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to hash password"))?;
 
-    // Insert new user
     let new_user_active_model = ActiveModel {
-        username: sea_orm::ActiveValue::Set(new_user.username.clone()),
-        email: sea_orm::ActiveValue::Set(new_user.email.clone()),
-        password: sea_orm::ActiveValue::Set(password_hash),
+        username: Set(new_user.username.clone()),
+        email: Set(new_user.email.clone()),
+        password: Set(password_hash),
         ..Default::default()
     };
 
@@ -151,4 +145,59 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
     }
 
     Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Missing token" })))
+}
+
+#[get("/drivers")]
+async fn get_drivers() -> impl Responder {
+    match establish_connection_pool().await {
+        Ok(db) => {
+            match driverentity::Entity::find().all(&db).await {
+                Ok(drivers) => HttpResponse::Ok().json(drivers),
+                Err(_) => HttpResponse::InternalServerError().body("Error fetching drivers"),
+            }
+        }
+        Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
+    }
+}
+
+#[post("/drivers")]
+async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder {
+    match establish_connection_pool().await {
+        Ok(db) => {
+            let new_driver = driverentity::ActiveModel {
+                first_name: Set(driver.first_name.clone()),
+                last_name: Set(driver.last_name.clone()),
+                email: Set(driver.email.clone()),
+                phone: Set(driver.phone.clone()),
+                photo: Set(driver.photo.clone()),
+                rating: Set(driver.rating),
+                total_rides: Set(driver.total_rides),
+                about_me: Set(driver.about_me.clone()),
+                from_location: Set(driver.from_location.clone()),
+                languages: Set(driver.languages.clone()),
+                is_pilot: Set(driver.is_pilot),
+                license_number: Set(driver.license_number.clone()),
+                verification_status: Set(driver.verification_status.clone()),
+                current_lat: Set(driver.current_lat),
+                current_lng: Set(driver.current_lng),
+                availability_status: Set(driver.availability_status.clone()),
+                ..Default::default()
+            };
+
+            match driverentity::Entity::insert(new_driver).exec(&db).await {
+                Ok(_) => HttpResponse::Created().finish(),
+                Err(_) => HttpResponse::InternalServerError().body("Error creating driver"),
+            }
+        }
+        Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
+    }
+}
+
+// Function to configure routes
+pub fn configure(cfg: &mut web::ServiceConfig) {
+    cfg.service(register_user);
+    cfg.service(login_user);
+    cfg.service(get_users);
+    cfg.service(get_drivers);
+    cfg.service(create_driver);
 }

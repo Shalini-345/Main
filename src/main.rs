@@ -81,6 +81,7 @@ async fn main() -> std::io::Result<()> {
             .service(register_user)
             .service(login_user)
             .service(get_users)
+            .configure(controllers::configure)
     })
     .bind("0.0.0.0:8081")?  
     .run()
