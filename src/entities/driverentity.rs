@@ -22,8 +22,11 @@ pub struct Model {
     pub current_lat: f64,
     pub current_lng: f64,
     pub availability_status: String,
-    pub created_at: DateTimeWithTimeZone, 
-    pub updated_at: DateTimeWithTimeZone,
+    #[sea_orm(default_value = "now()")]
+    pub created_at: Option<chrono::NaiveDateTime>,  
+    #[sea_orm(default_value = "now()", on_update = "now()")]
+    pub updated_at: Option<chrono::NaiveDateTime>,  
+
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
