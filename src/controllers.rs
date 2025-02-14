@@ -1,4 +1,6 @@
 use actix_web::{get, post, web, HttpResponse, Error, HttpRequest, Responder};
+use chrono::{Duration, Utc};
+use jsonwebtoken::{EncodingKey, Header , encode};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use log::info;
@@ -148,6 +150,16 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
     Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Missing token" })))
 }
 
+
+
+const JWT_SECRET: &[u8] = b"your_secret_key"; // Change this to a secure key
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Claims {
+    sub: String,
+    exp: usize,
+}
+
 #[get("/drivers")]
 async fn get_drivers() -> impl Responder {
     match establish_connection_pool().await {
@@ -161,14 +173,11 @@ async fn get_drivers() -> impl Responder {
     }
 }
 
-
-
 #[post("/drivers")]
 async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder {
     match establish_connection_pool().await {
         Ok(db) => {
             let existing_driver = driverentity::Entity::find()
-                .filter(driverentity::Column::FirstName.eq(driver.first_name.clone()))
                 .filter(driverentity::Column::Email.eq(driver.email.clone()))
                 .one(&db)
                 .await;
@@ -206,8 +215,18 @@ async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder
 
                     match driverentity::Entity::insert(new_driver).exec(&db).await {
                         Ok(inserted) => {
+                            // Generate JWT token
+                            let expiration = Utc::now() + Duration::hours(24);
+                            let claims = Claims {
+                                sub: driver.email.clone(),
+                                exp: expiration.timestamp() as usize,
+                            };
+                            let token = encode(&Header::default(), &claims, &EncodingKey::from_secret(JWT_SECRET))
+                                .unwrap_or_else(|_| "token_error".to_string());
+
                             let response = json!({
                                 "message": "Driver registered successfully!",
+                                "token": token,
                                 "driver_id": inserted.last_insert_id,
                                 "email": driver.email,
                                 "created_at": driver.created_at,
@@ -226,9 +245,6 @@ async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder
 }
 
 pub fn configure(cfg: &mut web::ServiceConfig) {
-    cfg.service(register_user);
-    cfg.service(login_user);
-    cfg.service(get_users);
     cfg.service(get_drivers);
     cfg.service(create_driver);
 }
