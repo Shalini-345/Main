@@ -1,6 +1,4 @@
 use actix_web::{get, post, web, HttpResponse, Error, HttpRequest, Responder};
-use chrono::{Duration, Utc};
-use jsonwebtoken::{EncodingKey, Header , encode};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use log::info;
@@ -151,42 +149,30 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
 }
 
 
-
-const JWT_SECRET: &[u8] = b"your_secret_key"; // Change this to a secure key
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Claims {
-    sub: String,
-    exp: usize,
-}
-
-#[get("/drivers")]
-async fn get_drivers() -> impl Responder {
-    match establish_connection_pool().await {
-        Ok(db) => {
-            match driverentity::Entity::find().all(&db).await {
-                Ok(drivers) => HttpResponse::Ok().json(drivers),
-                Err(_) => HttpResponse::InternalServerError().body("Error fetching drivers"),
-            }
-        }
-        Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
-    }
-}
-
 #[post("/drivers")]
 async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder {
     match establish_connection_pool().await {
         Ok(db) => {
             let existing_driver = driverentity::Entity::find()
-                .filter(driverentity::Column::Email.eq(driver.email.clone()))
+                .filter(
+                    driverentity::Column::Email.eq(driver.email.clone())
+                    .or(driverentity::Column::Phone.eq(driver.phone.clone()))
+                )
                 .one(&db)
                 .await;
 
             match existing_driver {
-                Ok(Some(_)) => {
+                Ok(Some(existing)) => {
+                    let message = if existing.email == driver.email {
+                        "Driver with this email already registered"
+                    } else {
+                        "Phone number already exists"
+                    };
+                    
                     let response = json!({
-                        "message": "Driver already registered",
-                        "email": driver.email
+                        "message": message,
+                        "email": driver.email,
+                        "phone": driver.phone
                     });
                     HttpResponse::Conflict().json(response)
                 }
@@ -215,34 +201,61 @@ async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder
 
                     match driverentity::Entity::insert(new_driver).exec(&db).await {
                         Ok(inserted) => {
-                            // Generate JWT token
-                            let expiration = Utc::now() + Duration::hours(24);
-                            let claims = Claims {
-                                sub: driver.email.clone(),
-                                exp: expiration.timestamp() as usize,
-                            };
-                            let token = encode(&Header::default(), &claims, &EncodingKey::from_secret(JWT_SECRET))
-                                .unwrap_or_else(|_| "token_error".to_string());
-
                             let response = json!({
                                 "message": "Driver registered successfully!",
-                                "token": token,
                                 "driver_id": inserted.last_insert_id,
                                 "email": driver.email,
+                                "phone": driver.phone,
                                 "created_at": driver.created_at,
                                 "updated_at": driver.updated_at
                             });
                             HttpResponse::Created().json(response)
                         }
-                        Err(_) => HttpResponse::InternalServerError().body("Error creating driver"),
+                        Err(e) => {
+                            eprintln!("Database insertion error: {:?}", e);
+                            HttpResponse::InternalServerError().body("Error creating driver")
+                        }
                     }
                 }
-                Err(_) => HttpResponse::InternalServerError().body("Database query failed"),
+                Err(e) => {
+                    eprintln!("Database query failed: {:?}", e);
+                    HttpResponse::InternalServerError().body("Database query failed")
+                }
             }
         }
         Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
     }
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Claims {
+    sub: String,
+    exp: usize,
+}
+
+#[get("/drivers")]
+async fn get_drivers() -> impl Responder {
+    match establish_connection_pool().await {
+        Ok(db) => {
+            match driverentity::Entity::find().all(&db).await {
+                Ok(drivers) => {
+                    if drivers.is_empty() {
+                        HttpResponse::Ok().json(json!({"message": "No drivers found", "drivers": []}))
+                    } else {
+                        HttpResponse::Ok().json(drivers)
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Error fetching drivers: {:?}", e);
+                    HttpResponse::InternalServerError().body("Error fetching drivers")
+                }
+            }
+        }
+        Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
+    }
+}
+
+
 
 pub fn configure(cfg: &mut web::ServiceConfig) {
     cfg.service(get_drivers);
