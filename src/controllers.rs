@@ -161,52 +161,70 @@ async fn get_drivers() -> impl Responder {
     }
 }
 
+
+
 #[post("/drivers")]
 async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder {
     match establish_connection_pool().await {
         Ok(db) => {
-            let new_driver = driverentity::ActiveModel {
-                first_name: Set(driver.first_name.clone()),
-                last_name: Set(driver.last_name.clone()),
-                email: Set(driver.email.clone()),
-                phone: Set(driver.phone.clone()),
-                photo: Set(driver.photo.clone()),
-                rating: Set(driver.rating),
-                total_rides: Set(driver.total_rides),
-                about_me: Set(driver.about_me.clone()),
-                from_location: Set(driver.from_location.clone()),
-                languages: Set(driver.languages.clone()),
-                is_pilot: Set(driver.is_pilot),
-                license_number: Set(driver.license_number.clone()),
-                verification_status: Set(driver.verification_status.clone()),
-                current_lat: Set(driver.current_lat),
-                current_lng: Set(driver.current_lng),
-                availability_status: Set(driver.availability_status.clone()),
-                created_at: Set(driver.created_at),  
-                updated_at: Set(driver.updated_at),  
-                ..Default::default()
-            };
+            let existing_driver = driverentity::Entity::find()
+                .filter(driverentity::Column::FirstName.eq(driver.first_name.clone()))
+                .filter(driverentity::Column::Email.eq(driver.email.clone()))
+                .one(&db)
+                .await;
 
-            match driverentity::Entity::insert(new_driver).exec(&db).await {
-                Ok(inserted) => {
+            match existing_driver {
+                Ok(Some(_)) => {
                     let response = json!({
-                        "message": "Driver created successfully!",
-                        "driver_id": inserted.last_insert_id,
-                        "email": driver.email,
-                        "created_at": driver.created_at,
-                        "updated_at": driver.updated_at
+                        "message": "Driver already registered",
+                        "email": driver.email
                     });
-                    HttpResponse::Created().json(response)
-                },
-                Err(_) => HttpResponse::InternalServerError().body("Error creating driver"),
+                    HttpResponse::Conflict().json(response)
+                }
+                Ok(None) => {
+                    let new_driver = driverentity::ActiveModel {
+                        first_name: Set(driver.first_name.clone()),
+                        last_name: Set(driver.last_name.clone()),
+                        email: Set(driver.email.clone()),
+                        phone: Set(driver.phone.clone()),
+                        photo: Set(driver.photo.clone()),
+                        rating: Set(driver.rating),
+                        total_rides: Set(driver.total_rides),
+                        about_me: Set(driver.about_me.clone()),
+                        from_location: Set(driver.from_location.clone()),
+                        languages: Set(driver.languages.clone()),
+                        is_pilot: Set(driver.is_pilot),
+                        license_number: Set(driver.license_number.clone()),
+                        verification_status: Set(driver.verification_status.clone()),
+                        current_lat: Set(driver.current_lat),
+                        current_lng: Set(driver.current_lng),
+                        availability_status: Set(driver.availability_status.clone()),
+                        created_at: Set(driver.created_at),
+                        updated_at: Set(driver.updated_at),
+                        ..Default::default()
+                    };
+
+                    match driverentity::Entity::insert(new_driver).exec(&db).await {
+                        Ok(inserted) => {
+                            let response = json!({
+                                "message": "Driver registered successfully!",
+                                "driver_id": inserted.last_insert_id,
+                                "email": driver.email,
+                                "created_at": driver.created_at,
+                                "updated_at": driver.updated_at
+                            });
+                            HttpResponse::Created().json(response)
+                        }
+                        Err(_) => HttpResponse::InternalServerError().body("Error creating driver"),
+                    }
+                }
+                Err(_) => HttpResponse::InternalServerError().body("Database query failed"),
             }
         }
         Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
     }
 }
 
-
-// Function to configure routes
 pub fn configure(cfg: &mut web::ServiceConfig) {
     cfg.service(register_user);
     cfg.service(login_user);
