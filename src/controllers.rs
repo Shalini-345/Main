@@ -177,6 +177,10 @@ async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder
                     HttpResponse::Conflict().json(response)
                 }
                 Ok(None) => {
+                    use chrono::Utc;
+
+                    let now = Utc::now().naive_utc(); 
+
                     let new_driver = driverentity::ActiveModel {
                         first_name: Set(driver.first_name.clone()),
                         last_name: Set(driver.last_name.clone()),
@@ -194,20 +198,20 @@ async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder
                         current_lat: Set(driver.current_lat),
                         current_lng: Set(driver.current_lng),
                         availability_status: Set(driver.availability_status.clone()),
-                        created_at: Set(driver.created_at),
-                        updated_at: Set(driver.updated_at),
-                        ..Default::default()
+                        created_at: Set(Some(now)), 
+                        updated_at: Set(Some(now)), 
+                        ..Default::default() 
                     };
 
                     match driverentity::Entity::insert(new_driver).exec(&db).await {
                         Ok(inserted) => {
                             let response = json!({
                                 "message": "Driver registered successfully!",
-                                "driver_id": inserted.last_insert_id,
+                                "driver_id": inserted.last_insert_id, 
                                 "email": driver.email,
                                 "phone": driver.phone,
-                                "created_at": driver.created_at,
-                                "updated_at": driver.updated_at
+                                "created_at": now,
+                                "updated_at": now
                             });
                             HttpResponse::Created().json(response)
                         }
@@ -226,6 +230,7 @@ async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder
         Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
     }
 }
+
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Claims {
