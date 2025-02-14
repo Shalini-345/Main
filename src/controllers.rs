@@ -235,29 +235,38 @@ struct Claims {
 
 #[get("/drivers")]
 async fn get_drivers() -> impl Responder {
+    println!("Received request at /drivers"); 
+
     match establish_connection_pool().await {
         Ok(db) => {
             match driverentity::Entity::find().all(&db).await {
                 Ok(drivers) => {
                     if drivers.is_empty() {
+                        println!("No drivers found in the database.");
                         HttpResponse::Ok().json(json!({"message": "No drivers found", "drivers": []}))
                     } else {
+                        println!("Fetched {} drivers", drivers.len());
                         HttpResponse::Ok().json(drivers)
                     }
                 }
                 Err(e) => {
-                    eprintln!("Error fetching drivers: {:?}", e);
-                    HttpResponse::InternalServerError().body("Error fetching drivers")
+                    eprintln!(" Error fetching drivers: {:?}", e);
+                    HttpResponse::InternalServerError().json(json!({"error": "Failed to fetch drivers"}))
                 }
             }
         }
-        Err(_) => HttpResponse::InternalServerError().body("Database connection failed"),
+        Err(e) => {
+            eprintln!(" Database connection failed: {:?}", e);
+            HttpResponse::InternalServerError().json(json!({"error": "Database connection failed"}))
+        }
     }
 }
+
 
 
 
 pub fn configure(cfg: &mut web::ServiceConfig) {
     cfg.service(get_drivers);
     cfg.service(create_driver);
+
 }
