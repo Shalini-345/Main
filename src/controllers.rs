@@ -1,4 +1,4 @@
-use actix_web::{get, post, web, HttpResponse, Error, HttpRequest, Responder};
+use actix_web::{get, post,put , delete, web, HttpResponse, Error, HttpRequest, Responder};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use log::info;
@@ -10,6 +10,11 @@ use crate::entities::userentity::{self, ActiveModel, Entity};
 use crate::entities::driverentity;
 use crate::db::establish_connection_pool;
 use serde_json::json;
+use chrono::Utc;
+
+
+// user log in api
+
 
 #[derive(Debug, Deserialize, Serialize, Validate)]
 pub struct NewUser {
@@ -149,6 +154,10 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
 }
 
 
+// driver api
+
+
+
 #[post("/drivers")]
 async fn create_driver(driver: web::Json<driverentity::Model>) -> impl Responder {
     match establish_connection_pool().await {
@@ -274,4 +283,113 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
     cfg.service(get_drivers);
     cfg.service(create_driver);
 
+}
+
+// payment API
+
+
+
+use crate::entities::payment::{ ActiveModel as PaymentActiveModel, Entity as PaymentEntity};
+
+#[derive(Serialize, Deserialize)]
+pub struct PaymentRequest {
+    pub user_id: i32,
+    pub payment_type: String,
+    pub card_number: Option<String>,
+    pub card_holder: Option<String>,
+    pub expiry_month: Option<i16>,
+    pub expiry_year: Option<i16>,
+    pub card_type: Option<String>,
+    pub is_default: bool,
+    pub paypal_email: Option<String>,
+}
+
+/// GET API - Fetch all payments
+#[get("/payments")]
+async fn get_payments(db: web::Data<DatabaseConnection>) -> impl Responder {
+    match PaymentEntity::find().all(db.get_ref()).await {
+        Ok(payments) => HttpResponse::Ok().json(payments),
+        Err(_) => HttpResponse::InternalServerError().body("Error fetching payments"),
+    }
+}
+
+/// POST API - Create a new payment
+#[post("/payments")]
+async fn create_payment(
+    db: web::Data<DatabaseConnection>,
+    payment_data: web::Json<PaymentRequest>,
+) -> impl Responder {
+    let new_payment = PaymentActiveModel {
+        user_id: Set(payment_data.user_id),
+        payment_type: Set(payment_data.payment_type.clone()),
+        card_number: Set(payment_data.card_number.clone()),
+        card_holder: Set(payment_data.card_holder.clone()),
+        expiry_month: Set(payment_data.expiry_month),
+        expiry_year: Set(payment_data.expiry_year),
+        card_type: Set(payment_data.card_type.clone()),
+        is_default: Set(payment_data.is_default),
+        paypal_email: Set(payment_data.paypal_email.clone()),
+        created_at: Set(Some(Utc::now())), // Auto-set created_at
+        updated_at: Set(Some(Utc::now())), // Auto-set updated_at
+        ..Default::default()
+    };
+
+    match new_payment.insert(db.get_ref()).await {
+        Ok(inserted) => HttpResponse::Created().json(inserted),
+        Err(_) => HttpResponse::InternalServerError().body("Error creating payment"),
+    }
+}
+
+/// PUT API - Update a payment
+#[put("/payments/{id}")]
+async fn update_payment(
+    db: web::Data<DatabaseConnection>,
+    payment_id: web::Path<i32>,
+    payment_data: web::Json<PaymentRequest>,
+) -> impl Responder {
+    let id = payment_id.into_inner();
+    
+    match PaymentEntity::find_by_id(id).one(db.get_ref()).await {
+        Ok(Some(existing_payment)) => {
+            let mut updated_payment: PaymentActiveModel = existing_payment.into();
+            updated_payment.payment_type = Set(payment_data.payment_type.clone());
+            updated_payment.card_number = Set(payment_data.card_number.clone());
+            updated_payment.card_holder = Set(payment_data.card_holder.clone());
+            updated_payment.expiry_month = Set(payment_data.expiry_month);
+            updated_payment.expiry_year = Set(payment_data.expiry_year);
+            updated_payment.card_type = Set(payment_data.card_type.clone());
+            updated_payment.is_default = Set(payment_data.is_default);
+            updated_payment.paypal_email = Set(payment_data.paypal_email.clone());
+            updated_payment.updated_at = Set(Some(Utc::now())); // Auto-set updated_at
+
+            match updated_payment.update(db.get_ref()).await {
+                Ok(updated) => HttpResponse::Ok().json(updated),
+                Err(_) => HttpResponse::InternalServerError().body("Error updating payment"),
+            }
+        }
+        Ok(None) => HttpResponse::NotFound().body("Payment not found"),
+        Err(_) => HttpResponse::InternalServerError().body("Database error"),
+    }
+}
+
+/// DELETE API - Delete a payment
+#[delete("/payments/{id}")]
+async fn delete_payment(
+    db: web::Data<DatabaseConnection>,
+    payment_id: web::Path<i32>,
+) -> impl Responder {
+    let id = payment_id.into_inner();
+
+    match PaymentEntity::find_by_id(id).one(db.get_ref()).await {
+        Ok(Some(existing_payment)) => {
+            let active_payment: PaymentActiveModel = existing_payment.into();
+
+            match active_payment.delete(db.get_ref()).await {
+                Ok(_) => HttpResponse::Ok().json(format!("Payment ID {} deleted", id)),
+                Err(_) => HttpResponse::InternalServerError().body("Error deleting payment"),
+            }
+        }
+        Ok(None) => HttpResponse::NotFound().body("Payment not found"),
+        Err(_) => HttpResponse::InternalServerError().body("Database error"),
+    }
 }

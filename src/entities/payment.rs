@@ -3,8 +3,9 @@ use crate::entities::rideentity::Entity as RideEntity;
 use sea_orm::entity::prelude::*;
 use sea_orm::{DeriveRelation, EnumIter};
 use chrono::{DateTime as ChronoDateTime, Utc};
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "payment")]
 pub struct Model {
     #[sea_orm(primary_key)]
