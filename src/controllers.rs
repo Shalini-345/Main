@@ -290,6 +290,7 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
 
 
 
+
 #[derive(Serialize, Deserialize)]
 pub struct PaymentRequest {
     pub user_id: i32,
@@ -308,9 +309,12 @@ pub struct PaymentRequest {
 async fn get_payments(db: web::Data<DatabaseConnection>) -> impl Responder {
     match PaymentEntity::find().all(db.get_ref()).await {
         Ok(payments) => HttpResponse::Ok().json(payments),
-        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
-            "error": "Failed to fetch payments. Please try again later."
-        })),
+        Err(e) => {
+            eprintln!("Error fetching payments: {:?}", e);
+            HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": format!("Failed to fetch payments: {:?}", e)
+            }))
+        }
     }
 }
 
@@ -340,9 +344,12 @@ async fn create_payment(
             "message": "Payment created successfully",
             "payment": inserted
         })),
-        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
-            "error": "Failed to create payment. Please check your input and try again."
-        })),
+        Err(e) => {
+            eprintln!("Error inserting payment: {:?}", e);
+            HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": format!("Failed to create payment: {:?}", e)
+            }))
+        }
     }
 }
 
@@ -373,17 +380,23 @@ async fn update_payment(
                     "message": "Payment updated successfully",
                     "payment": updated
                 })),
-                Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
-                    "error": "Failed to update payment. Please try again."
-                })),
+                Err(e) => {
+                    eprintln!("Error updating payment: {:?}", e);
+                    HttpResponse::InternalServerError().json(serde_json::json!({
+                        "error": format!("Failed to update payment: {:?}", e)
+                    }))
+                }
             }
         }
         Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
             "error": "Payment not found. Please check the payment ID."
         })),
-        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
-            "error": "Database error occurred while updating payment."
-        })),
+        Err(e) => {
+            eprintln!("Database error while updating payment: {:?}", e);
+            HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": format!("Database error: {:?}", e)
+            }))
+        }
     }
 }
 
@@ -403,17 +416,23 @@ async fn delete_payment(
                 Ok(_) => HttpResponse::Ok().json(serde_json::json!({
                     "message": format!("Payment with ID {} deleted successfully", id)
                 })),
-                Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
-                    "error": "Failed to delete payment. Please try again."
-                })),
+                Err(e) => {
+                    eprintln!("Error deleting payment: {:?}", e);
+                    HttpResponse::InternalServerError().json(serde_json::json!({
+                        "error": format!("Failed to delete payment: {:?}", e)
+                    }))
+                }
             }
         }
         Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
             "error": "Payment not found. Please check the payment ID."
         })),
-        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
-            "error": "Database error occurred while deleting payment."
-        })),
+        Err(e) => {
+            eprintln!("Database error while deleting payment: {:?}", e);
+            HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": format!("Database error: {:?}", e)
+            }))
+        }
     }
 }
 
