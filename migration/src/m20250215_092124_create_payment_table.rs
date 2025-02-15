@@ -43,7 +43,7 @@ impl MigrationTrait for Migration {
                         ForeignKey::create()
                             .name("fk-payment-user")
                             .from(Payment::Table, Payment::UserId)
-                            .to(User::Table, User::Id)
+                            .to(Users::Table, Users::Id)
                             .on_delete(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
@@ -76,7 +76,9 @@ enum Payment {
 }
 
 #[derive(DeriveIden)]
-enum User {
+enum Users {
+    #[sea_orm(iden = "users")]  
+
     Table,
     Id,
 }
