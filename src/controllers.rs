@@ -291,6 +291,7 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
 
 
 
+
 #[derive(Serialize, Deserialize)]
 pub struct PaymentRequest {
     pub user_id: i32,
@@ -443,3 +444,4 @@ pub fn init(cfg: &mut web::ServiceConfig) {
        .service(update_payment)
        .service(delete_payment);
 }
+
