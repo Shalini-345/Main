@@ -11,6 +11,7 @@ use crate::entities::driverentity;
 use crate::db::establish_connection_pool;
 use serde_json::json;
 use chrono::Utc;
+use crate::entities::payment::{ActiveModel as PaymentActiveModel, Entity as PaymentEntity};
 
 
 // user log in api
@@ -289,8 +290,6 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
 
 
 
-use crate::entities::payment::{ ActiveModel as PaymentActiveModel, Entity as PaymentEntity};
-
 #[derive(Serialize, Deserialize)]
 pub struct PaymentRequest {
     pub user_id: i32,
@@ -309,7 +308,9 @@ pub struct PaymentRequest {
 async fn get_payments(db: web::Data<DatabaseConnection>) -> impl Responder {
     match PaymentEntity::find().all(db.get_ref()).await {
         Ok(payments) => HttpResponse::Ok().json(payments),
-        Err(_) => HttpResponse::InternalServerError().body("Error fetching payments"),
+        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
+            "error": "Failed to fetch payments. Please try again later."
+        })),
     }
 }
 
@@ -329,14 +330,19 @@ async fn create_payment(
         card_type: Set(payment_data.card_type.clone()),
         is_default: Set(payment_data.is_default),
         paypal_email: Set(payment_data.paypal_email.clone()),
-        created_at: Set(Some(Utc::now())), // Auto-set created_at
-        updated_at: Set(Some(Utc::now())), // Auto-set updated_at
+        created_at: Set(Some(Utc::now())),
+        updated_at: Set(Some(Utc::now())),
         ..Default::default()
     };
 
     match new_payment.insert(db.get_ref()).await {
-        Ok(inserted) => HttpResponse::Created().json(inserted),
-        Err(_) => HttpResponse::InternalServerError().body("Error creating payment"),
+        Ok(inserted) => HttpResponse::Created().json(serde_json::json!({
+            "message": "Payment created successfully",
+            "payment": inserted
+        })),
+        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
+            "error": "Failed to create payment. Please check your input and try again."
+        })),
     }
 }
 
@@ -360,15 +366,24 @@ async fn update_payment(
             updated_payment.card_type = Set(payment_data.card_type.clone());
             updated_payment.is_default = Set(payment_data.is_default);
             updated_payment.paypal_email = Set(payment_data.paypal_email.clone());
-            updated_payment.updated_at = Set(Some(Utc::now())); // Auto-set updated_at
+            updated_payment.updated_at = Set(Some(Utc::now()));
 
             match updated_payment.update(db.get_ref()).await {
-                Ok(updated) => HttpResponse::Ok().json(updated),
-                Err(_) => HttpResponse::InternalServerError().body("Error updating payment"),
+                Ok(updated) => HttpResponse::Ok().json(serde_json::json!({
+                    "message": "Payment updated successfully",
+                    "payment": updated
+                })),
+                Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
+                    "error": "Failed to update payment. Please try again."
+                })),
             }
         }
-        Ok(None) => HttpResponse::NotFound().body("Payment not found"),
-        Err(_) => HttpResponse::InternalServerError().body("Database error"),
+        Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
+            "error": "Payment not found. Please check the payment ID."
+        })),
+        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
+            "error": "Database error occurred while updating payment."
+        })),
     }
 }
 
@@ -385,11 +400,27 @@ async fn delete_payment(
             let active_payment: PaymentActiveModel = existing_payment.into();
 
             match active_payment.delete(db.get_ref()).await {
-                Ok(_) => HttpResponse::Ok().json(format!("Payment ID {} deleted", id)),
-                Err(_) => HttpResponse::InternalServerError().body("Error deleting payment"),
+                Ok(_) => HttpResponse::Ok().json(serde_json::json!({
+                    "message": format!("Payment with ID {} deleted successfully", id)
+                })),
+                Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
+                    "error": "Failed to delete payment. Please try again."
+                })),
             }
         }
-        Ok(None) => HttpResponse::NotFound().body("Payment not found"),
-        Err(_) => HttpResponse::InternalServerError().body("Database error"),
+        Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
+            "error": "Payment not found. Please check the payment ID."
+        })),
+        Err(_) => HttpResponse::InternalServerError().json(serde_json::json!({
+            "error": "Database error occurred while deleting payment."
+        })),
     }
+}
+
+/// Initialize payment routes
+pub fn init(cfg: &mut web::ServiceConfig) {
+    cfg.service(get_payments)
+       .service(create_payment)
+       .service(update_payment)
+       .service(delete_payment);
 }
