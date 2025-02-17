@@ -23,6 +23,8 @@ mod entities {
 }
 
 use controllers::{register_user, login_user, get_users}; 
+use controllers::{get_all_vehicles, get_vehicle, create_vehicle, delete_vehicle}; // Import the routes
+
 #[derive(Debug)]
 pub struct AppError {
     pub message: String,
@@ -83,10 +85,10 @@ async fn main() -> std::io::Result<()> {
             .service(get_users)
             .configure(controllers::configure)
            // .configure(controllers::init)
-            .service(controllers::get_all_vehicles)
-            .service(controllers::get_vehicle)
-            .service(controllers::create_vehicle)
-            .service(controllers::delete_vehicle) 
+            .service(get_all_vehicles)
+            .service(get_vehicle)
+            .service(create_vehicle)
+            .service(delete_vehicle) 
 
     })
     .bind("0.0.0.0:8081")?  
