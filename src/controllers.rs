@@ -298,7 +298,7 @@ pub struct CreateVehicle {
     pub style: String,
     pub make: String,
     pub model: String,
-    pub year: i16,
+    pub year: i32,
     pub license_plate: String,
     pub passenger_capacity: i16,
     pub photo: String,
