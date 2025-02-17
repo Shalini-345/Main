@@ -17,7 +17,7 @@ pub struct Model {
     #[sea_orm(column_type = "Integer")]
     pub year: i32,
     pub license_plate: String,
-    pub passenger_capacity: i16,
+    pub passenger_capacity: i32,
     pub photo: String,
     pub base_fare: f64,
     pub per_minute_rate:f64,
