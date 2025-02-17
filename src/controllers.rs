@@ -314,7 +314,7 @@ pub async fn get_all_vehicles(db: web::Data<DatabaseConnection>) -> impl Respond
         Ok(vehicle_list) => HttpResponse::Ok().json(vehicle_list),
         Err(e) => {
             eprintln!("Failed to fetch vehicles: {:?}", e); // Log the error for debugging
-            HttpResponse::InternalServerError().body("Failed to fetch vehicles")
+            HttpResponse::InternalServerError().body(format!("Failed to fetch vehicles: {:?}", e))
         }
     }
 }
@@ -326,7 +326,7 @@ pub async fn get_vehicle(db: web::Data<DatabaseConnection>, vehicle_id: web::Pat
         Ok(None) => HttpResponse::NotFound().body("Vehicle not found"),
         Err(e) => {
             eprintln!("Failed to fetch vehicle: {:?}", e); // Log the error for debugging
-            HttpResponse::InternalServerError().body("Failed to fetch vehicle")
+            HttpResponse::InternalServerError().body(format!("Failed to fetch vehicle: {:?}", e))
         }
     }
 }
@@ -336,6 +336,8 @@ pub async fn create_vehicle(
     db: web::Data<DatabaseConnection>,
     vehicle_data: web::Json<CreateVehicle>,
 ) -> impl Responder {
+    eprintln!("Received vehicle data: {:?}", vehicle_data);
+
     // Check if a vehicle for the same driver already exists
     let existing_vehicle = vehicleentity::Entity::find()
         .filter(vehicleentity::Column::DriverId.eq(vehicle_data.driver_id))
@@ -346,10 +348,10 @@ pub async fn create_vehicle(
         Ok(Some(_)) => {
             return HttpResponse::Conflict().body("Vehicle already created for this driver"); 
         }
-        Ok(None) => {} // Continue if no existing vehicle
+        Ok(None) => {} 
         Err(e) => {
-            eprintln!("Database query failed: {:?}", e); // Log the error for debugging
-            return HttpResponse::InternalServerError().body("Database query failed");
+            eprintln!("Error checking existing vehicle: {:?}", e); 
+            return HttpResponse::InternalServerError().body(format!("Error checking existing vehicle: {:?}", e));
         }
     }
 
@@ -364,22 +366,23 @@ pub async fn create_vehicle(
         license_plate: Set(vehicle_data.license_plate.clone()),
         passenger_capacity: Set(vehicle_data.passenger_capacity),
         photo: Set(vehicle_data.photo.clone()),
-        base_fare: Set(vehicle_data.base_fare), // Ensure base_fare is of type f64, not string
+        base_fare: Set(vehicle_data.base_fare), 
         per_minute_rate: Set(vehicle_data.per_minute_rate), 
         per_kilometer_rate: Set(vehicle_data.per_kilometer_rate), 
         status: Set(vehicle_data.status.clone()),
-        ..Default::default() // Default for other fields
+        ..Default::default() 
     };
 
-    // Insert the new vehicle into the database
+    eprintln!("Inserting new vehicle: {:?}", new_vehicle);
+
     match new_vehicle.insert(db.get_ref()).await {
         Ok(vehicle) => HttpResponse::Created().json(serde_json::json!({
             "message": "Vehicle created successfully",
             "vehicle": vehicle
         })),
         Err(e) => {
-            eprintln!("Failed to create vehicle: {:?}", e); // Log the error for debugging
-            HttpResponse::InternalServerError().body("Failed to create vehicle")
+            eprintln!("Failed to create vehicle: {:?}", e); 
+            HttpResponse::InternalServerError().body(format!("Failed to create vehicle: {:?}", e))
         }
     }
 }
@@ -389,8 +392,8 @@ pub async fn delete_vehicle(db: web::Data<DatabaseConnection>, vehicle_id: web::
     match vehicleentity::Entity::delete_by_id(vehicle_id.into_inner()).exec(db.get_ref()).await {
         Ok(_) => HttpResponse::Ok().body("Vehicle deleted successfully"),
         Err(e) => {
-            eprintln!("Failed to delete vehicle: {:?}", e); // Log the error for debugging
-            HttpResponse::InternalServerError().body("Failed to delete vehicle")
+            eprintln!("Failed to delete vehicle: {:?}", e); 
+            HttpResponse::InternalServerError().body(format!("Failed to delete vehicle: {:?}", e))
         }
     }
 }
