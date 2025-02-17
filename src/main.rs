@@ -82,7 +82,11 @@ async fn main() -> std::io::Result<()> {
             .service(login_user)
             .service(get_users)
             .configure(controllers::configure)
-            .configure(controllers::init) 
+           // .configure(controllers::init)
+            .service(controllers::get_all_vehicles)
+            .service(controllers::get_vehicle)
+            .service(controllers::create_vehicle)
+            .service(controllers::delete_vehicle) 
 
     })
     .bind("0.0.0.0:8081")?  

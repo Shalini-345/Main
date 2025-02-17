@@ -1,7 +1,8 @@
 
 use sea_orm::DeriveRelation; 
 use sea_orm::entity::prelude::*;
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, )]
+use serde::{Deserialize, Serialize};
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel,Serialize, Deserialize )]
 #[sea_orm(table_name = "vehicles")]
  
 

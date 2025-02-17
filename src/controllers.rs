@@ -1,4 +1,4 @@
-use actix_web::{get, post,put , delete, web, HttpResponse, Error, HttpRequest, Responder};
+use actix_web::{get, post , delete, web, HttpResponse, Error, HttpRequest, Responder};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use log::info;
@@ -7,11 +7,12 @@ use validator::Validate;
 use regex::Regex;
 use crate::auth::AuthTokenClaims;
 use crate::entities::userentity::{self, ActiveModel, Entity};
-use crate::entities::driverentity;
+use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
 use serde_json::json;
-use chrono::Utc;
-use crate::entities::payment::{ActiveModel as PaymentActiveModel, Entity as PaymentEntity};
+//use chrono::Utc;
+//use crate::entities::payment::{ActiveModel as PaymentActiveModel, Entity as PaymentEntity};
+
 
 
 // user log in api
@@ -286,162 +287,253 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
 
 }
 
+
+
+
+#[derive(Debug, Deserialize)]
+pub struct CreateVehicle {
+    pub driver_id: i32,
+    pub vehicle_type: String,
+    pub style: String,
+    pub make: String,
+    pub model: String,
+    pub year: i16,
+    pub license_plate: String,
+    pub passenger_capacity: i16,
+    pub photo: String,
+    pub base_fare: String,
+    pub per_minute_rate: String,
+    pub per_kilometer_rate: String,
+    pub status: String,
+}
+
+#[get("/vehicles")]
+pub async fn get_all_vehicles(db: web::Data<DatabaseConnection>) -> impl Responder {
+    match vehicleentity::Entity::find().all(db.get_ref()).await {
+        Ok(vehicle_list) => HttpResponse::Ok().json(vehicle_list),
+        Err(_) => HttpResponse::InternalServerError().body("Failed to fetch vehicles"),
+    }
+}
+
+#[get("/vehicles/{id}")]
+pub async fn get_vehicle(db: web::Data<DatabaseConnection>, vehicle_id: web::Path<i32>) -> impl Responder {
+    match vehicleentity::Entity::find_by_id(vehicle_id.into_inner()).one(db.get_ref()).await {
+        Ok(Some(vehicle)) => HttpResponse::Ok().json(vehicle),
+        Ok(None) => HttpResponse::NotFound().body("Vehicle not found"),
+        Err(_) => HttpResponse::InternalServerError().body("Failed to fetch vehicle"),
+    }
+}
+
+#[post("/vehicles")]
+pub async fn create_vehicle(
+    db: web::Data<DatabaseConnection>,
+    vehicle_data: web::Json<CreateVehicle>,
+) -> impl Responder {
+    let existing_vehicle = vehicleentity::Entity::find()
+        .filter(vehicleentity::Column::DriverId.eq(vehicle_data.driver_id))
+        .one(db.get_ref())
+        .await;
+
+    match existing_vehicle {
+        Ok(Some(_)) => {
+            return HttpResponse::Conflict().body("Vehicle already created"); 
+        }
+        Ok(None) => {} 
+        Err(_) => {
+            return HttpResponse::InternalServerError().body("Database query failed");
+        }
+    }
+
+    let new_vehicle = vehicleentity::ActiveModel {
+        driver_id: Set(vehicle_data.driver_id),
+        vehicle_type: Set(vehicle_data.vehicle_type.clone()),
+        style: Set(vehicle_data.style.clone()),
+        make: Set(vehicle_data.make.clone()),
+        model: Set(vehicle_data.model.clone()),
+        year: Set(vehicle_data.year),
+        license_plate: Set(vehicle_data.license_plate.clone()),
+        passenger_capacity: Set(vehicle_data.passenger_capacity),
+        photo: Set(vehicle_data.photo.clone()),
+        base_fare: Set(vehicle_data.base_fare.parse().unwrap()),
+        per_minute_rate: Set(vehicle_data.per_minute_rate.parse().unwrap()),
+        per_kilometer_rate: Set(vehicle_data.per_kilometer_rate.parse().unwrap()),
+        status: Set(vehicle_data.status.clone()),
+        ..Default::default()
+    };
+
+    match new_vehicle.insert(db.get_ref()).await {
+        Ok(vehicle) => HttpResponse::Created().json(serde_json::json!({
+            "message": "Vehicle created successfully",
+            "vehicle": vehicle
+        })),
+        Err(_) => HttpResponse::InternalServerError().body("Failed to create vehicle"),
+    }
+}
+
+
+#[delete("/vehicles/{id}")]
+pub async fn delete_vehicle(db: web::Data<DatabaseConnection>, vehicle_id: web::Path<i32>) -> impl Responder {
+    match vehicleentity::Entity::delete_by_id(vehicle_id.into_inner()).exec(db.get_ref()).await {
+        Ok(_) => HttpResponse::Ok().body("Vehicle deleted successfully"),
+        Err(_) => HttpResponse::InternalServerError().body("Failed to delete vehicle"),
+    }
+}
+
+
 // payment API
 
 
 
+// #[derive(Serialize, Deserialize)]
+// pub struct PaymentRequest {
+//     pub user_id: i32,
+//     pub payment_type: String,
+//     pub card_number: Option<String>,
+//     pub card_holder: Option<String>,
+//     pub expiry_month: Option<i16>,
+//     pub expiry_year: Option<i16>,
+//     pub card_type: Option<String>,
+//     pub is_default: bool,
+//     pub paypal_email: Option<String>,
+// }
 
+// /// GET API - Fetch all payments
+// #[get("/payments")]
+// async fn get_payments(db: web::Data<DatabaseConnection>) -> impl Responder {
+//     match PaymentEntity::find().all(db.get_ref()).await {
+//         Ok(payments) => HttpResponse::Ok().json(payments),
+//         Err(e) => {
+//             eprintln!("Error fetching payments: {:?}", e);
+//             HttpResponse::InternalServerError().json(serde_json::json!({
+//                 "error": format!("Failed to fetch payments: {:?}", e)
+//             }))
+//         }
+//     }
+// }
 
-#[derive(Serialize, Deserialize)]
-pub struct PaymentRequest {
-    pub user_id: i32,
-    pub payment_type: String,
-    pub card_number: Option<String>,
-    pub card_holder: Option<String>,
-    pub expiry_month: Option<i16>,
-    pub expiry_year: Option<i16>,
-    pub card_type: Option<String>,
-    pub is_default: bool,
-    pub paypal_email: Option<String>,
-}
+// /// POST API - Create a new payment
+// #[post("/payments")]
+// async fn create_payment(
+//     db: web::Data<DatabaseConnection>,
+//     payment_data: web::Json<PaymentRequest>,
+// ) -> impl Responder {
+//     let new_payment = PaymentActiveModel {
+//         user_id: Set(payment_data.user_id),
+//         payment_type: Set(payment_data.payment_type.clone()),
+//         card_number: Set(payment_data.card_number.clone()),
+//         card_holder: Set(payment_data.card_holder.clone()),
+//         expiry_month: Set(payment_data.expiry_month),
+//         expiry_year: Set(payment_data.expiry_year),
+//         card_type: Set(payment_data.card_type.clone()),
+//         is_default: Set(payment_data.is_default),
+//         paypal_email: Set(payment_data.paypal_email.clone()),
+//         created_at: Set(Some(Utc::now())),
+//         updated_at: Set(Some(Utc::now())),
+//         ..Default::default()
+//     };
 
-/// GET API - Fetch all payments
-#[get("/payments")]
-async fn get_payments(db: web::Data<DatabaseConnection>) -> impl Responder {
-    match PaymentEntity::find().all(db.get_ref()).await {
-        Ok(payments) => HttpResponse::Ok().json(payments),
-        Err(e) => {
-            eprintln!("Error fetching payments: {:?}", e);
-            HttpResponse::InternalServerError().json(serde_json::json!({
-                "error": format!("Failed to fetch payments: {:?}", e)
-            }))
-        }
-    }
-}
+//     match new_payment.insert(db.get_ref()).await {
+//         Ok(inserted) => HttpResponse::Created().json(serde_json::json!({
+//             "message": "Payment created successfully",
+//             "payment": inserted
+//         })),
+//         Err(e) => {
+//             eprintln!("Error inserting payment: {:?}", e);
+//             HttpResponse::InternalServerError().json(serde_json::json!({
+//                 "error": format!("Failed to create payment: {:?}", e)
+//             }))
+//         }
+//     }
+// }
 
-/// POST API - Create a new payment
-#[post("/payments")]
-async fn create_payment(
-    db: web::Data<DatabaseConnection>,
-    payment_data: web::Json<PaymentRequest>,
-) -> impl Responder {
-    let new_payment = PaymentActiveModel {
-        user_id: Set(payment_data.user_id),
-        payment_type: Set(payment_data.payment_type.clone()),
-        card_number: Set(payment_data.card_number.clone()),
-        card_holder: Set(payment_data.card_holder.clone()),
-        expiry_month: Set(payment_data.expiry_month),
-        expiry_year: Set(payment_data.expiry_year),
-        card_type: Set(payment_data.card_type.clone()),
-        is_default: Set(payment_data.is_default),
-        paypal_email: Set(payment_data.paypal_email.clone()),
-        created_at: Set(Some(Utc::now())),
-        updated_at: Set(Some(Utc::now())),
-        ..Default::default()
-    };
-
-    match new_payment.insert(db.get_ref()).await {
-        Ok(inserted) => HttpResponse::Created().json(serde_json::json!({
-            "message": "Payment created successfully",
-            "payment": inserted
-        })),
-        Err(e) => {
-            eprintln!("Error inserting payment: {:?}", e);
-            HttpResponse::InternalServerError().json(serde_json::json!({
-                "error": format!("Failed to create payment: {:?}", e)
-            }))
-        }
-    }
-}
-
-/// PUT API - Update a payment
-#[put("/payments/{id}")]
-async fn update_payment(
-    db: web::Data<DatabaseConnection>,
-    payment_id: web::Path<i32>,
-    payment_data: web::Json<PaymentRequest>,
-) -> impl Responder {
-    let id = payment_id.into_inner();
+// /// PUT API - Update a payment
+// #[put("/payments/{id}")]
+// async fn update_payment(
+//     db: web::Data<DatabaseConnection>,
+//     payment_id: web::Path<i32>,
+//     payment_data: web::Json<PaymentRequest>,
+// ) -> impl Responder {
+//     let id = payment_id.into_inner();
     
-    match PaymentEntity::find_by_id(id).one(db.get_ref()).await {
-        Ok(Some(existing_payment)) => {
-            let mut updated_payment: PaymentActiveModel = existing_payment.into();
-            updated_payment.payment_type = Set(payment_data.payment_type.clone());
-            updated_payment.card_number = Set(payment_data.card_number.clone());
-            updated_payment.card_holder = Set(payment_data.card_holder.clone());
-            updated_payment.expiry_month = Set(payment_data.expiry_month);
-            updated_payment.expiry_year = Set(payment_data.expiry_year);
-            updated_payment.card_type = Set(payment_data.card_type.clone());
-            updated_payment.is_default = Set(payment_data.is_default);
-            updated_payment.paypal_email = Set(payment_data.paypal_email.clone());
-            updated_payment.updated_at = Set(Some(Utc::now()));
+//     match PaymentEntity::find_by_id(id).one(db.get_ref()).await {
+//         Ok(Some(existing_payment)) => {
+//             let mut updated_payment: PaymentActiveModel = existing_payment.into();
+//             updated_payment.payment_type = Set(payment_data.payment_type.clone());
+//             updated_payment.card_number = Set(payment_data.card_number.clone());
+//             updated_payment.card_holder = Set(payment_data.card_holder.clone());
+//             updated_payment.expiry_month = Set(payment_data.expiry_month);
+//             updated_payment.expiry_year = Set(payment_data.expiry_year);
+//             updated_payment.card_type = Set(payment_data.card_type.clone());
+//             updated_payment.is_default = Set(payment_data.is_default);
+//             updated_payment.paypal_email = Set(payment_data.paypal_email.clone());
+//             updated_payment.updated_at = Set(Some(Utc::now()));
 
-            match updated_payment.update(db.get_ref()).await {
-                Ok(updated) => HttpResponse::Ok().json(serde_json::json!({
-                    "message": "Payment updated successfully",
-                    "payment": updated
-                })),
-                Err(e) => {
-                    eprintln!("Error updating payment: {:?}", e);
-                    HttpResponse::InternalServerError().json(serde_json::json!({
-                        "error": format!("Failed to update payment: {:?}", e)
-                    }))
-                }
-            }
-        }
-        Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
-            "error": "Payment not found. Please check the payment ID."
-        })),
-        Err(e) => {
-            eprintln!("Database error while updating payment: {:?}", e);
-            HttpResponse::InternalServerError().json(serde_json::json!({
-                "error": format!("Database error: {:?}", e)
-            }))
-        }
-    }
-}
+//             match updated_payment.update(db.get_ref()).await {
+//                 Ok(updated) => HttpResponse::Ok().json(serde_json::json!({
+//                     "message": "Payment updated successfully",
+//                     "payment": updated
+//                 })),
+//                 Err(e) => {
+//                     eprintln!("Error updating payment: {:?}", e);
+//                     HttpResponse::InternalServerError().json(serde_json::json!({
+//                         "error": format!("Failed to update payment: {:?}", e)
+//                     }))
+//                 }
+//             }
+//         }
+//         Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
+//             "error": "Payment not found. Please check the payment ID."
+//         })),
+//         Err(e) => {
+//             eprintln!("Database error while updating payment: {:?}", e);
+//             HttpResponse::InternalServerError().json(serde_json::json!({
+//                 "error": format!("Database error: {:?}", e)
+//             }))
+//         }
+//     }
+// }
 
-/// DELETE API - Delete a payment
-#[delete("/payments/{id}")]
-async fn delete_payment(
-    db: web::Data<DatabaseConnection>,
-    payment_id: web::Path<i32>,
-) -> impl Responder {
-    let id = payment_id.into_inner();
+// /// DELETE API - Delete a payment
+// #[delete("/payments/{id}")]
+// async fn delete_payment(
+//     db: web::Data<DatabaseConnection>,
+//     payment_id: web::Path<i32>,
+// ) -> impl Responder {
+//     let id = payment_id.into_inner();
 
-    match PaymentEntity::find_by_id(id).one(db.get_ref()).await {
-        Ok(Some(existing_payment)) => {
-            let active_payment: PaymentActiveModel = existing_payment.into();
+//     match PaymentEntity::find_by_id(id).one(db.get_ref()).await {
+//         Ok(Some(existing_payment)) => {
+//             let active_payment: PaymentActiveModel = existing_payment.into();
 
-            match active_payment.delete(db.get_ref()).await {
-                Ok(_) => HttpResponse::Ok().json(serde_json::json!({
-                    "message": format!("Payment with ID {} deleted successfully", id)
-                })),
-                Err(e) => {
-                    eprintln!("Error deleting payment: {:?}", e);
-                    HttpResponse::InternalServerError().json(serde_json::json!({
-                        "error": format!("Failed to delete payment: {:?}", e)
-                    }))
-                }
-            }
-        }
-        Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
-            "error": "Payment not found. Please check the payment ID."
-        })),
-        Err(e) => {
-            eprintln!("Database error while deleting payment: {:?}", e);
-            HttpResponse::InternalServerError().json(serde_json::json!({
-                "error": format!("Database error: {:?}", e)
-            }))
-        }
-    }
-}
+//             match active_payment.delete(db.get_ref()).await {
+//                 Ok(_) => HttpResponse::Ok().json(serde_json::json!({
+//                     "message": format!("Payment with ID {} deleted successfully", id)
+//                 })),
+//                 Err(e) => {
+//                     eprintln!("Error deleting payment: {:?}", e);
+//                     HttpResponse::InternalServerError().json(serde_json::json!({
+//                         "error": format!("Failed to delete payment: {:?}", e)
+//                     }))
+//                 }
+//             }
+//         }
+//         Ok(None) => HttpResponse::NotFound().json(serde_json::json!({
+//             "error": "Payment not found. Please check the payment ID."
+//         })),
+//         Err(e) => {
+//             eprintln!("Database error while deleting payment: {:?}", e);
+//             HttpResponse::InternalServerError().json(serde_json::json!({
+//                 "error": format!("Database error: {:?}", e)
+//             }))
+//         }
+//     }
+// }
 
-/// Initialize payment routes
-pub fn init(cfg: &mut web::ServiceConfig) {
-    cfg.service(get_payments)
-       .service(create_payment)
-       .service(update_payment)
-       .service(delete_payment);
-}
+// /// Initialize payment routes
+// pub fn init(cfg: &mut web::ServiceConfig) {
+//     cfg.service(get_payments)
+//        .service(create_payment)
+//        .service(update_payment)
+//        .service(delete_payment);
+// }
 
