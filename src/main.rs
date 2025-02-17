@@ -23,7 +23,7 @@ mod entities {
 }
 
 use controllers::{register_user, login_user, get_users}; 
-use controllers::{get_all_vehicles, get_vehicle, create_vehicle, delete_vehicle}; // Import the routes
+use controllers::{get_all_vehicles, get_vehicle, create_vehicle, delete_vehicle}; 
 
 #[derive(Debug)]
 pub struct AppError {
