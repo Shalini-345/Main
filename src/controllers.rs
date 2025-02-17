@@ -302,9 +302,9 @@ pub struct CreateVehicle {
     pub license_plate: String,
     pub passenger_capacity: i32,
     pub photo: String,
-    pub base_fare: f64,
-    pub per_minute_rate: f64,
-    pub per_kilometer_rate: f64,
+    pub base_fare: Option<f64>,
+    pub per_minute_rate: Option<f64>,
+    pub per_kilometer_rate: Option<f64>,
     pub status: String,
 }
 
