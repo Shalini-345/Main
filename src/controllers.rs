@@ -1,4 +1,4 @@
-use actix_web::{get, post , delete, web, HttpResponse, Error, HttpRequest, Responder};
+use actix_web::{delete, get, post, web, Error, HttpRequest, HttpResponse, Responder};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
 use bcrypt::{hash, verify, DEFAULT_COST};
 use log::info;
@@ -12,6 +12,9 @@ use crate::db::establish_connection_pool;
 use serde_json::json;
 //use chrono::Utc;
 //use crate::entities::payment::{ActiveModel as PaymentActiveModel, Entity as PaymentEntity};
+use crate::entities::rideentity::{self, Entity as RideEntity};
+use rust_decimal::Decimal;
+use chrono::{DateTime as ChronoDateTime, Utc};
 
 
 
@@ -398,6 +401,126 @@ pub async fn delete_vehicle(db: web::Data<DatabaseConnection>, vehicle_id: web::
     }
 }
 
+
+//ride entity API
+
+
+
+
+#[derive(Debug, Deserialize)]
+pub struct CreateRide {
+    pub user_id: i32,
+    pub driver_id: i32,
+    pub vehicle_id: i32,
+    pub ride_type: String,
+    pub vehicle_type: String,
+    pub pickup_location: String,
+    pub pickup_lat: f64,
+    pub pickup_lng: f64,
+    pub dropoff_location: String,
+    pub dropoff_lat: f64,
+    pub dropoff_lng: f64,
+    pub scheduled_time: Option<ChronoDateTime<Utc>>,
+    pub start_time: Option<ChronoDateTime<Utc>>,
+    pub end_time: Option<ChronoDateTime<Utc>>,
+    pub status: String,
+    pub distance_fare: Decimal,
+    pub time_fare: Decimal,
+    pub tip_amount: Option<Decimal>,
+    pub total_amount: Decimal,
+    pub rating: Option<i16>,
+    pub review: Option<String>,
+    pub cancel_reason: Option<String>,
+    pub payment_status: String,
+    pub payment_id: i32,
+}
+
+#[get("/rides")]
+pub async fn get_all_rides(db: web::Data<DatabaseConnection>) -> impl Responder {
+    match RideEntity::find().all(db.get_ref()).await {
+        Ok(ride_list) => HttpResponse::Ok().json(ride_list),
+        Err(e) => {
+            eprintln!("Failed to fetch rides: {:?}", e); 
+            HttpResponse::InternalServerError().body(format!("Failed to fetch rides: {:?}", e))
+        }
+    }
+}
+
+#[get("/rides/{id}")]
+pub async fn get_ride(db: web::Data<DatabaseConnection>, ride_id: web::Path<i32>) -> impl Responder {
+    match RideEntity::find_by_id(ride_id.into_inner()).one(db.get_ref()).await {
+        Ok(Some(ride)) => HttpResponse::Ok().json(ride),
+        Ok(None) => HttpResponse::NotFound().body("Ride not found"),
+        Err(e) => {
+            eprintln!("Failed to fetch ride: {:?}", e); 
+            HttpResponse::InternalServerError().body(format!("Failed to fetch ride: {:?}", e))
+        }
+    }
+}
+
+#[post("/rides")]
+pub async fn create_ride(
+    db: web::Data<DatabaseConnection>,
+    ride_data: web::Json<CreateRide>,
+) -> impl Responder {
+    // Create a new ride
+    let new_ride = rideentity::ActiveModel {
+        user_id: Set(ride_data.user_id),
+        driver_id: Set(ride_data.driver_id),
+        vehicle_id: Set(ride_data.vehicle_id),
+        ride_type: Set(ride_data.ride_type.clone()),
+        vehicle_type: Set(ride_data.vehicle_type.clone()),
+        pickup_location: Set(ride_data.pickup_location.clone()),
+        pickup_lat: Set(ride_data.pickup_lat),
+        pickup_lng: Set(ride_data.pickup_lng),
+        dropoff_location: Set(ride_data.dropoff_location.clone()),
+        dropoff_lat: Set(ride_data.dropoff_lat),
+        dropoff_lng: Set(ride_data.dropoff_lng),
+        scheduled_time: Set(ride_data.scheduled_time.clone()),
+        start_time: Set(ride_data.start_time.clone()),
+        end_time: Set(ride_data.end_time.clone()),
+        status: Set(ride_data.status.clone()),
+        distance_fare: Set(ride_data.distance_fare),
+        time_fare: Set(ride_data.time_fare),
+        tip_amount: Set(ride_data.tip_amount),
+        total_amount: Set(ride_data.total_amount),
+        rating: Set(ride_data.rating),
+        review: Set(ride_data.review.clone()),
+        cancel_reason: Set(ride_data.cancel_reason.clone()),
+        payment_status: Set(ride_data.payment_status.clone()),
+        payment_id: Set(ride_data.payment_id),
+        ..Default::default() 
+    };
+
+    match new_ride.insert(db.get_ref()).await {
+        Ok(ride) => HttpResponse::Created().json(serde_json::json!({
+            "message": "Ride created successfully",
+            "ride": ride
+        })),
+        Err(e) => {
+            eprintln!("Failed to create ride: {:?}", e); 
+            HttpResponse::InternalServerError().body(format!("Failed to create ride: {:?}", e))
+        }
+    }
+}
+
+#[delete("/rides/{id}")]
+pub async fn delete_ride(db: web::Data<DatabaseConnection>, ride_id: web::Path<i32>) -> impl Responder {
+    match RideEntity::delete_by_id(ride_id.into_inner()).exec(db.get_ref()).await {
+        Ok(_) => HttpResponse::Ok().body("Ride deleted successfully"),
+        Err(e) => {
+            eprintln!("Failed to delete ride: {:?}", e); 
+            HttpResponse::InternalServerError().body(format!("Failed to delete ride: {:?}", e))
+        }
+    }
+}
+
+pub fn config(cfg: &mut web::ServiceConfig) {
+    cfg.service(get_all_rides)
+        .service(get_ride)
+        .service(create_ride)
+        .service(delete_ride);
+}
 
 
 // payment API

@@ -4,8 +4,9 @@ use sea_orm::entity::prelude::*;
 use sea_orm::{DeriveRelation, EnumIter};
 use chrono::{DateTime as ChronoDateTime, Utc};
 use rust_decimal::Decimal;
+use serde::{Deserialize, Serialize}; // Make sure to import Serialize
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel , Serialize,Deserialize)]
 #[sea_orm(table_name = "ride")]
 pub struct Model {
     #[sea_orm(primary_key)]
