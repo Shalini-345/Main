@@ -1,12 +1,12 @@
+use actix_web::error::ErrorInternalServerError;
 use actix_web::{delete, get, post, web, Error, HttpRequest, HttpResponse, Responder};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
 use bcrypt::{hash, verify, DEFAULT_COST};
-use log::info;
 use serde::{Deserialize, Serialize};
-use validator::Validate;
+use validator::{Validate, ValidationError};
 use regex::Regex;
 use crate::auth::AuthTokenClaims;
-use crate::entities::userentity::{self, ActiveModel, Entity};
+use crate::entities::userentity::{Entity as UserEntity, ActiveModel as UserActiveModel, Column};
 use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
 use serde_json::json;
@@ -15,12 +15,26 @@ use serde_json::json;
 use crate::entities::rideentity::{self, Entity as RideEntity};
 use rust_decimal::Decimal;
 use chrono::{DateTime as ChronoDateTime, Utc};
-
+use crate::entities::userentity::Entity;
 
 
 // user log in api
 
+fn is_valid_email(email: &str) -> bool {
+    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
+    email_regex.is_match(email)
+}
 
+fn validate_phone(phone: &str) -> Result<(), ValidationError> {
+    let phone_regex = Regex::new(r"^\+?[1-9]\d{1,14}$").unwrap();
+    if phone_regex.is_match(phone) {
+        Ok(())
+    } else {
+        Err(ValidationError::new("invalid_phone"))
+    }
+}
+
+// Struct for User Registration
 #[derive(Debug, Deserialize, Serialize, Validate)]
 pub struct NewUser {
     #[validate(length(min = 3))]
@@ -29,52 +43,54 @@ pub struct NewUser {
     pub email: String,
     #[validate(length(min = 6))]
     pub password: String,
+    #[validate(length(min = 3))]
+    pub city: String,
+    #[validate(custom = "validate_phone")]
+    pub phone_number: String,
 }
 
-fn is_valid_email(email: &str) -> bool {
-    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
-    email_regex.is_match(email)
-}
-
+// User Registration API
 #[post("/users/register")]
 async fn register_user(
     new_user: web::Json<NewUser>,
     db: web::Data<DatabaseConnection>,
 ) -> Result<HttpResponse, Error> {
-    info!("Received user registration request for username: {}", new_user.username);
-
-    if let Err(_) = new_user.validate() {
+    if let Err(e) = new_user.validate() {
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": format!("{}", e) })));
+    }
+    if !is_valid_email(&new_user.email) {
         return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
     }
 
-    let existing_user = Entity::find()
+    // Check if the user already exists
+    let existing_user = UserEntity::find()
         .filter(
             Condition::any()
-                .add(userentity::Column::Username.eq(&new_user.username))
-                .add(userentity::Column::Email.eq(&new_user.email)),
+                .add(Column::Username.eq(&new_user.username))
+                .add(Column::Email.eq(&new_user.email)),
         )
         .one(db.as_ref())
         .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error while checking user existence"))?;
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
 
     if let Some(user) = existing_user {
-        let conflict_field = if user.username == new_user.username {
-            "username"
-        } else {
-            "email"
-        };
+        let conflict_field = if user.username == new_user.username { "username" } else { "email" };
         return Ok(HttpResponse::Conflict().json(serde_json::json!({
             "error": format!("{} already exists", conflict_field)
         })));
     }
 
+    // Hash the password
     let password_hash = hash(&new_user.password, DEFAULT_COST)
         .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to hash password"))?;
 
-    let new_user_active_model = ActiveModel {
+    // Insert new user
+    let new_user_active_model = UserActiveModel {
         username: Set(new_user.username.clone()),
         email: Set(new_user.email.clone()),
         password: Set(password_hash),
+        city: Set(new_user.city.clone()),
+        phone_number: Set(new_user.phone_number.clone()),
         ..Default::default()
     };
 
@@ -84,30 +100,67 @@ async fn register_user(
     }
 }
 
+// Struct for User Login
+#[derive(Debug, Deserialize, Serialize)]
+pub struct LoginUser {
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Debug)]
+pub enum AppError {
+    JwtError(jsonwebtoken::errors::Error),
+    InternalError(String),
+}
+
+impl std::fmt::Display for AppError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            AppError::JwtError(ref e) => write!(f, "JWT error: {}", e),
+            AppError::InternalError(ref e) => write!(f, "Internal server error: {}", e),
+        }
+    }
+}
+
+impl From<jsonwebtoken::errors::Error> for AppError {
+    fn from(err: jsonwebtoken::errors::Error) -> AppError {
+        AppError::JwtError(err)
+    }
+}
+
+impl From<AppError> for actix_web::Error {
+    fn from(error: AppError) -> Self {
+        match error {
+            AppError::JwtError(_) => ErrorInternalServerError("JWT generation failed"),
+            AppError::InternalError(msg) => ErrorInternalServerError(msg),
+        }
+    }
+}
+
 #[post("/users/login")]
 async fn login_user(
-    login_data: web::Json<NewUser>,
+    login_data: web::Json<LoginUser>,
     db: web::Data<DatabaseConnection>,
 ) -> Result<HttpResponse, Error> {
-    if !is_valid_email(&login_data.email) {
+    // Validate email format
+    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
+    if !email_regex.is_match(&login_data.email) {
         return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
     }
 
-    let user = Entity::find()
-        .filter(
-            Condition::all()
-                .add(userentity::Column::Email.eq(&login_data.email))
-                .add(userentity::Column::Username.eq(&login_data.username)),
-        )
+    // Fetch user from database
+    let user = UserEntity::find()
+        .filter(Column::Email.eq(&login_data.email))
         .one(db.as_ref())
         .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error while fetching user"))?;
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
 
     let user = match user {
         Some(user) => user,
         None => return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid credentials" }))),
     };
 
+    // Verify password
     let is_password_valid = verify(&login_data.password, &user.password)
         .map_err(|_| actix_web::error::ErrorInternalServerError("Error verifying password"))?;
 
@@ -115,17 +168,22 @@ async fn login_user(
         return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid credentials" })));
     }
 
-    let access_token = AuthTokenClaims::new(user.id, 24).generate_token()
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Access token generation failed"))?;
+    // Generate Access Token (expires in 7 minutes)
+    let access_token = AuthTokenClaims::new(user.id, 7)
+        .generate_token()
+        .map_err(AppError::from)?;
 
-    let refresh_token = AuthTokenClaims::new(user.id, 168).generate_token()
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Refresh token generation failed"))?;
+    // Generate Refresh Token (expires in 15 days)
+    let refresh_token = AuthTokenClaims::new(user.id, 15 * 24 * 60)
+        .generate_token()
+        .map_err(AppError::from)?;
 
     Ok(HttpResponse::Ok().json(serde_json::json!({
         "access_token": access_token,
         "refresh_token": refresh_token
     })))
 }
+
 
 #[get("/users")]
 async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Result<HttpResponse, Error> {
@@ -135,27 +193,33 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
         if let Ok(auth_str) = auth_value.to_str() {
             if auth_str.starts_with("Bearer ") {
                 let token = &auth_str[7..];
-                if let Ok(_) = AuthTokenClaims::validate_token(token) {
-                    let users = Entity::find()
-                        .all(db.as_ref())
-                        .await
-                        .map_err(|_| actix_web::error::ErrorInternalServerError("Error fetching users"))?
-                        .into_iter()
-                        .map(|user| serde_json::json!({
-                            "id": user.id,
-                            "username": user.username,
-                            "email": user.email,
-                        }))
-                        .collect::<Vec<_>>();
 
-                    return Ok(HttpResponse::Ok().json(users));
+                match AuthTokenClaims::validate_token(token) {
+                    Ok(_) => {
+                        let users = Entity::find()
+                            .all(db.as_ref())
+                            .await
+                            .map_err(|_| actix_web::error::ErrorInternalServerError("Error fetching users"))?
+                            .into_iter()
+                            .map(|user| json!({
+                                "id": user.id,
+                                "username": user.username,
+                                "email": user.email,
+                            }))
+                            .collect::<Vec<_>>();
+
+                        return Ok(HttpResponse::Ok().json(users));
+                    },
+                    Err(_) => {
+                        return Ok(HttpResponse::Unauthorized().json(json!({ "error": "Invalid token" })));
+                    }
                 }
             }
         }
-        return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid token" })));
+        return Ok(HttpResponse::Unauthorized().json(json!({ "error": "Invalid token format" })));
     }
 
-    Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Missing token" })))
+    Ok(HttpResponse::Unauthorized().json(json!({ "error": "Missing token" })))
 }
 
 

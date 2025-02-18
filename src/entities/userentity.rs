@@ -10,6 +10,10 @@ pub struct Model {
     pub username: String,
     pub email: String,
     pub password: String,
+    pub city: String,
+    pub phone_number: String,
+
+
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
