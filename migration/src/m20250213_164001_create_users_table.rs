@@ -12,8 +12,7 @@ impl MigrationTrait for Migration {
                     .table(User::Table)
                     .if_not_exists()
                     .col(pk_auto(User::Id)) // Primary Key, auto-increment
-                    .col(string(User::Username).not_null()) // Username column
-                    .col(string(User::Email).not_null()) // Email column
+                    .col(string(User::Email).not_null().unique_key()) // Email column (must be unique)
                     .col(string(User::Password).not_null()) // Password column
                     .col(string(User::City).not_null()) // City column
                     .col(string(User::PhoneNumber).not_null()) // Phone number column
@@ -33,7 +32,6 @@ impl MigrationTrait for Migration {
 enum User {
     Table,
     Id,
-    Username,
     Email,
     Password,
     City,

@@ -1,11 +1,10 @@
-use actix_web::error::ErrorInternalServerError;
 use actix_web::{delete, get, post, web, Error, HttpRequest, HttpResponse, Responder};
-use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait, Condition, Set};
-use bcrypt::{hash, verify, DEFAULT_COST};
+use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait,  Set};
+use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
-use validator::{Validate, ValidationError};
+use validator::ValidationError;
 use regex::Regex;
-use crate::auth::AuthTokenClaims;
+use crate::auth::{verify_refresh_token, AuthTokenClaims};
 use crate::entities::userentity::{Entity as UserEntity, ActiveModel as UserActiveModel, Column};
 use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
@@ -16,9 +15,11 @@ use crate::entities::rideentity::{self, Entity as RideEntity};
 use rust_decimal::Decimal;
 use chrono::{DateTime as ChronoDateTime, Utc};
 use crate::entities::userentity::Entity;
+use crate::auth::{generate_access_token, generate_refresh_token};
 
 
-// user log in api
+
+// user log in API
 
 fn is_valid_email(email: &str) -> bool {
     let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
@@ -34,49 +35,48 @@ fn validate_phone(phone: &str) -> Result<(), ValidationError> {
     }
 }
 
-// Struct for User Registration
-#[derive(Debug, Deserialize, Serialize, Validate)]
+
+
+// User Registration Payload
+#[derive(Deserialize)]
 pub struct NewUser {
-    #[validate(length(min = 3))]
-    pub username: String,
-    #[validate(email)]
     pub email: String,
-    #[validate(length(min = 6))]
     pub password: String,
-    #[validate(length(min = 3))]
     pub city: String,
-    #[validate(custom = "validate_phone")]
     pub phone_number: String,
 }
 
-// User Registration API
+
+
 #[post("/users/register")]
 async fn register_user(
     new_user: web::Json<NewUser>,
     db: web::Data<DatabaseConnection>,
 ) -> Result<HttpResponse, Error> {
-    if let Err(e) = new_user.validate() {
-        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": format!("{}", e) })));
-    }
+    // Check if email format is valid
     if !is_valid_email(&new_user.email) {
-        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({
+            "error": "Incorrect email format"
+        })));
     }
 
-    // Check if the user already exists
+    // Validate phone number format
+    if let Err(_) = validate_phone(&new_user.phone_number) {
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({
+            "error": "Invalid phone number format"
+        })));
+    }
+
+    // Check if the email already exists
     let existing_user = UserEntity::find()
-        .filter(
-            Condition::any()
-                .add(Column::Username.eq(&new_user.username))
-                .add(Column::Email.eq(&new_user.email)),
-        )
+        .filter(Column::Email.eq(new_user.email.clone()))
         .one(db.as_ref())
         .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
 
-    if let Some(user) = existing_user {
-        let conflict_field = if user.username == new_user.username { "username" } else { "email" };
+    if existing_user.is_some() {
         return Ok(HttpResponse::Conflict().json(serde_json::json!({
-            "error": format!("{} already exists", conflict_field)
+            "error": "Email already exists"
         })));
     }
 
@@ -86,7 +86,6 @@ async fn register_user(
 
     // Insert new user
     let new_user_active_model = UserActiveModel {
-        username: Set(new_user.username.clone()),
         email: Set(new_user.email.clone()),
         password: Set(password_hash),
         city: Set(new_user.city.clone()),
@@ -95,93 +94,35 @@ async fn register_user(
     };
 
     match new_user_active_model.insert(db.as_ref()).await {
-        Ok(_) => Ok(HttpResponse::Created().json(serde_json::json!({ "message": "User registered successfully" }))),
-        Err(_) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({ "error": "Error registering user" }))),
-    }
-}
+        Ok(_) => {
+            // Generate access and refresh tokens
+            let access_token = generate_access_token(&new_user.email);
+            let refresh_token = generate_refresh_token(&new_user.email);
 
-// Struct for User Login
-#[derive(Debug, Deserialize, Serialize)]
-pub struct LoginUser {
-    pub email: String,
-    pub password: String,
-}
-
-#[derive(Debug)]
-pub enum AppError {
-    JwtError(jsonwebtoken::errors::Error),
-    InternalError(String),
-}
-
-impl std::fmt::Display for AppError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match *self {
-            AppError::JwtError(ref e) => write!(f, "JWT error: {}", e),
-            AppError::InternalError(ref e) => write!(f, "Internal server error: {}", e),
+            match (access_token, refresh_token) {
+                (Ok(at), Ok(rt)) => {
+                    // Example usage of `verify_refresh_token`
+                    if let Ok(_) = verify_refresh_token(&rt) {
+                        return Ok(HttpResponse::Created().json(serde_json::json!({ 
+                            "message": "User registered successfully",
+                            "access_token": at,
+                            "refresh_token": rt
+                        })));
+                    } else {
+                        return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                            "error": "Invalid refresh token generated"
+                        })));
+                    }
+                }
+                _ => Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                    "error": "Failed to generate tokens"
+                }))),
+            }
         }
+        Err(_) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+            "error": "Error registering user"
+        }))),
     }
-}
-
-impl From<jsonwebtoken::errors::Error> for AppError {
-    fn from(err: jsonwebtoken::errors::Error) -> AppError {
-        AppError::JwtError(err)
-    }
-}
-
-impl From<AppError> for actix_web::Error {
-    fn from(error: AppError) -> Self {
-        match error {
-            AppError::JwtError(_) => ErrorInternalServerError("JWT generation failed"),
-            AppError::InternalError(msg) => ErrorInternalServerError(msg),
-        }
-    }
-}
-
-#[post("/users/login")]
-async fn login_user(
-    login_data: web::Json<LoginUser>,
-    db: web::Data<DatabaseConnection>,
-) -> Result<HttpResponse, Error> {
-    // Validate email format
-    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
-    if !email_regex.is_match(&login_data.email) {
-        return Ok(HttpResponse::BadRequest().json(serde_json::json!({ "error": "Invalid email format" })));
-    }
-
-    // Fetch user from database
-    let user = UserEntity::find()
-        .filter(Column::Email.eq(&login_data.email))
-        .one(db.as_ref())
-        .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
-
-    let user = match user {
-        Some(user) => user,
-        None => return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid credentials" }))),
-    };
-
-    // Verify password
-    let is_password_valid = verify(&login_data.password, &user.password)
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Error verifying password"))?;
-
-    if !is_password_valid {
-        return Ok(HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid credentials" })));
-    }
-
-    // Generate Access Token (expires in 7 minutes)
-    let access_token = AuthTokenClaims::new(user.id, 7)
-        .generate_token()
-        .map_err(AppError::from)?;
-
-    // Generate Refresh Token (expires in 15 days)
-    let refresh_token = AuthTokenClaims::new(user.id, 15 * 24 * 60)
-        .generate_token()
-        .map_err(AppError::from)?;
-
-    Ok(HttpResponse::Ok().json(serde_json::json!({
-        "access_token": access_token,
-        "refresh_token": refresh_token
-    })))
 }
 
 
@@ -203,7 +144,6 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
                             .into_iter()
                             .map(|user| json!({
                                 "id": user.id,
-                                "username": user.username,
                                 "email": user.email,
                             }))
                             .collect::<Vec<_>>();

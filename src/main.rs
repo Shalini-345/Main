@@ -23,7 +23,7 @@ mod entities {
     pub mod cities;
 }
 
-use controllers::{register_user, login_user, get_users}; 
+use controllers::{register_user,  get_users}; 
 use controllers::{get_all_vehicles, get_vehicle, create_vehicle, delete_vehicle}; 
 
 #[derive(Debug)]
@@ -82,7 +82,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(pool.clone()) 
             .route("/", web::get().to(index)) 
             .service(register_user)
-            .service(login_user)
             .service(get_users)
             .configure(controllers::configure)
            // .configure(controllers::init)
