@@ -92,7 +92,7 @@ async fn main() -> std::io::Result<()> {
             .service(delete_vehicle) 
             .configure(controllers::config) 
             .service(controllers::get_cities)
-            .service(controllers::add_city) 
+            .service(controllers::add_cities) 
     })
     .bind("0.0.0.0:8081")?  
     .run()

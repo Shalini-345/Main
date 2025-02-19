@@ -590,43 +590,37 @@ pub fn config(cfg: &mut web::ServiceConfig) {
 //cities API 
 
 
-use crate::entities::cities::{ActiveModel as CityActiveModel, Entity as CityEntity};
+
+use crate::entities::cities; 
 
 #[derive(Debug, Deserialize)]
-pub struct NewCity {
+struct NewCity {
     pub name: String,
 }
 
 #[post("/cities")]
-async fn add_city(
-    db: web::Data<DatabaseConnection>,
-    new_city: web::Json<NewCity>,
+async fn add_cities(
+    cities: web::Json<Vec<NewCity>>, 
+    db: web::Data<DatabaseConnection>
 ) -> impl Responder {
-    // Check if the city already exists
-    let existing_city = CityEntity::find()
-        .filter(crate::entities::cities::Column::Name.eq(&new_city.name))
-        .one(db.get_ref())
-        .await;
+    let insert_operations: Vec<_> = cities
+        .iter()
+        .map(|city| cities::ActiveModel {
+            name: Set(city.name.clone()),
+            ..Default::default()
+        })
+        .collect();
 
-    if let Ok(Some(_)) = existing_city {
-        return HttpResponse::Conflict().json("City already exists");
-    }
-
-    // Insert new city
-    let city = CityActiveModel {
-        name: Set(new_city.name.clone()),
-        ..Default::default()
-    };
-
-    match city.insert(db.get_ref()).await {
-        Ok(_) => HttpResponse::Created().json("City added successfully"),
-        Err(_) => HttpResponse::InternalServerError().json("Error adding city"),
+    match cities::Entity::insert_many(insert_operations).exec(db.get_ref()).await {
+        Ok(_) => HttpResponse::Created().json(serde_json::json!({ "message": "Cities added successfully" })),
+        Err(err) => HttpResponse::InternalServerError().json(serde_json::json!({ "error": format!("Failed to add cities: {}", err) })),
     }
 }
 
+
 #[get("/cities")]
 async fn get_cities(db: web::Data<DatabaseConnection>) -> impl Responder {
-    match CityEntity::find().all(db.get_ref()).await {
+    match cities::Entity::find().all(db.get_ref()).await {
         Ok(cities) => HttpResponse::Ok().json(cities),
         Err(_) => HttpResponse::InternalServerError().json("Error fetching cities"),
     }
