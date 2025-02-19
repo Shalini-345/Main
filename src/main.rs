@@ -20,6 +20,7 @@ mod entities {
     pub mod settings;
     pub mod vehicleentity;
     pub mod driverentity;
+    pub mod cities;
 }
 
 use controllers::{register_user, login_user, get_users}; 
@@ -90,6 +91,8 @@ async fn main() -> std::io::Result<()> {
             .service(create_vehicle)
             .service(delete_vehicle) 
             .configure(controllers::config) 
+            .service(controllers::get_cities)
+            .service(controllers::add_city) 
     })
     .bind("0.0.0.0:8081")?  
     .run()
