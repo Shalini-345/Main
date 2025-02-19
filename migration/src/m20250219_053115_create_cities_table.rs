@@ -9,17 +9,17 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(City::Table)
+                    .table(Cities::Table) 
                     .if_not_exists()
                     .col(
-                        ColumnDef::new(City::Id)
+                        ColumnDef::new(Cities::Id)
                             .integer()
                             .not_null()
                             .auto_increment()
                             .primary_key(),
                     )
                     .col(
-                        ColumnDef::new(City::Name)
+                        ColumnDef::new(Cities::Name)
                             .string()
                             .not_null()
                             .unique_key(),
@@ -31,13 +31,13 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(City::Table).to_owned())
+            .drop_table(Table::drop().table(Cities::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-enum City {
+enum Cities {  
     Table,
     Id,
     Name,
