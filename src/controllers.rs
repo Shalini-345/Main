@@ -16,7 +16,7 @@ use rust_decimal::Decimal;
 use chrono::{DateTime as ChronoDateTime, Utc};
 use crate::entities::userentity::Entity;
 use crate::auth::{generate_access_token, generate_refresh_token};
-use crate::entities::settings::{self, Entity as Settings};
+use crate::entities::settings::{self};
 
 
 
@@ -603,8 +603,18 @@ async fn create_settings(
         ..Default::default()
     };
 
-    match new_setting.insert(db.get_ref()).await {
-        Ok(inserted) => HttpResponse::Created().json(inserted),
+    // Insert the new setting into the database
+    match settings::Entity::insert(new_setting).exec(db.get_ref()).await {
+        Ok(insert_result) => {
+            // Fetch the inserted record using the last inserted ID
+            match settings::Entity::find_by_id(insert_result.last_insert_id)
+                .one(db.get_ref())
+                .await
+            {
+                Ok(Some(inserted)) => HttpResponse::Created().json(inserted),
+                _ => HttpResponse::InternalServerError().finish(),
+            }
+        }
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
@@ -615,7 +625,7 @@ async fn get_settings(
     db: web::Data<DatabaseConnection>,
     id: web::Path<i32>,
 ) -> impl Responder {
-    match Settings::find_by_id(id.into_inner()).one(db.get_ref()).await {
+    match settings::Entity::find_by_id(id.into_inner()).one(db.get_ref()).await {
         Ok(Some(setting)) => HttpResponse::Ok().json(setting),
         Ok(None) => HttpResponse::NotFound().finish(),
         Err(_) => HttpResponse::InternalServerError().finish(),
@@ -630,7 +640,7 @@ async fn update_settings(
     payload: web::Json<UpdateSettings>,
 ) -> impl Responder {
     let id = id.into_inner();
-    if let Ok(Some(setting)) = Settings::find_by_id(id).one(db.get_ref()).await {
+    if let Ok(Some(setting)) = settings::Entity::find_by_id(id).one(db.get_ref()).await {
         let mut active_model: settings::ActiveModel = setting.into();
 
         if let Some(language) = &payload.language {
@@ -662,14 +672,12 @@ async fn delete_settings(
     id: web::Path<i32>,
 ) -> impl Responder {
     let id = id.into_inner();
-    match Settings::delete_by_id(id).exec(db.get_ref()).await {
+    match settings::Entity::delete_by_id(id).exec(db.get_ref()).await {
         Ok(delete_result) if delete_result.rows_affected > 0 => HttpResponse::Ok().finish(),
         Ok(_) => HttpResponse::NotFound().finish(),
         Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
-
-
 
 
 // payment API
