@@ -17,6 +17,7 @@ use chrono::{DateTime as ChronoDateTime, Utc};
 use crate::entities::userentity::Entity;
 use crate::auth::{generate_access_token, generate_refresh_token};
 use crate::entities::settings::{self};
+use log::{error, info};
 
 
 
@@ -570,8 +571,7 @@ async fn get_cities(db: web::Data<DatabaseConnection>) -> impl Responder {
 // settings API
 
 
-
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct CreateSettings {
     pub user_id: i32,
     pub language: String,
@@ -579,6 +579,7 @@ pub struct CreateSettings {
     pub dark_mode: bool,
     pub currency: String,
 }
+
 
 #[derive(Deserialize, Serialize)]
 pub struct UpdateSettings {
@@ -588,12 +589,14 @@ pub struct UpdateSettings {
     pub currency: Option<String>,
 }
 
-/// Create a new settings entry
+
 #[post("/settings")]
 async fn create_settings(
     db: web::Data<DatabaseConnection>,
     payload: web::Json<CreateSettings>,
 ) -> impl Responder {
+    info!("Received request to create settings: {:?}", payload);
+
     let new_setting = settings::ActiveModel {
         user_id: Set(payload.user_id),
         language: Set(payload.language.clone()),
@@ -603,21 +606,34 @@ async fn create_settings(
         ..Default::default()
     };
 
-    // Insert the new setting into the database
     match settings::Entity::insert(new_setting).exec(db.get_ref()).await {
         Ok(insert_result) => {
-            // Fetch the inserted record using the last inserted ID
+            // Fetch newly inserted settings
             match settings::Entity::find_by_id(insert_result.last_insert_id)
                 .one(db.get_ref())
                 .await
             {
-                Ok(Some(inserted)) => HttpResponse::Created().json(inserted),
-                _ => HttpResponse::InternalServerError().finish(),
+                Ok(Some(inserted)) => {
+                    info!("Successfully created settings with ID: {}", inserted.id);
+                    HttpResponse::Created().json(inserted)
+                }
+                Ok(None) => {
+                    error!("Inserted settings not found.");
+                    HttpResponse::InternalServerError().json("Inserted settings not found.")
+                }
+                Err(e) => {
+                    error!("Database fetch error: {:?}", e);
+                    HttpResponse::InternalServerError().json(format!("Database error: {}", e))
+                }
             }
         }
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Err(e) => {
+            error!("Database insert error: {:?}", e);
+            HttpResponse::InternalServerError().json(format!("Database insert error: {}", e))
+        }
     }
 }
+
 
 /// Get a settings entry by ID
 #[get("/settings/{id}")]
@@ -625,10 +641,19 @@ async fn get_settings(
     db: web::Data<DatabaseConnection>,
     id: web::Path<i32>,
 ) -> impl Responder {
-    match settings::Entity::find_by_id(id.into_inner()).one(db.get_ref()).await {
+    let id = id.into_inner();
+    info!("Fetching settings for ID: {}", id);
+
+    match settings::Entity::find_by_id(id).one(db.get_ref()).await {
         Ok(Some(setting)) => HttpResponse::Ok().json(setting),
-        Ok(None) => HttpResponse::NotFound().finish(),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Ok(None) => {
+            info!("Settings not found for ID: {}", id);
+            HttpResponse::NotFound().json(format!("No settings found for ID: {}", id))
+        }
+        Err(e) => {
+            error!("Database error fetching settings: {:?}", e);
+            HttpResponse::InternalServerError().json("Database error retrieving settings.")
+        }
     }
 }
 
@@ -640,28 +665,44 @@ async fn update_settings(
     payload: web::Json<UpdateSettings>,
 ) -> impl Responder {
     let id = id.into_inner();
-    if let Ok(Some(setting)) = settings::Entity::find_by_id(id).one(db.get_ref()).await {
-        let mut active_model: settings::ActiveModel = setting.into();
+    info!("Updating settings for ID: {}", id);
 
-        if let Some(language) = &payload.language {
-            active_model.language = Set(language.clone());
-        }
-        if let Some(notifications_enabled) = payload.notifications_enabled {
-            active_model.notifications_enabled = Set(notifications_enabled);
-        }
-        if let Some(dark_mode) = payload.dark_mode {
-            active_model.dark_mode = Set(dark_mode);
-        }
-        if let Some(currency) = &payload.currency {
-            active_model.currency = Set(currency.clone());
-        }
+    match settings::Entity::find_by_id(id).one(db.get_ref()).await {
+        Ok(Some(setting)) => {
+            let mut active_model: settings::ActiveModel = setting.into();
 
-        match active_model.update(db.get_ref()).await {
-            Ok(updated) => HttpResponse::Ok().json(updated),
-            Err(_) => HttpResponse::InternalServerError().finish(),
+            if let Some(language) = &payload.language {
+                active_model.language = Set(language.clone());
+            }
+            if let Some(notifications_enabled) = payload.notifications_enabled {
+                active_model.notifications_enabled = Set(notifications_enabled);
+            }
+            if let Some(dark_mode) = payload.dark_mode {
+                active_model.dark_mode = Set(dark_mode);
+            }
+            if let Some(currency) = &payload.currency {
+                active_model.currency = Set(currency.clone());
+            }
+
+            match active_model.update(db.get_ref()).await {
+                Ok(updated) => {
+                    info!("Successfully updated settings for ID: {}", id);
+                    HttpResponse::Ok().json(updated)
+                }
+                Err(e) => {
+                    error!("Database error updating settings: {:?}", e);
+                    HttpResponse::InternalServerError().json("Database error updating settings.")
+                }
+            }
         }
-    } else {
-        HttpResponse::NotFound().finish()
+        Ok(None) => {
+            info!("Settings not found for ID: {}", id);
+            HttpResponse::NotFound().json(format!("No settings found for ID: {}", id))
+        }
+        Err(e) => {
+            error!("Database error fetching settings for update: {:?}", e);
+            HttpResponse::InternalServerError().json("Database error retrieving settings for update.")
+        }
     }
 }
 
@@ -672,12 +713,24 @@ async fn delete_settings(
     id: web::Path<i32>,
 ) -> impl Responder {
     let id = id.into_inner();
+    info!("Deleting settings for ID: {}", id);
+
     match settings::Entity::delete_by_id(id).exec(db.get_ref()).await {
-        Ok(delete_result) if delete_result.rows_affected > 0 => HttpResponse::Ok().finish(),
-        Ok(_) => HttpResponse::NotFound().finish(),
-        Err(_) => HttpResponse::InternalServerError().finish(),
+        Ok(delete_result) if delete_result.rows_affected > 0 => {
+            info!("Successfully deleted settings for ID: {}", id);
+            HttpResponse::Ok().json(format!("Deleted settings with ID: {}", id))
+        }
+        Ok(_) => {
+            info!("No settings found for ID: {}", id);
+            HttpResponse::NotFound().json(format!("No settings found for ID: {}", id))
+        }
+        Err(e) => {
+            error!("Database error deleting settings: {:?}", e);
+            HttpResponse::InternalServerError().json("Database error deleting settings.")
+        }
     }
 }
+
 
 
 // payment API
