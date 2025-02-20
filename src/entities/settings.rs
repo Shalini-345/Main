@@ -1,6 +1,8 @@
 use sea_orm::entity::prelude::*;
 use sea_orm::DeriveRelation; 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, )]
+use serde::{Serialize, Deserialize};  
+
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize,Deserialize)]
 #[sea_orm(table_name = "settings")]
 pub struct Model{
     #[sea_orm(primary_key)]

@@ -1,4 +1,4 @@
-use actix_web::{delete, get, post, web, Error, HttpRequest, HttpResponse, Responder};
+use actix_web::{delete, get, post,put, web, Error, HttpRequest, HttpResponse, Responder};
 use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait,  Set};
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
@@ -16,6 +16,7 @@ use rust_decimal::Decimal;
 use chrono::{DateTime as ChronoDateTime, Utc};
 use crate::entities::userentity::Entity;
 use crate::auth::{generate_access_token, generate_refresh_token};
+use crate::entities::settings::{self, Entity as Settings};
 
 
 
@@ -565,6 +566,109 @@ async fn get_cities(db: web::Data<DatabaseConnection>) -> impl Responder {
         Err(_) => HttpResponse::InternalServerError().json("Error fetching cities"),
     }
 }
+
+// settings API
+
+
+
+#[derive(Deserialize, Serialize)]
+pub struct CreateSettings {
+    pub user_id: i32,
+    pub language: String,
+    pub notifications_enabled: bool,
+    pub dark_mode: bool,
+    pub currency: String,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct UpdateSettings {
+    pub language: Option<String>,
+    pub notifications_enabled: Option<bool>,
+    pub dark_mode: Option<bool>,
+    pub currency: Option<String>,
+}
+
+/// Create a new settings entry
+#[post("/settings")]
+async fn create_settings(
+    db: web::Data<DatabaseConnection>,
+    payload: web::Json<CreateSettings>,
+) -> impl Responder {
+    let new_setting = settings::ActiveModel {
+        user_id: Set(payload.user_id),
+        language: Set(payload.language.clone()),
+        notifications_enabled: Set(payload.notifications_enabled),
+        dark_mode: Set(payload.dark_mode),
+        currency: Set(payload.currency.clone()),
+        ..Default::default()
+    };
+
+    match new_setting.insert(db.get_ref()).await {
+        Ok(inserted) => HttpResponse::Created().json(inserted),
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
+}
+
+/// Get a settings entry by ID
+#[get("/settings/{id}")]
+async fn get_settings(
+    db: web::Data<DatabaseConnection>,
+    id: web::Path<i32>,
+) -> impl Responder {
+    match Settings::find_by_id(id.into_inner()).one(db.get_ref()).await {
+        Ok(Some(setting)) => HttpResponse::Ok().json(setting),
+        Ok(None) => HttpResponse::NotFound().finish(),
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
+}
+
+/// Update a settings entry
+#[put("/settings/{id}")]
+async fn update_settings(
+    db: web::Data<DatabaseConnection>,
+    id: web::Path<i32>,
+    payload: web::Json<UpdateSettings>,
+) -> impl Responder {
+    let id = id.into_inner();
+    if let Ok(Some(setting)) = Settings::find_by_id(id).one(db.get_ref()).await {
+        let mut active_model: settings::ActiveModel = setting.into();
+
+        if let Some(language) = &payload.language {
+            active_model.language = Set(language.clone());
+        }
+        if let Some(notifications_enabled) = payload.notifications_enabled {
+            active_model.notifications_enabled = Set(notifications_enabled);
+        }
+        if let Some(dark_mode) = payload.dark_mode {
+            active_model.dark_mode = Set(dark_mode);
+        }
+        if let Some(currency) = &payload.currency {
+            active_model.currency = Set(currency.clone());
+        }
+
+        match active_model.update(db.get_ref()).await {
+            Ok(updated) => HttpResponse::Ok().json(updated),
+            Err(_) => HttpResponse::InternalServerError().finish(),
+        }
+    } else {
+        HttpResponse::NotFound().finish()
+    }
+}
+
+/// Delete a settings entry
+#[delete("/settings/{id}")]
+async fn delete_settings(
+    db: web::Data<DatabaseConnection>,
+    id: web::Path<i32>,
+) -> impl Responder {
+    let id = id.into_inner();
+    match Settings::delete_by_id(id).exec(db.get_ref()).await {
+        Ok(delete_result) if delete_result.rows_affected > 0 => HttpResponse::Ok().finish(),
+        Ok(_) => HttpResponse::NotFound().finish(),
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
+}
+
 
 
 

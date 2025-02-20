@@ -7,6 +7,7 @@ mod m20250215_092124_create_payment_table;
 mod m20250217_053312_create_vehicles_table;
 mod m20250218_060218_create_ride_table;
 mod m20250219_053115_create_cities_table;
+mod m20250220_065436_create_settings_table;
 
 pub struct Migrator;
 
@@ -21,6 +22,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20250217_053312_create_vehicles_table::Migration),
             Box::new(m20250218_060218_create_ride_table::Migration),
             Box::new(m20250219_053115_create_cities_table::Migration),
+            Box::new(m20250220_065436_create_settings_table::Migration),
         ]
     }
 }
