@@ -92,6 +92,10 @@ async fn main() -> std::io::Result<()> {
             .configure(controllers::config) 
             .service(controllers::get_cities)
             .service(controllers::add_cities) 
+            .service(controllers::create_settings)
+            .service(controllers::get_settings)
+            .service(controllers::update_settings)
+            .service(controllers::delete_settings)
     })
     .bind("0.0.0.0:8081")?  
     .run()
