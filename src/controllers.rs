@@ -3,7 +3,7 @@ use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, Co
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use regex::Regex;
-use crate::auth::{generate_access_token, generate_refresh_token,AuthTokenClaims,verify_refresh_token};
+use crate::auth::{generate_access_token,AuthTokenClaims};
 use crate::entities::userentity::{self};
 use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
@@ -101,7 +101,7 @@ pub async fn register_user(
     match userentity::Entity::insert(new_user_active_model).exec(db.as_ref()).await {
         Ok(_) => {
             let access_token = generate_access_token(&new_user.email);
-            let refresh_token = generate_refresh_token(&new_user.email);
+            let refresh_token = generate_access_token(&new_user.email);
 
             match (access_token, refresh_token) {
                 (Ok(at), Ok(rt)) => Ok(HttpResponse::Created().json(json!({
@@ -120,73 +120,47 @@ pub async fn register_user(
     }
 }
 
+
+
+
 #[get("/users")]
-async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl Responder {
+pub async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl Responder {
+    // Extract the Authorization header
     let auth_header = req.headers().get("Authorization");
 
     if let Some(auth_value) = auth_header {
         if let Ok(auth_str) = auth_value.to_str() {
             if auth_str.starts_with("Bearer ") {
-                let token = &auth_str[7..]; 
-                
-                if token.starts_with("access_") {
-                    match AuthTokenClaims::validate_token(token) {
-                        Ok(_) => {
-                            match userentity::Entity::find().all(db.as_ref()).await {
-                                Ok(users) => {
-                                    let user_list: Vec<_> = users.into_iter().map(|user| json!({
-                                        "id": user.id,
-                                        "first_name": user.first_name,
-                                        "last_name": user.last_name,
-                                        "email": user.email,
-                                        "city": user.city,
-                                        "phone_number": user.phone_number
-                                    })).collect();
-                                    return HttpResponse::Ok().json(user_list);
-                                },
-                                Err(_) => {
-                                    return HttpResponse::InternalServerError().json(json!({
-                                        "error": "Failed to fetch users"
-                                    }));
-                                },
-                            }
-                        },
-                        Err(_) => {
-                            return HttpResponse::Unauthorized().json(json!({
-                                "error": "Invalid or expired access token"
-                            }));
-                        },
-                    }
-                } 
-                else if token.starts_with("refresh_") {
-                    match verify_refresh_token(token) {
-                        Ok(_) => {
-                            return HttpResponse::Ok().json(json!({
-                                "message": "Valid refresh token"
-                            }));
-                        },
-                        Err(_) => {
-                            return HttpResponse::Unauthorized().json(json!({
-                                "error": "Invalid or expired refresh token"
-                            }));
-                        },
-                    }
-                } else {
-                    return HttpResponse::Unauthorized().json(json!({
-                        "error": "Invalid token format"
-                    }));
+                let token = &auth_str[7..]; // Remove "Bearer " prefix
+
+                // Validate access token
+                match AuthTokenClaims::validate_token(token) {
+                    Ok(_) => {
+                        // Fetch users from DB if token is valid
+                        match userentity::Entity::find().all(db.as_ref()).await {
+                            Ok(users) => {
+                                let user_list: Vec<_> = users.into_iter().map(|user| json!({
+                                    "id": user.id,
+                                    "first_name": user.first_name,
+                                    "last_name": user.last_name,
+                                    "email": user.email,
+                                    "city": user.city,
+                                    "phone_number": user.phone_number
+                                })).collect();
+                                return HttpResponse::Ok().json(user_list);
+                            },
+                            Err(_) => return HttpResponse::InternalServerError().json(json!({ "error": "Failed to fetch users" })),
+                        }
+                    },
+                    Err(_) => return HttpResponse::Unauthorized().json(json!({ "error": "Invalid or expired access token" })),
                 }
             } else {
-                return HttpResponse::Unauthorized().json(json!({
-                    "error": "Invalid token format"
-                }));
+                return HttpResponse::Unauthorized().json(json!({ "error": "Invalid token format" }));
             }
         }
     }
 
-    HttpResponse::Unauthorized().json(json!({
-        "error": "Missing token"
-    }))
+    HttpResponse::Unauthorized().json(json!({ "error": "Missing token" }))
 }
 
 // driver api
