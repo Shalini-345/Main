@@ -17,7 +17,10 @@ use chrono::{DateTime as ChronoDateTime, Utc};
 use crate::entities::userentity::Entity;
 use crate::auth::{generate_access_token, generate_refresh_token};
 use crate::entities::settings::{self};
-use log::{error, info};
+use log::{error, info, warn};
+use std::sync::Arc;
+use crate::entities::helpsupport::{self, Entity as SupportTicket};
+use sea_orm::ModelTrait; // Ensure this is imported
 
 
 
@@ -727,6 +730,212 @@ async fn delete_settings(
         Err(e) => {
             error!("Database error deleting settings: {:?}", e);
             HttpResponse::InternalServerError().json("Database error deleting settings.")
+        }
+    }
+}
+
+
+//helpsupport API
+
+
+#[derive(Debug, Deserialize, Serialize)]
+struct TicketInput {
+    user_id: i32,
+    subject: String,
+    description: String,
+    status: String,
+    priority: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+struct TicketUpdateInput {
+    subject: Option<String>,
+    description: Option<String>,
+    status: Option<String>,
+    priority: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+struct ApiResponse<T> {
+    success: bool,
+    message: String,
+    data: Option<T>,
+}
+
+#[get("/tickets")]
+async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
+    let db_conn: &DatabaseConnection = db.as_ref().as_ref(); // Convert Arc to &DatabaseConnection
+
+    match SupportTicket::find().all(db_conn).await {
+        Ok(tickets) => {
+            if tickets.is_empty() {
+                HttpResponse::Ok().json(ApiResponse::<Vec<helpsupport::Model>> {
+                    success: true,
+                    message: "No support tickets found.".to_string(),
+                    data: None,
+                })
+            } else {
+                HttpResponse::Ok().json(ApiResponse {
+                    success: true,
+                    message: "Support tickets retrieved successfully.".to_string(),
+                    data: Some(tickets),
+                })
+            }
+        }
+        Err(err) => {
+            error!("Error fetching tickets: {:?}", err);
+            HttpResponse::InternalServerError().json(ApiResponse::<Vec<helpsupport::Model>> {
+                success: false,
+                message: "Failed to fetch support tickets.".to_string(),
+                data: None,
+            })
+        }
+    }
+}
+
+
+
+#[post("/tickets")]
+async fn create_ticket(
+    db: web::Data<Arc<DatabaseConnection>>, // Arc wrapper around DatabaseConnection
+    new_ticket: web::Json<TicketInput>,
+) -> impl Responder {
+    let db_conn: &DatabaseConnection = db.as_ref().as_ref(); // Convert Arc<DatabaseConnection> to &DatabaseConnection
+
+    let ticket = helpsupport::ActiveModel {
+        user_id: Set(new_ticket.user_id),
+        subject: Set(new_ticket.subject.clone()),
+        description: Set(new_ticket.description.clone()),
+        status: Set(new_ticket.status.clone()),
+        priority: Set(new_ticket.priority.clone()),
+        created_at: Set(Utc::now().naive_utc()),
+        updated_at: Set(Utc::now().naive_utc()),
+
+        ..Default::default()
+    };
+
+    match ticket.insert(db_conn).await {
+        Ok(ticket) => {
+            info!("Support ticket created successfully: {:?}", ticket);
+            HttpResponse::Created().json(ApiResponse {
+                success: true,
+                message: "Support ticket created successfully.".to_string(),
+                data: Some(ticket),
+            })
+        }
+        Err(err) => {
+            error!("Error creating support ticket: {:?}", err);
+            HttpResponse::InternalServerError().json(ApiResponse::<helpsupport::Model> {
+                success: false,
+                message: format!("Failed to create support ticket: {}", err),
+                data: None,
+            })
+        }
+    }
+}
+
+
+#[put("/tickets/{id}")]
+async fn update_ticket(
+    db: web::Data<DatabaseConnection>, // Use DatabaseConnection directly
+    ticket_id: web::Path<i32>,
+    updated_ticket: web::Json<TicketUpdateInput>,
+) -> impl Responder {
+    let id = ticket_id.into_inner();
+
+    match helpsupport::Entity::find_by_id(id).one(db.as_ref()).await {
+        Ok(Some(ticket)) => {
+            let mut active_model: helpsupport::ActiveModel = ticket.into();
+
+            if let Some(subject) = &updated_ticket.subject {
+                active_model.subject = Set(subject.clone());
+            }
+            if let Some(description) = &updated_ticket.description {
+                active_model.description = Set(description.clone());
+            }
+            if let Some(status) = &updated_ticket.status {
+                active_model.status = Set(status.clone());
+            }
+            if let Some(priority) = &updated_ticket.priority {
+                active_model.priority = Set(priority.clone());
+            }
+            active_model.updated_at = Set(chrono::Utc::now().naive_utc()); // Fix datetime issue
+
+            match active_model.update(db.as_ref()).await {
+                Ok(updated_ticket) => {
+                    info!("Support ticket {} updated successfully", id);
+                    HttpResponse::Ok().json(ApiResponse {
+                        success: true,
+                        message: "Support ticket updated successfully.".to_string(),
+                        data: Some(updated_ticket),
+                    })
+                }
+                Err(err) => {
+                    error!("Error updating ticket {}: {:?}", id, err);
+                    HttpResponse::InternalServerError().json(ApiResponse::<helpsupport::Model> {
+                        success: false,
+                        message: format!("Failed to update support ticket: {}", err),
+                        data: None,
+                    })
+                }
+            }
+        }
+        Ok(None) => {
+            warn!("Support ticket {} not found", id);
+            HttpResponse::NotFound().json(ApiResponse::<helpsupport::Model> {
+                success: false,
+                message: "Support ticket not found.".to_string(),
+                data: None,
+            })
+        }
+        Err(err) => {
+            error!("Error finding ticket {}: {:?}", id, err);
+            HttpResponse::InternalServerError().json(ApiResponse::<helpsupport::Model> {
+                success: false,
+                message: format!("Failed to find support ticket: {}", err),
+                data: None,
+            })
+        }
+    }
+}
+
+#[delete("/tickets/{id}")]
+async fn delete_ticket(
+    db: web::Data<DatabaseConnection>,
+    ticket_id: web::Path<i32>,
+) -> impl Responder {
+    let id = ticket_id.into_inner();
+
+    match helpsupport::Entity::find_by_id(id).one(db.get_ref()).await {
+        Ok(Some(ticket)) => {
+            match ticket.delete(db.get_ref()).await {
+                Ok(_) => HttpResponse::Ok().json(ApiResponse::<()> {
+                    success: true,
+                    message: "Support ticket deleted successfully.".to_string(),
+                    data: None,
+                }),
+                Err(err) => {
+                    error!("Error deleting ticket: {:?}", err);
+                    HttpResponse::InternalServerError().json(ApiResponse::<()> {
+                        success: false,
+                        message: "Failed to delete support ticket.".to_string(),
+                        data: None,
+                    })
+                }
+            }
+        }
+        Ok(None) => HttpResponse::NotFound().json(ApiResponse::<()> {
+            success: false,
+            message: "Support ticket not found.".to_string(),
+            data: None,
+        }),
+        Err(err) => {
+            error!("Error finding ticket: {:?}", err);
+            HttpResponse::InternalServerError().json(ApiResponse::<()> {
+                success: false,
+                message: "Failed to find support ticket.".to_string(),
+                data: None,
+            })
         }
     }
 }
