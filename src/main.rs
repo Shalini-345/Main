@@ -23,7 +23,7 @@ mod entities {
     pub mod cities;
 }
 
-use controllers::get_users; 
+use controllers::{get_users, register_user}; 
 use controllers::{get_all_vehicles, get_vehicle, create_vehicle, delete_vehicle}; 
 
 #[derive(Debug)]
@@ -81,7 +81,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(actix_web::middleware::Logger::default()) 
             .app_data(pool.clone()) 
             .route("/", web::get().to(index)) 
-            .service(controllers::register_user)
+            .service(register_user) // Register the register_user handler
             .service(get_users)
             .configure(controllers::configure)
            // .configure(controllers::init)
