@@ -797,10 +797,11 @@ async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
 
 #[post("/tickets")]
 async fn create_ticket(
-    db: web::Data<Arc<DatabaseConnection>>, // Arc wrapper around DatabaseConnection
+    db: web::Data<Arc<DatabaseConnection>>, 
     new_ticket: web::Json<TicketInput>,
 ) -> impl Responder {
-    let db_conn: &DatabaseConnection = db.as_ref().as_ref(); // Convert Arc<DatabaseConnection> to &DatabaseConnection
+    let db_conn: &DatabaseConnection = db.as_ref().as_ref(); 
+    info!("Received request to create a support ticket: {:?}", new_ticket);
 
     let ticket = helpsupport::ActiveModel {
         user_id: Set(new_ticket.user_id),
@@ -827,12 +828,14 @@ async fn create_ticket(
             error!("Error creating support ticket: {:?}", err);
             HttpResponse::InternalServerError().json(ApiResponse::<helpsupport::Model> {
                 success: false,
-                message: format!("Failed to create support ticket: {}", err),
+                message: format!("Failed to create support ticket: {:?}", err),
                 data: None,
             })
         }
     }
 }
+
+
 
 
 #[put("/tickets/{id}")]
