@@ -6,6 +6,7 @@ use dotenv::dotenv;
 use sea_orm_migration::prelude::*;
 use migration::{Migrator, MigratorTrait};
 use db::establish_connection_pool;
+use crate::controllers::register_user;
 
 mod db;
 mod controllers;
@@ -23,7 +24,7 @@ mod entities {
     pub mod cities;
 }
 
-use controllers::{register_user,  get_users}; 
+use controllers::get_users; 
 use controllers::{get_all_vehicles, get_vehicle, create_vehicle, delete_vehicle}; 
 
 #[derive(Debug)]

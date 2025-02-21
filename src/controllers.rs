@@ -120,8 +120,6 @@ pub async fn register_user(
     }
 }
 
-
-
 #[get("/users")]
 async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl Responder {
     let auth_header = req.headers().get("Authorization");
@@ -129,17 +127,14 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl 
     if let Some(auth_value) = auth_header {
         if let Ok(auth_str) = auth_value.to_str() {
             if auth_str.starts_with("Bearer ") {
-                let token = &auth_str[7..]; // Remove the "Bearer " prefix
-
-                // For access token validation
+                let token = &auth_str[7..]; 
+                
                 if token.starts_with("access_") {
-                    // Validate the access token using `AuthTokenClaims::validate_token`
                     match AuthTokenClaims::validate_token(token) {
                         Ok(_) => {
-                            // Proceed with fetching users
                             match userentity::Entity::find().all(db.as_ref()).await {
                                 Ok(users) => {
-                                    let user_list: Vec<_> = users.into_iter().map(|user| serde_json::json!({
+                                    let user_list: Vec<_> = users.into_iter().map(|user| json!({
                                         "id": user.id,
                                         "first_name": user.first_name,
                                         "last_name": user.last_name,
@@ -149,37 +144,49 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl 
                                     })).collect();
                                     return HttpResponse::Ok().json(user_list);
                                 },
-                                Err(_) => return HttpResponse::InternalServerError().json(serde_json::json!({
-                                    "error": "Failed to fetch users"
-                                })),
+                                Err(_) => {
+                                    return HttpResponse::InternalServerError().json(json!({
+                                        "error": "Failed to fetch users"
+                                    }));
+                                },
                             }
                         },
                         Err(_) => {
-                            return HttpResponse::Unauthorized().json(serde_json::json!({
+                            return HttpResponse::Unauthorized().json(json!({
                                 "error": "Invalid or expired access token"
                             }));
                         },
                     }
-                } else if token.starts_with("refresh_") {
-                    // Validate the refresh token using `verify_refresh_token`
+                } 
+                else if token.starts_with("refresh_") {
                     match verify_refresh_token(token) {
                         Ok(_) => {
-                            // Refresh token is valid, perform desired action
-                            HttpResponse::Ok().json(serde_json::json!({ "message": "Valid refresh token" }));
+                            return HttpResponse::Ok().json(json!({
+                                "message": "Valid refresh token"
+                            }));
                         },
                         Err(_) => {
-                            return HttpResponse::Unauthorized().json(serde_json::json!({
+                            return HttpResponse::Unauthorized().json(json!({
                                 "error": "Invalid or expired refresh token"
                             }));
                         },
                     }
+                } else {
+                    return HttpResponse::Unauthorized().json(json!({
+                        "error": "Invalid token format"
+                    }));
                 }
+            } else {
+                return HttpResponse::Unauthorized().json(json!({
+                    "error": "Invalid token format"
+                }));
             }
         }
-        return HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Invalid token format" }));
     }
 
-    HttpResponse::Unauthorized().json(serde_json::json!({ "error": "Missing token" }))
+    HttpResponse::Unauthorized().json(json!({
+        "error": "Missing token"
+    }))
 }
 
 // driver api
