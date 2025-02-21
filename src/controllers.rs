@@ -20,6 +20,9 @@ use crate::entities::helpsupport::{self, Entity as SupportTicket};
 use sea_orm::ModelTrait; 
 
 
+
+use crate::entities::cities; 
+
 #[derive(Deserialize)]
 pub struct NewUser {
     pub first_name: String,
@@ -30,134 +33,109 @@ pub struct NewUser {
     pub phone_number: String,
 }
 
+// ✅ Email validation
 fn is_valid_email(email: &str) -> bool {
     let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
     email_regex.is_match(email)
 }
 
+// ✅ Phone validation
 fn validate_phone(phone: &str) -> bool {
     let phone_regex = Regex::new(r"^\+?[1-9]\d{1,14}$").unwrap();
     phone_regex.is_match(phone)
 }
-
 
 #[post("/users/register")]
 pub async fn register_user(
     db: web::Data<DatabaseConnection>,
     new_user: web::Json<NewUser>,
 ) -> impl Responder { 
-    // Validate Email
+    // ✅ Validate email
     if !is_valid_email(&new_user.email) {
-        return HttpResponse::BadRequest().json(json!({
-            "error": "Invalid email format"
-        }));
+        return HttpResponse::BadRequest().json(json!({"error": "Invalid email format"}));
     }
 
-    // Validate Phone Number
+    // ✅ Validate phone number
     if !validate_phone(&new_user.phone_number) {
-        return HttpResponse::BadRequest().json(json!({
-            "error": "Invalid phone number format"
-        }));
+        return HttpResponse::BadRequest().json(json!({"error": "Invalid phone number format"}));
     }
 
-    // Check if Email Already Exists
-    match userentity::Entity::find()
-        .filter(userentity::Column::Email.eq(new_user.email.clone()))
-        .one(db.as_ref())
-        .await 
-    {
-        Ok(Some(_)) => {
-            return HttpResponse::Conflict().json(json!({
-                "error": "Email already exists"
-            }));
-        }
-        Ok(None) => {} // Email is unique, continue
-        Err(err) => {
-            eprintln!("Database error while checking email: {:?}", err);
-            return HttpResponse::InternalServerError().json(json!({
-                "error": "Database error while checking email"
-            }));
-        }
-    }
+    // ✅ Check if email already exists
+    if let Ok(Some(_)) = userentity::Entity::find()
+    .filter(userentity::Column::Email.eq(new_user.email.clone()))
+    .one(db.get_ref())  // ✅ FIXED: `db.get_ref()` instead of `&db`
+    .await
+{
+    return HttpResponse::Conflict().json(json!({"error": "Email already exists"}));
+}
 
-    // Validate City ID Exists
-    match cities::Entity::find()
-        .filter(cities::Column::Id.eq(new_user.city))
-        .one(db.as_ref())
-        .await 
-    {
-        Ok(Some(_)) => {} // City ID exists, continue
-        Ok(None) => {
-            return HttpResponse::BadRequest().json(json!({
-                "error": "Invalid city ID"
-            }));
-        }
-        Err(err) => {
-            eprintln!("Database error while checking city ID: {:?}", err);
-            return HttpResponse::InternalServerError().json(json!({
-                "error": "Database error while checking city ID"
-            }));
-        }
-    }
+    // ✅ Validate city ID exists
+    if let Ok(None) = cities::Entity::find()
+    .filter(cities::Column::Id.eq(new_user.city))
+    .one(db.get_ref())  // ✅ FIXED: `db.get_ref()`
+    .await
+{
+    return HttpResponse::BadRequest().json(json!({"error": "Invalid city ID"}));
+}
 
-    // Hash Password
+
+    // ✅ Hash password
     let password_hash = match hash(&new_user.password, DEFAULT_COST) {
         Ok(hash) => hash,
         Err(err) => {
             eprintln!("Error hashing password: {:?}", err);
-            return HttpResponse::InternalServerError().json(json!({
-                "error": "Failed to hash password"
-            }));
+            return HttpResponse::InternalServerError().json(json!({"error": "Failed to hash password"}));
         }
     };
 
-    // Insert New User
+    // ✅ Insert new user
     let new_user_active_model = userentity::ActiveModel {
         first_name: Set(new_user.first_name.clone()),
         last_name: Set(new_user.last_name.clone()),
         email: Set(new_user.email.clone()),
         password: Set(password_hash),
-        city: Set(new_user.city), // Fixed column name
+        city: Set(new_user.city),
         phone_number: Set(new_user.phone_number.clone()),
         ..Default::default()
     };
 
-    match userentity::Entity::insert(new_user_active_model).exec(db.as_ref()).await {
-        Ok(_) => {
-            let access_token = match generate_access_token(&new_user.email) {
-                Ok(token) => token,
-                Err(err) => {
-                    eprintln!("Error generating access token: {:?}", err);
-                    return HttpResponse::InternalServerError().json(json!({
-                        "error": "Failed to generate access token"
-                    }));
-                }
-            };
-
-            let refresh_token = match generate_access_token(&new_user.email) {
-                Ok(token) => token,
-                Err(err) => {
-                    eprintln!("Error generating refresh token: {:?}", err);
-                    return HttpResponse::InternalServerError().json(json!({
-                        "error": "Failed to generate refresh token"
-                    }));
-                }
-            };
-
-            HttpResponse::Created().json(json!({
-                "message": "User registered successfully",
-                "access_token": access_token,
-                "refresh_token": refresh_token
-            }))
-        }
-        Err(err) => {
-            eprintln!("Database error while inserting user: {:?}", err);
-            HttpResponse::InternalServerError().json(json!({
-                "error": "Failed to register user"
-            }))
-        }
-    }
+    // ✅ Save to database
+    if let Err(err) = userentity::Entity::insert(new_user_active_model)
+    .exec(db.get_ref())  // ✅ FIXED: `db.get_ref()`
+    .await
+{
+    eprintln!("Database error while inserting user: {:?}", err);
+    return HttpResponse::InternalServerError().json(json!({"error": "Failed to register user"}));
 }
+
+    // ✅ Generate tokens
+    let access_token = match generate_access_token(&new_user.email) {
+        Ok(token) => token,
+        Err(err) => {
+            eprintln!("Error generating access token: {:?}", err);
+            return HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to generate access token"
+            }));
+        } 
+    };
+    
+    let refresh_token = match generate_access_token(&new_user.email) {
+        Ok(token) => token,
+        Err(err) => {
+            eprintln!("Error generating refresh token: {:?}", err);
+            return HttpResponse::InternalServerError().json(json!({
+                "error": "Failed to generate refresh token"
+            }));
+        } 
+    };
+    
+    HttpResponse::Created().json(json!({
+        "message": "User registered successfully",
+        "access_token": access_token,
+        "refresh_token": refresh_token
+    }))
+}
+
 
 #[get("/users")]
 async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl Responder {
@@ -569,7 +547,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
 
 
 
-use crate::entities::cities; 
 
 #[derive(Debug, Deserialize)]
 struct NewCity {
