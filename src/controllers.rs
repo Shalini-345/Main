@@ -121,47 +121,47 @@ pub async fn register_user(
 }
 
 
-
-
 #[get("/users")]
-pub async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl Responder {
-    // Extract the Authorization header
+async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl Responder {
     let auth_header = req.headers().get("Authorization");
 
     if let Some(auth_value) = auth_header {
         if let Ok(auth_str) = auth_value.to_str() {
             if auth_str.starts_with("Bearer ") {
-                let token = &auth_str[7..]; // Remove "Bearer " prefix
+                let token = &auth_str[7..]; 
+                println!("Received Token: {:?}", token); 
 
-                // Validate access token
                 match AuthTokenClaims::validate_token(token) {
                     Ok(_) => {
-                        // Fetch users from DB if token is valid
                         match userentity::Entity::find().all(db.as_ref()).await {
                             Ok(users) => {
                                 let user_list: Vec<_> = users.into_iter().map(|user| json!({
                                     "id": user.id,
+                                    "email": user.email,
                                     "first_name": user.first_name,
                                     "last_name": user.last_name,
-                                    "email": user.email,
                                     "city": user.city,
-                                    "phone_number": user.phone_number
+                                    "phone_number": user.phone_number,
                                 })).collect();
                                 return HttpResponse::Ok().json(user_list);
                             },
-                            Err(_) => return HttpResponse::InternalServerError().json(json!({ "error": "Failed to fetch users" })),
+                            Err(_) => return HttpResponse::InternalServerError().json(json!({
+                                "error": "Failed to fetch users"
+                            })),
                         }
                     },
-                    Err(_) => return HttpResponse::Unauthorized().json(json!({ "error": "Invalid or expired access token" })),
+                    Err(_) => return HttpResponse::Unauthorized().json(json!({
+                        "error": "Invalid token"
+                    })),
                 }
-            } else {
-                return HttpResponse::Unauthorized().json(json!({ "error": "Invalid token format" }));
             }
         }
+        return HttpResponse::Unauthorized().json(json!({ "error": "Invalid token format" }));
     }
 
     HttpResponse::Unauthorized().json(json!({ "error": "Missing token" }))
 }
+
 
 // driver api
 
