@@ -45,7 +45,7 @@ impl AuthTokenClaims {
         )?;
 
         if token_data.claims.token_type != "access" {
-            return Err(Error::from(ErrorKind::InvalidToken)); // Corrected error handling
+            return Err(Error::from(ErrorKind::InvalidToken)); 
         }
 
         Ok(token_data.claims)

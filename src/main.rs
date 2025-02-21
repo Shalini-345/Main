@@ -81,7 +81,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(actix_web::middleware::Logger::default()) 
             .app_data(pool.clone()) 
             .route("/", web::get().to(index)) 
-            .service(register_user)
+            .route("/register", web::post().to(register_user)) 
             .service(get_users)
             .configure(controllers::configure)
            // .configure(controllers::init)
