@@ -6,7 +6,6 @@ use dotenv::dotenv;
 use sea_orm_migration::prelude::*;
 use migration::{Migrator, MigratorTrait};
 use db::establish_connection_pool;
-use crate::controllers::register_user;
 
 mod db;
 mod controllers;
@@ -82,7 +81,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(actix_web::middleware::Logger::default()) 
             .app_data(pool.clone()) 
             .route("/", web::get().to(index)) 
-            .route("/register", web::post().to(register_user)) 
+            .service(controllers::register_user)
             .service(get_users)
             .configure(controllers::configure)
            // .configure(controllers::init)
