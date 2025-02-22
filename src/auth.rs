@@ -1,7 +1,7 @@
 use jsonwebtoken::{encode, decode, EncodingKey, DecodingKey, Header, Validation};
 use chrono::{Utc, Duration};
 use serde::{Serialize, Deserialize};
-use jsonwebtoken::errors::{Error, ErrorKind};
+use jsonwebtoken::errors::Error;
 
 const SECRET_KEY: &[u8] = b"your_secret_key";  
 
@@ -27,8 +27,14 @@ fn generate_token(email: &str, expiry_minutes: i64, token_type: &str, secret: &[
     encode(&Header::default(), &claims, &EncodingKey::from_secret(secret))
 }
 
+/// Generates an access token that expires in **7 minutes**
 pub fn generate_access_token(email: &str) -> Result<String, Error> {
-    generate_token(email, 7, "access", SECRET_KEY)
+    generate_token(email, 7, "access", SECRET_KEY) // 7 minutes expiry
+}
+
+/// Generates a refresh token that expires in **15 days**
+pub fn generate_refresh_token(email: &str) -> Result<String, Error> {
+    generate_token(email, 15 * 24 * 60, "refresh", SECRET_KEY) // 15 days expiry
 }
 
 impl AuthTokenClaims {
@@ -38,10 +44,6 @@ impl AuthTokenClaims {
             &DecodingKey::from_secret(SECRET_KEY),  
             &Validation::default(),
         )?;
-
-        if token_data.claims.token_type != "access" {
-            return Err(Error::from(ErrorKind::InvalidToken)); 
-        }
 
         Ok(token_data.claims)
     }

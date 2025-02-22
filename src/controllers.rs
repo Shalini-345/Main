@@ -1,10 +1,11 @@
 use actix_web::{delete, get, post,put, web, HttpRequest, HttpResponse, Responder};
-use sea_orm::{DatabaseConnection, EntityTrait, ActiveModelTrait, QueryFilter, ColumnTrait,  Set};
+use regex::Regex;
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
-use regex::Regex;
-use crate::auth::{generate_access_token,AuthTokenClaims};
-use crate::entities::userentity::{self};
+use validator::ValidationError;
+use crate::auth::{generate_access_token, generate_refresh_token, AuthTokenClaims};
+use crate::entities::userentity::{self, ActiveModel as UserActiveModel, Entity as UserEntity};
 use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
 use serde_json::json;
@@ -18,10 +19,29 @@ use log::{error, info};
 use std::sync::Arc;
 use crate::entities::helpsupport::{self, Entity as SupportTicket};
 use sea_orm::ModelTrait; 
+use actix_web::Error;
 
 
 
 use crate::entities::cities; 
+
+
+fn is_valid_email(email: &str) -> bool {
+    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
+    email_regex.is_match(email)
+}
+
+fn validate_phone(phone: &str) -> Result<(), ValidationError> {
+    let phone_regex = Regex::new(r"^\+?[1-9]\d{1,14}$").unwrap();
+    if phone_regex.is_match(phone) {
+        Ok(())
+    } else {
+        Err(ValidationError::new("invalid_phone"))
+    }
+}
+
+
+
 
 #[derive(Deserialize)]
 pub struct NewUser {
@@ -29,69 +49,47 @@ pub struct NewUser {
     pub last_name: String,
     pub email: String,
     pub password: String,
-    pub city: i32,  
+    pub city: i32,
     pub phone_number: String,
 }
 
-// ✅ Email validation
-fn is_valid_email(email: &str) -> bool {
-    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
-    email_regex.is_match(email)
-}
-
-// ✅ Phone validation
-fn validate_phone(phone: &str) -> bool {
-    let phone_regex = Regex::new(r"^\+?[1-9]\d{1,14}$").unwrap();
-    phone_regex.is_match(phone)
-}
-
 #[post("/users/register")]
-pub async fn register_user(
-    db: web::Data<DatabaseConnection>,
+async fn register_user(
     new_user: web::Json<NewUser>,
-) -> impl Responder { 
-    // ✅ Validate email
+    db: web::Data<DatabaseConnection>,
+) -> Result<HttpResponse, Error> {
     if !is_valid_email(&new_user.email) {
-        return HttpResponse::BadRequest().json(json!({"error": "Invalid email format"}));
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({
+            "error": "Incorrect email format"
+        })));
     }
 
-    // ✅ Validate phone number
-    if !validate_phone(&new_user.phone_number) {
-        return HttpResponse::BadRequest().json(json!({"error": "Invalid phone number format"}));
+    if let Err(_) = validate_phone(&new_user.phone_number) {
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({
+            "error": "Invalid phone number format"
+        })));
+    }
+        
+    
+
+    let existing_user = UserEntity::find()
+        .filter(userentity::Column::Email.eq(new_user.email.clone()))
+        .one(db.as_ref())
+        .await
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
+
+    if existing_user.is_some() {
+        return Ok(HttpResponse::Conflict().json(serde_json::json!({
+            "error": "Email already exists"
+        })));
     }
 
-    // ✅ Check if email already exists
-    if let Ok(Some(_)) = userentity::Entity::find()
-    .filter(userentity::Column::Email.eq(new_user.email.clone()))
-    .one(db.get_ref())  // ✅ FIXED: `db.get_ref()` instead of `&db`
-    .await
-{
-    return HttpResponse::Conflict().json(json!({"error": "Email already exists"}));
-}
+    let password_hash = hash(&new_user.password, DEFAULT_COST)
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to hash password"))?;
 
-    // ✅ Validate city ID exists
-    if let Ok(None) = cities::Entity::find()
-    .filter(cities::Column::Id.eq(new_user.city))
-    .one(db.get_ref())  // ✅ FIXED: `db.get_ref()`
-    .await
-{
-    return HttpResponse::BadRequest().json(json!({"error": "Invalid city ID"}));
-}
-
-
-    // ✅ Hash password
-    let password_hash = match hash(&new_user.password, DEFAULT_COST) {
-        Ok(hash) => hash,
-        Err(err) => {
-            eprintln!("Error hashing password: {:?}", err);
-            return HttpResponse::InternalServerError().json(json!({"error": "Failed to hash password"}));
-        }
-    };
-
-    // ✅ Insert new user
-    let new_user_active_model = userentity::ActiveModel {
-        first_name: Set(new_user.first_name.clone()),
-        last_name: Set(new_user.last_name.clone()),
+    let new_user_active_model = UserActiveModel {
+        first_name:Set(new_user.first_name.clone()),
+        last_name:Set(new_user.last_name.clone()),
         email: Set(new_user.email.clone()),
         password: Set(password_hash),
         city: Set(new_user.city),
@@ -99,84 +97,72 @@ pub async fn register_user(
         ..Default::default()
     };
 
-    // ✅ Save to database
-    if let Err(err) = userentity::Entity::insert(new_user_active_model)
-    .exec(db.get_ref())  // ✅ FIXED: `db.get_ref()`
-    .await
-{
-    eprintln!("Database error while inserting user: {:?}", err);
-    return HttpResponse::InternalServerError().json(json!({"error": "Failed to register user"}));
-}
+    match new_user_active_model.insert(db.as_ref()).await {
+        Ok(_) => {
+            let access_token = generate_access_token(&new_user.email);
+            let refresh_token = generate_refresh_token(&new_user.email);
 
-    // ✅ Generate tokens
-    let access_token = match generate_access_token(&new_user.email) {
-        Ok(token) => token,
-        Err(err) => {
-            eprintln!("Error generating access token: {:?}", err);
-            return HttpResponse::InternalServerError().json(json!({
-                "error": "Failed to generate access token"
-            }));
-        } 
-    };
-    
-    let refresh_token = match generate_access_token(&new_user.email) {
-        Ok(token) => token,
-        Err(err) => {
-            eprintln!("Error generating refresh token: {:?}", err);
-            return HttpResponse::InternalServerError().json(json!({
-                "error": "Failed to generate refresh token"
-            }));
-        } 
-    };
-    
-    HttpResponse::Created().json(json!({
-        "message": "User registered successfully",
-        "access_token": access_token,
-        "refresh_token": refresh_token
-    }))
+            match (access_token, refresh_token) {
+                (Ok(at), Ok(rt)) => {
+                    return Ok(HttpResponse::Created().json(serde_json::json!({ 
+                        "message": "User registered successfully",
+                        "access_token": at,
+                        "refresh_token": rt
+                    })));
+                }
+                _ => return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                    "error": "Failed to generate tokens"
+                }))),
+            }
+        }
+        Err(_) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+            "error": "Error registering user"
+        }))),
+    }
 }
-
 
 #[get("/users")]
-async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> impl Responder {
+async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Result<HttpResponse, actix_web::Error> {
     let auth_header = req.headers().get("Authorization");
 
     if let Some(auth_value) = auth_header {
         if let Ok(auth_str) = auth_value.to_str() {
             if auth_str.starts_with("Bearer ") {
-                let token = &auth_str[7..]; 
-                println!("Received Token: {:?}", token); 
+                let token = &auth_str[7..];
 
                 match AuthTokenClaims::validate_token(token) {
                     Ok(_) => {
-                        match userentity::Entity::find().all(db.as_ref()).await {
-                            Ok(users) => {
-                                let user_list: Vec<_> = users.into_iter().map(|user| json!({
-                                    "id": user.id,
-                                    "email": user.email,
-                                    "first_name": user.first_name,
-                                    "last_name": user.last_name,
-                                    "city": user.city,
-                                    "phone_number": user.phone_number,
-                                })).collect();
-                                return HttpResponse::Ok().json(user_list);
-                            },
-                            Err(_) => return HttpResponse::InternalServerError().json(json!({
-                                "error": "Failed to fetch users"
-                            })),
-                        }
+                        let users = UserEntity::find()
+                            .all(db.as_ref())
+                            .await
+                            .map_err(|_| actix_web::error::ErrorInternalServerError("Error fetching users"))?
+                            .into_iter()
+                            .map(|user| serde_json::json!({
+                                "id": user.id,
+                                "email": user.email,
+                            }))
+                            .collect::<Vec<_>>();
+
+                        return Ok(HttpResponse::Ok().json(users));
                     },
-                    Err(_) => return HttpResponse::Unauthorized().json(json!({
-                        "error": "Invalid token"
-                    })),
+                    Err(_) => {
+                        return Ok(HttpResponse::Unauthorized().json(serde_json::json!({
+                            "error": "Invalid token"
+                        })));
+                    }
                 }
             }
         }
-        return HttpResponse::Unauthorized().json(json!({ "error": "Invalid token format" }));
+        return Ok(HttpResponse::Unauthorized().json(serde_json::json!({
+            "error": "Invalid token format"
+        })));
     }
 
-    HttpResponse::Unauthorized().json(json!({ "error": "Missing token" }))
+    Ok(HttpResponse::Unauthorized().json(serde_json::json!({
+        "error": "Missing token"
+    })))
 }
+
 
 
 // driver api
