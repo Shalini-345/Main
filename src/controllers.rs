@@ -3,9 +3,8 @@ use regex::Regex;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
-use validator::ValidationError;
 use crate::auth::{generate_access_token, generate_refresh_token, AuthTokenClaims};
-use crate::entities::userentity::{self, ActiveModel as UserActiveModel, Entity as UserEntity};
+use crate::entities::userentity::{ActiveModel as UserActiveModel, Entity as UserEntity};
 use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
 use serde_json::json;
@@ -21,26 +20,10 @@ use crate::entities::helpsupport::{self, Entity as SupportTicket};
 use sea_orm::ModelTrait; 
 use actix_web::Error;
 
+use crate::entities::cities::Entity as CityEntity;
 
 
 use crate::entities::cities; 
-
-
-fn is_valid_email(email: &str) -> bool {
-    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
-    email_regex.is_match(email)
-}
-
-fn validate_phone(phone: &str) -> Result<(), ValidationError> {
-    let phone_regex = Regex::new(r"^\+?[1-9]\d{1,14}$").unwrap();
-    if phone_regex.is_match(phone) {
-        Ok(())
-    } else {
-        Err(ValidationError::new("invalid_phone"))
-    }
-}
-
-
 
 
 #[derive(Deserialize)]
@@ -53,27 +36,55 @@ pub struct NewUser {
     pub phone_number: String,
 }
 
+fn is_valid_email(email: &str) -> bool {
+    let email_regex = Regex::new(r"^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$").unwrap();
+    email_regex.is_match(email)
+}
+
+fn validate_phone(phone: &str) -> Result<(), String> {
+    let phone_regex = Regex::new(r"^\+?[1-9]\d{1,14}$").unwrap();
+    if phone_regex.is_match(phone) {
+        Ok(())
+    } else {
+        Err("Invalid phone number format".to_string())
+    }
+}
+
 #[post("/users/register")]
 async fn register_user(
     new_user: web::Json<NewUser>,
-    db: web::Data<DatabaseConnection>,
+    db: web::Data<sea_orm::DatabaseConnection>,
 ) -> Result<HttpResponse, Error> {
+    // Validate email format
     if !is_valid_email(&new_user.email) {
         return Ok(HttpResponse::BadRequest().json(serde_json::json!({
             "error": "Incorrect email format"
         })));
     }
 
-    if let Err(_) = validate_phone(&new_user.phone_number) {
+    // Validate phone number format
+    if let Err(err) = validate_phone(&new_user.phone_number) {
         return Ok(HttpResponse::BadRequest().json(serde_json::json!({
-            "error": "Invalid phone number format"
+            "error": err
         })));
     }
-        
-    
 
+    // Check if the provided city exists in the database
+    let city_exists = CityEntity::find()
+        .filter(crate::entities::cities::Column::Id.eq(new_user.city))
+        .one(db.as_ref())
+        .await
+        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
+    
+    if city_exists.is_none() {
+        return Ok(HttpResponse::BadRequest().json(serde_json::json!({
+            "error": "Invalid city ID"
+        })));
+    }
+
+    // Check if the email is already registered
     let existing_user = UserEntity::find()
-        .filter(userentity::Column::Email.eq(new_user.email.clone()))
+        .filter(crate::entities::userentity::Column::Email.eq(new_user.email.clone()))
         .one(db.as_ref())
         .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
@@ -84,12 +95,14 @@ async fn register_user(
         })));
     }
 
+    // Hash the password
     let password_hash = hash(&new_user.password, DEFAULT_COST)
         .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to hash password"))?;
 
+    // Insert new user
     let new_user_active_model = UserActiveModel {
-        first_name:Set(new_user.first_name.clone()),
-        last_name:Set(new_user.last_name.clone()),
+        first_name: Set(new_user.first_name.clone()),
+        last_name: Set(new_user.last_name.clone()),
         email: Set(new_user.email.clone()),
         password: Set(password_hash),
         city: Set(new_user.city),
