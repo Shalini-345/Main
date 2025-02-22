@@ -4,7 +4,7 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, Qu
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use crate::auth::{generate_access_token, generate_refresh_token, AuthTokenClaims};
-use crate::entities::userentity::{ActiveModel as UserActiveModel, Entity as UserEntity};
+use crate::entities::userentity::{self, Entity as UserEntity};
 use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
 use serde_json::json;
@@ -19,11 +19,10 @@ use std::sync::Arc;
 use crate::entities::helpsupport::{self, Entity as SupportTicket};
 use sea_orm::ModelTrait; 
 use actix_web::Error;
+use crate::entities::cities::{self};
 
-use crate::entities::cities::Entity as CityEntity;
 
 
-use crate::entities::cities; 
 
 
 #[derive(Deserialize)]
@@ -53,41 +52,28 @@ fn validate_phone(phone: &str) -> Result<(), String> {
 #[post("/users/register")]
 async fn register_user(
     new_user: web::Json<NewUser>,
-    db: web::Data<sea_orm::DatabaseConnection>,
+    db: web::Data<DatabaseConnection>,
 ) -> Result<HttpResponse, Error> {
-    // Validate email format
     if !is_valid_email(&new_user.email) {
         return Ok(HttpResponse::BadRequest().json(serde_json::json!({
             "error": "Incorrect email format"
         })));
     }
 
-    // Validate phone number format
-    if let Err(err) = validate_phone(&new_user.phone_number) {
+    if let Err(_) = validate_phone(&new_user.phone_number) {
         return Ok(HttpResponse::BadRequest().json(serde_json::json!({
-            "error": err
+            "error": "Invalid phone number format"
         })));
     }
 
-    // Check if the provided city exists in the database
-    let city_exists = CityEntity::find()
-        .filter(crate::entities::cities::Column::Id.eq(new_user.city))
-        .one(db.as_ref())
-        .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
-    
-    if city_exists.is_none() {
-        return Ok(HttpResponse::BadRequest().json(serde_json::json!({
-            "error": "Invalid city ID"
-        })));
-    }
-
-    // Check if the email is already registered
     let existing_user = UserEntity::find()
-        .filter(crate::entities::userentity::Column::Email.eq(new_user.email.clone()))
+        .filter(userentity::Column::Email.eq(new_user.email.clone()))
         .one(db.as_ref())
         .await
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Database error"))?;
+        .map_err(|e| {
+            eprintln!("Database query error: {:?}", e);
+            actix_web::error::ErrorInternalServerError("Database error")
+        })?;
 
     if existing_user.is_some() {
         return Ok(HttpResponse::Conflict().json(serde_json::json!({
@@ -95,12 +81,12 @@ async fn register_user(
         })));
     }
 
-    // Hash the password
-    let password_hash = hash(&new_user.password, DEFAULT_COST)
-        .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to hash password"))?;
+    let password_hash = hash(&new_user.password, DEFAULT_COST).map_err(|e| {
+        eprintln!("Password hashing error: {:?}", e);
+        actix_web::error::ErrorInternalServerError("Failed to hash password")
+    })?;
 
-    // Insert new user
-    let new_user_active_model = UserActiveModel {
+    let new_user_active_model = userentity::ActiveModel {
         first_name: Set(new_user.first_name.clone()),
         last_name: Set(new_user.last_name.clone()),
         email: Set(new_user.email.clone()),
@@ -112,25 +98,34 @@ async fn register_user(
 
     match new_user_active_model.insert(db.as_ref()).await {
         Ok(_) => {
+            eprintln!("User successfully inserted into database");
+
             let access_token = generate_access_token(&new_user.email);
             let refresh_token = generate_refresh_token(&new_user.email);
 
             match (access_token, refresh_token) {
                 (Ok(at), Ok(rt)) => {
+                    eprintln!("Token generation successful");
                     return Ok(HttpResponse::Created().json(serde_json::json!({ 
                         "message": "User registered successfully",
                         "access_token": at,
                         "refresh_token": rt
                     })));
                 }
-                _ => return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
-                    "error": "Failed to generate tokens"
-                }))),
+                _ => {
+                    eprintln!("Error generating tokens");
+                    return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                        "error": "Failed to generate tokens"
+                    })));
+                }
             }
         }
-        Err(_) => Ok(HttpResponse::InternalServerError().json(serde_json::json!({
-            "error": "Error registering user"
-        }))),
+        Err(e) => {
+            eprintln!("Database insertion error: {:?}", e);
+            return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Error registering user"
+            })));
+        }
     }
 }
 
