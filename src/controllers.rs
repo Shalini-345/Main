@@ -5,7 +5,7 @@ use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use crate::auth::AuthTokenClaims;
 use crate::entities::userentity::{self, Entity as UserEntity};
-use crate::entities::{driverentity, vehicleentity};
+use crate::entities::{self, driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
 use serde_json::json;
 //use chrono::Utc;
@@ -15,8 +15,7 @@ use rust_decimal::Decimal;
 use chrono::{DateTime as ChronoDateTime, Utc};
 use crate::entities::settings::{self};
 use log::{error, info};
-use std::sync::Arc;
-use crate::entities::helpsupport::{self, Entity as SupportTicket};
+use crate::entities::helpsupport::NewTicketRequest;
  
 use actix_web::Error;
 use crate::entities::cities::{self};
@@ -869,204 +868,141 @@ async fn delete_settings(
 
 //helpsupport API
 
+use crate::entities::helpsupport::{Entity as HelpSupportEntity, ActiveModel};
 
 
-#[derive(Debug, Deserialize, Serialize)]
-struct TicketInput {
-    user_id: i32,
-    subject: String,
-    description: String,
-    status: String,
-    priority: String,
-}
 
-#[derive(Debug, Deserialize, Serialize)]
-struct TicketUpdateInput {
-    subject: Option<String>,
-    description: Option<String>,
-    status: Option<String>,
-    priority: Option<String>,
-}
 
-#[derive(Debug, Serialize)]
-struct ApiResponse<T> {
-    success: bool,
-    message: String,
-    data: Option<T>,
-}
-
-#[get("/tickets")]
-async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
-    let db_conn: &DatabaseConnection = db.get_ref(); // Correct way to get the reference
-
-    match SupportTicket::find().all(db_conn).await {
-        Ok(tickets) => {
-            if tickets.is_empty() {
-                log::info!("No support tickets found.");
-            } else {
-                log::info!("Successfully retrieved {} support tickets.", tickets.len());
-            }
-            HttpResponse::Ok().json(ApiResponse {
-                success: true,
-                message: "Support tickets retrieved successfully.".to_string(),
-                data: Some(tickets),
-            })
-        }
-        Err(err) => {
-            log::error!("Error fetching tickets: {:?}", err);
-            HttpResponse::InternalServerError().json(ApiResponse::<Vec<helpsupport::Model>> {
-                success: false,
-                message: format!("Failed to fetch support tickets: {:?}", err),
-                data: None,
-            })
-        }
-    }
-}
-
+/// Create a new support ticket
 #[post("/tickets")]
 async fn create_ticket(
-    db: web::Data<Arc<DatabaseConnection>>,
-    new_ticket: web::Json<TicketInput>,
+    db: web::Data<DatabaseConnection>,
+    payload: web::Json<NewTicketRequest>,
 ) -> impl Responder {
-    log::info!("Received request to create a ticket: {:?}", new_ticket);
-
-    let db_conn: &DatabaseConnection = db.get_ref(); // Correct reference extraction
-
-    if new_ticket.user_id == 0 || new_ticket.subject.trim().is_empty() || new_ticket.description.trim().is_empty() {
-        return HttpResponse::BadRequest().json(ApiResponse::<()> {
-            success: false,
-            message: "Missing required fields: user_id, subject, or description".to_string(),
-            data: None,
-        });
-    }
-
-    let ticket = helpsupport::ActiveModel {
-        user_id: Set(new_ticket.user_id),
-        subject: Set(new_ticket.subject.clone()),
-        description: Set(new_ticket.description.clone()),
-        status: Set(new_ticket.status.clone()),
-        priority: Set(new_ticket.priority.clone()),
-        created_at: Set(Utc::now().naive_utc()),
-        updated_at: Set(Utc::now().naive_utc()),
+    let new_ticket = entities::helpsupport::ActiveModel {
+        user_id: Set(payload.user_id),
+        subject: Set(payload.subject.clone()),
+        description: Set(payload.description.clone()),
+        status: Set(payload.status.clone()),
+        priority: Set(payload.priority.clone()),
+        created_at: Set(chrono::Utc::now().naive_utc()),
+        updated_at: Set(chrono::Utc::now().naive_utc()),
         ..Default::default()
     };
 
-    match ticket.insert(db_conn).await {
+    match new_ticket.insert(db.get_ref()).await {
         Ok(ticket) => {
-            log::info!("Support ticket created successfully: {:?}", ticket);
-            HttpResponse::Created().json(ApiResponse {
-                success: true,
-                message: "Support ticket created successfully.".to_string(),
-                data: Some(ticket),
-            })
+            let response = serde_json::json!({
+                "message": "Support ticket created successfully",
+                "ticket": ticket  // Includes the created ticket details
+            });
+            HttpResponse::Created().json(response)
         }
-        Err(err) => {
-            log::error!("ERROR INSERTING TICKET: {:?}", err);
-            HttpResponse::InternalServerError().json(ApiResponse::<()> {
-                success: false,
-                message: format!("Failed to create support ticket: {:?}", err),
-                data: None,
-            })
+        Err(e) => {
+            error!("Failed to create support ticket: {}", e);
+            let error_response = serde_json::json!({
+                "error": "Failed to create support ticket",
+                "details": e.to_string()
+            });
+            HttpResponse::InternalServerError().json(error_response)
         }
     }
 }
 
 
+/// Get all support tickets
+#[get("/tickets")]
+async fn get_tickets(db: web::Data<DatabaseConnection>) -> impl Responder {
+    match HelpSupportEntity::find().all(db.get_ref()).await {
+        Ok(tickets) => HttpResponse::Ok().json(tickets),
+        Err(e) => {
+            error!("Failed to fetch support tickets: {}", e);
+            HttpResponse::InternalServerError().body("Failed to fetch support tickets")
+        }
+    }
+}
+
+/// Get a support ticket by ID
+#[get("/tickets/{id}")]
+async fn get_ticket(db: web::Data<DatabaseConnection>, id: web::Path<i32>) -> impl Responder {
+    match HelpSupportEntity::find_by_id(id.into_inner()).one(db.get_ref()).await {
+        Ok(Some(ticket)) => HttpResponse::Ok().json(ticket),
+        Ok(None) => HttpResponse::NotFound().body("Support ticket not found"),
+        Err(e) => {
+            error!("Failed to fetch support ticket: {}", e);
+            HttpResponse::InternalServerError().body("Failed to fetch support ticket")
+        }
+    }
+}
+
+/// Update a support ticket by ID
 #[put("/tickets/{id}")]
 async fn update_ticket(
-    db: web::Data<Arc<DatabaseConnection>>,
-    ticket_id: web::Path<i32>,
-    updated_ticket: web::Json<TicketUpdateInput>,
+    db: web::Data<DatabaseConnection>, 
+    id: web::Path<i32>, 
+    ticket: web::Json<NewTicketRequest>  // Use correct struct
 ) -> impl Responder {
-    let id = ticket_id.into_inner();
-    let db_conn = db.as_ref().as_ref();
+    let ticket_id = id.into_inner();
 
-    match SupportTicket::find_by_id(id).one(db_conn).await {
-        Ok(Some(ticket)) => {
-            let mut active_model: helpsupport::ActiveModel = ticket.into();
+    match entities::helpsupport::Entity::find_by_id(ticket_id).one(db.get_ref()).await {
+        Ok(Some(existing_ticket)) => {
+            let mut active_ticket: entities::helpsupport::ActiveModel = existing_ticket.into();
+            active_ticket.user_id = Set(ticket.user_id);
+            active_ticket.subject = Set(ticket.subject.clone());
+            active_ticket.description = Set(ticket.description.clone());
+            active_ticket.status = Set(ticket.status.clone());
+            active_ticket.priority = Set(ticket.priority.clone());
+            active_ticket.updated_at = Set(chrono::Utc::now().naive_utc()); // Auto update timestamp
 
-            if let Some(subject) = &updated_ticket.subject {
-                active_model.subject = Set(subject.clone());
-            }
-            if let Some(description) = &updated_ticket.description {
-                active_model.description = Set(description.clone());
-            }
-            if let Some(status) = &updated_ticket.status {
-                active_model.status = Set(status.clone());
-            }
-            if let Some(priority) = &updated_ticket.priority {
-                active_model.priority = Set(priority.clone());
-            }
-            active_model.updated_at = Set(Utc::now().naive_utc());
-
-            match active_model.update(db_conn).await {
-                Ok(updated_ticket) => HttpResponse::Ok().json(ApiResponse {
-                    success: true,
-                    message: "Support ticket updated successfully.".to_string(),
-                    data: Some(updated_ticket),
-                }),
-                Err(err) => {
-                    eprintln!("Error updating ticket: {:?}", err);
-                    HttpResponse::InternalServerError().json(ApiResponse::<helpsupport::Model> {
-                        success: false,
-                        message: format!("Failed to update support ticket: {}", err),
-                        data: None,
-                    })
+            match active_ticket.update(db.get_ref()).await {
+                Ok(updated_ticket) => {
+                    let response = serde_json::json!({
+                        "message": "Support ticket updated successfully",
+                        "ticket": updated_ticket
+                    });
+                    HttpResponse::Ok().json(response)
+                }
+                Err(e) => {
+                    error!("Failed to update support ticket: {}", e);
+                    HttpResponse::InternalServerError().json(serde_json::json!({
+                        "error": "Failed to update support ticket",
+                        "details": e.to_string()
+                    }))
                 }
             }
-        }
-        Ok(None) => HttpResponse::NotFound().json(ApiResponse::<()> {
-            success: false,
-            message: "Support ticket not found.".to_string(),
-            data: None,
-        }),
-        Err(err) => {
-            eprintln!("Error finding ticket: {:?}", err);
-            HttpResponse::InternalServerError().json(ApiResponse::<()> {
-                success: false,
-                message: format!("Failed to find support ticket: {}", err),
-                data: None,
-            })
+        },
+        Ok(None) => HttpResponse::NotFound().json(serde_json::json!({"error": "Support ticket not found"})),
+        Err(e) => {
+            error!("Failed to fetch support ticket: {}", e);
+            HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Failed to fetch support ticket",
+                "details": e.to_string()
+            }))
         }
     }
 }
 
+/// Delete a support ticket by ID
 #[delete("/tickets/{id}")]
-async fn delete_ticket(db: web::Data<Arc<DatabaseConnection>>, ticket_id: web::Path<i32>) -> impl Responder {
-    let id = ticket_id.into_inner();
-    let db_conn = db.as_ref().as_ref();
+async fn delete_ticket(db: web::Data<DatabaseConnection>, id: web::Path<i32>) -> impl Responder {
+    let ticket_id = id.into_inner();
 
-    match SupportTicket::find_by_id(id).one(db_conn).await {
+    match HelpSupportEntity::find_by_id(ticket_id).one(db.get_ref()).await {
         Ok(Some(ticket)) => {
-            let active_ticket: helpsupport::ActiveModel = ticket.into();
-            match active_ticket.delete(db_conn).await {
-                Ok(_) => HttpResponse::Ok().json(ApiResponse::<()> {
-                    success: true,
-                    message: "Support ticket deleted successfully.".to_string(),
-                    data: None,
-                }),
-                Err(err) => {
-                    eprintln!("Error deleting ticket: {:?}", err);
-                    HttpResponse::InternalServerError().json(ApiResponse::<()> {
-                        success: false,
-                        message: "Failed to delete support ticket.".to_string(),
-                        data: None,
-                    })
+            let active_ticket: ActiveModel = ticket.into();
+
+            match active_ticket.delete(db.get_ref()).await {
+                Ok(_) => HttpResponse::Ok().body("Support ticket deleted successfully"),
+                Err(e) => {
+                    error!("Failed to delete support ticket: {}", e);
+                    HttpResponse::InternalServerError().body("Failed to delete support ticket")
                 }
             }
-        }
-        Ok(None) => HttpResponse::NotFound().json(ApiResponse::<()> {
-            success: false,
-            message: "Support ticket not found.".to_string(),
-            data: None,
-        }),
-        Err(err) => {
-            eprintln!("Error finding ticket: {:?}", err);
-            HttpResponse::InternalServerError().json(ApiResponse::<()> {
-                success: false,
-                message: "Failed to find support ticket.".to_string(),
-                data: None,
-            })
+        },
+        Ok(None) => HttpResponse::NotFound().body("Support ticket not found"),
+        Err(e) => {
+            error!("Failed to fetch support ticket: {}", e);
+            HttpResponse::InternalServerError().body("Failed to fetch support ticket")
         }
     }
 }

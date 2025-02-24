@@ -16,6 +16,17 @@ pub struct Model {
     pub updated_at: NaiveDateTime,
 }
 
+
+#[derive(Serialize, Deserialize)]
+pub struct NewTicketRequest {
+    pub user_id: i32,
+    pub subject: String,
+    pub description: String,
+    pub status: String,
+    pub priority: String,
+}
+
+
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
