@@ -27,17 +27,18 @@ fn generate_token(email: &str, expiry_minutes: i64, token_type: &str, secret: &[
     encode(&Header::default(), &claims, &EncodingKey::from_secret(secret))
 }
 
-/// Generates an access token that expires in **7 minutes**
+#[allow(dead_code)] // Suppress warning for unused function
 pub fn generate_access_token(email: &str) -> Result<String, Error> {
     generate_token(email, 7, "access", SECRET_KEY) // 7 minutes expiry
 }
 
-/// Generates a refresh token that expires in **15 days**
+#[allow(dead_code)] // Suppress warning for unused function
 pub fn generate_refresh_token(email: &str) -> Result<String, Error> {
     generate_token(email, 15 * 24 * 60, "refresh", SECRET_KEY) // 15 days expiry
 }
 
 impl AuthTokenClaims {
+    #[allow(dead_code)] // Suppress warning for unused function
     pub fn validate_token(token: &str) -> Result<Self, Error> {
         let token_data = decode::<AuthTokenClaims>(
             token,

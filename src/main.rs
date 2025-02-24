@@ -21,6 +21,7 @@ mod entities {
     pub mod vehicleentity;
     pub mod driverentity;
     pub mod cities;
+    pub mod userprofile;
 }
 
 use controllers::get_users; 

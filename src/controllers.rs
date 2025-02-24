@@ -3,7 +3,7 @@ use regex::Regex;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
-use crate::auth::{generate_access_token, generate_refresh_token, AuthTokenClaims};
+use crate::auth::AuthTokenClaims;
 use crate::entities::userentity::{self, Entity as UserEntity};
 use crate::entities::{driverentity, vehicleentity};
 use crate::db::establish_connection_pool;
@@ -22,7 +22,7 @@ use actix_web::Error;
 use crate::entities::cities::{self};
 
 
-
+//user registration
 
 
 #[derive(Deserialize)]
@@ -66,7 +66,7 @@ async fn register_user(
         })));
     }
 
-    let existing_user = UserEntity::find()
+    let existing_email = UserEntity::find()
         .filter(userentity::Column::Email.eq(new_user.email.clone()))
         .one(db.as_ref())
         .await
@@ -75,9 +75,24 @@ async fn register_user(
             actix_web::error::ErrorInternalServerError("Database error")
         })?;
 
-    if existing_user.is_some() {
+    if existing_email.is_some() {
         return Ok(HttpResponse::Conflict().json(serde_json::json!({
             "error": "Email already exists"
+        })));
+    }
+
+    let existing_phone = UserEntity::find()
+        .filter(userentity::Column::PhoneNumber.eq(new_user.phone_number.clone()))
+        .one(db.as_ref())
+        .await
+        .map_err(|e| {
+            eprintln!("Database query error: {:?}", e);
+            actix_web::error::ErrorInternalServerError("Database error")
+        })?;
+
+    if existing_phone.is_some() {
+        return Ok(HttpResponse::Conflict().json(serde_json::json!({
+            "error": "Phone number already exists"
         })));
     }
 
@@ -99,26 +114,9 @@ async fn register_user(
     match new_user_active_model.insert(db.as_ref()).await {
         Ok(_) => {
             eprintln!("User successfully inserted into database");
-
-            let access_token = generate_access_token(&new_user.email);
-            let refresh_token = generate_refresh_token(&new_user.email);
-
-            match (access_token, refresh_token) {
-                (Ok(at), Ok(rt)) => {
-                    eprintln!("Token generation successful");
-                    return Ok(HttpResponse::Created().json(serde_json::json!({ 
-                        "message": "User registered successfully",
-                        "access_token": at,
-                        "refresh_token": rt
-                    })));
-                }
-                _ => {
-                    eprintln!("Error generating tokens");
-                    return Ok(HttpResponse::InternalServerError().json(serde_json::json!({
-                        "error": "Failed to generate tokens"
-                    })));
-                }
-            }
+            return Ok(HttpResponse::Created().json(serde_json::json!({ 
+                "message": "User registered successfully"
+            })));
         }
         Err(e) => {
             eprintln!("Database insertion error: {:?}", e);
@@ -170,6 +168,66 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
         "error": "Missing token"
     })))
 }
+
+//user profile API
+
+
+use crate::entities::userprofile;
+
+#[derive(Deserialize)]
+pub struct NewUserProfile {
+    pub user_id: i32,
+    pub profile_photo: Option<String>,
+    pub about: Option<String>,
+    pub location: Option<String>,
+    pub language: Option<String>,
+    pub phone_number: String,
+}
+
+#[post("/user_profiles")]
+async fn create_user_profile(
+    new_profile: web::Json<NewUserProfile>,
+    db: web::Data<DatabaseConnection>,
+) -> Result<HttpResponse, Error> {
+    let new_profile_active = userprofile::ActiveModel {
+        user_id: Set(new_profile.user_id),
+        profile_photo: Set(new_profile.profile_photo.clone()),
+        about: Set(new_profile.about.clone()),
+        location: Set(new_profile.location.clone()),
+        language: Set(new_profile.language.clone()),
+        phone_number: Set(new_profile.phone_number.clone()),
+        ..Default::default()
+    };
+
+    match new_profile_active.insert(db.as_ref()).await {
+        Ok(_) => Ok(HttpResponse::Created().json(serde_json::json!({
+            "message": "User profile created successfully"
+        }))),
+        Err(e) => {
+            eprintln!("Database insertion error: {:?}", e);
+            Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Error creating user profile"
+            })))
+        }
+    }
+}
+
+#[get("/user_profiles")]
+async fn get_user_profiles(db: web::Data<DatabaseConnection>) -> Result<HttpResponse, Error> {
+    match userprofile::Entity::find()
+        .all(db.as_ref())
+        .await
+    {
+        Ok(profiles) => Ok(HttpResponse::Ok().json(profiles)),
+        Err(e) => {
+            eprintln!("Database query error: {:?}", e);
+            Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Error fetching user profiles"
+            })))
+        }
+    }
+}
+
 
 
 

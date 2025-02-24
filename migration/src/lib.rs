@@ -10,6 +10,7 @@ mod m20250219_053115_create_cities_table;
 mod m20250220_065436_create_settings_table;
 mod m20250221_071147_create_support_tickets;
 mod m20250221_101629_add_firstname_lastname;
+mod m20250224_111441_create_user_profiles;
 
 pub struct Migrator;
 
@@ -27,6 +28,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20250220_065436_create_settings_table::Migration),
             Box::new(m20250221_071147_create_support_tickets::Migration),
             Box::new(m20250221_101629_add_firstname_lastname::Migration),
+            Box::new(m20250224_111441_create_user_profiles::Migration),
         ]
     }
 }
