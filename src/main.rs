@@ -80,6 +80,10 @@ async fn main() -> std::io::Result<()> {
         .wrap(actix_web::middleware::Logger::default())  
         .app_data(pool.clone()) 
             .route("/", web::get().to(index)) 
+
+            .service(web::scope("/v1")
+            .route("/", web::get().to(index)) 
+
             .service(controllers::register_user)
             .service(get_users)
             .configure(controllers::configure)
@@ -98,7 +102,7 @@ async fn main() -> std::io::Result<()> {
             .service(controllers::get_tickets)
             .service(controllers::create_ticket)
             .service(controllers::update_ticket)  
-            .service(controllers::delete_ticket)  
+            .service(controllers::delete_ticket) ) 
  
     })
     .bind("0.0.0.0:8081")?  
