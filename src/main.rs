@@ -50,9 +50,7 @@ async fn index() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok(); 
-    env_logger::builder()
-        .filter_level(log::LevelFilter::Info) 
-        .init();
+    env_logger::init();  
 
     info!(" Starting the application...");
 
@@ -78,8 +76,8 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .wrap(actix_web::middleware::Logger::default()) 
-            .app_data(pool.clone()) 
+        .wrap(actix_web::middleware::Logger::default())  
+        .app_data(pool.clone()) 
             .route("/", web::get().to(index)) 
             .service(controllers::register_user)
             .service(get_users)

@@ -801,6 +801,8 @@ async fn create_ticket(
     db: web::Data<Arc<DatabaseConnection>>,
     new_ticket: web::Json<TicketInput>,
 ) -> impl Responder {
+    log::info!("Received request to create a ticket: {:?}", new_ticket);
+
     let db_conn = db.as_ref().as_ref();
 
     if new_ticket.user_id == 0 || new_ticket.subject.trim().is_empty() || new_ticket.description.trim().is_empty() {
@@ -824,7 +826,7 @@ async fn create_ticket(
 
     match ticket.insert(db_conn).await {
         Ok(ticket) => {
-            println!(" Support ticket created successfully: {:?}", ticket);
+            log::info!("Support ticket created successfully: {:?}", ticket);
             HttpResponse::Created().json(ApiResponse {
                 success: true,
                 message: "Support ticket created successfully.".to_string(),
@@ -832,14 +834,15 @@ async fn create_ticket(
             })
         }
         Err(err) => {
-            eprintln!("ERROR INSERTING TICKET: {:?}", err);
+            log::error!("ERROR INSERTING TICKET: {:?}", err);
             HttpResponse::InternalServerError().json(ApiResponse::<()> {
                 success: false,
-                message: format!("Failed to create support ticket: {}", err),
+                message: format!("Failed to create support ticket: {:?}", err),
                 data: None,
             })
         }
     }
+    
 }
 
 
