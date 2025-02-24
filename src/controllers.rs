@@ -743,7 +743,6 @@ async fn delete_settings(
 
 
 
-
 #[derive(Debug, Deserialize, Serialize)]
 struct TicketInput {
     user_id: i32,
@@ -770,14 +769,14 @@ struct ApiResponse<T> {
 
 #[get("/tickets")]
 async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
-    let db_conn = db.as_ref().as_ref();
+    let db_conn: &DatabaseConnection = db.get_ref(); // Correct way to get the reference
 
     match SupportTicket::find().all(db_conn).await {
         Ok(tickets) => {
             if tickets.is_empty() {
-                println!("No support tickets found.");
+                log::info!("No support tickets found.");
             } else {
-                println!(" Successfully retrieved {} support tickets.", tickets.len());
+                log::info!("Successfully retrieved {} support tickets.", tickets.len());
             }
             HttpResponse::Ok().json(ApiResponse {
                 success: true,
@@ -786,7 +785,7 @@ async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
             })
         }
         Err(err) => {
-            eprintln!(" Error fetching tickets: {:?}", err);
+            log::error!("Error fetching tickets: {:?}", err);
             HttpResponse::InternalServerError().json(ApiResponse::<Vec<helpsupport::Model>> {
                 success: false,
                 message: format!("Failed to fetch support tickets: {:?}", err),
@@ -803,7 +802,7 @@ async fn create_ticket(
 ) -> impl Responder {
     log::info!("Received request to create a ticket: {:?}", new_ticket);
 
-    let db_conn = db.as_ref().as_ref();
+    let db_conn: &DatabaseConnection = db.get_ref(); // Correct reference extraction
 
     if new_ticket.user_id == 0 || new_ticket.subject.trim().is_empty() || new_ticket.description.trim().is_empty() {
         return HttpResponse::BadRequest().json(ApiResponse::<()> {
@@ -842,7 +841,6 @@ async fn create_ticket(
             })
         }
     }
-    
 }
 
 
