@@ -174,6 +174,8 @@ async fn get_users(db: web::Data<DatabaseConnection>, req: HttpRequest) -> Resul
 
 use crate::entities::userprofile;
 
+
+
 #[derive(Deserialize)]
 pub struct NewUserProfile {
     pub user_id: i32,
@@ -225,6 +227,74 @@ async fn get_user_profiles(db: web::Data<DatabaseConnection>) -> Result<HttpResp
                 "error": "Error fetching user profiles"
             })))
         }
+    }
+}
+
+#[put("/user_profiles/{user_id}")]
+async fn update_user_profile(
+    user_id: web::Path<i32>,
+    updated_profile: web::Json<NewUserProfile>,
+    db: web::Data<DatabaseConnection>,
+) -> Result<HttpResponse, Error> {
+    let existing_profile = userprofile::Entity::find()
+        .filter(userprofile::Column::UserId.eq(user_id.into_inner()))
+        .one(db.as_ref())
+        .await
+        .map_err(|e| {
+            eprintln!("Database query error: {:?}", e);
+            actix_web::error::ErrorInternalServerError("Database error")
+        })?;
+
+    if let Some(profile) = existing_profile {
+        let mut profile_active: userprofile::ActiveModel = profile.into();
+
+        profile_active.profile_photo = Set(updated_profile.profile_photo.clone());
+        profile_active.about = Set(updated_profile.about.clone());
+        profile_active.location = Set(updated_profile.location.clone());
+        profile_active.language = Set(updated_profile.language.clone());
+        profile_active.phone_number = Set(updated_profile.phone_number.clone());
+
+        match profile_active.update(db.as_ref()).await {
+            Ok(_) => Ok(HttpResponse::Ok().json(serde_json::json!({
+                "message": "User profile updated successfully"
+            }))),
+            Err(e) => {
+                eprintln!("Database update error: {:?}", e);
+                Ok(HttpResponse::InternalServerError().json(serde_json::json!({
+                    "error": "Error updating user profile"
+                })))
+            }
+        }
+    } else {
+        Ok(HttpResponse::NotFound().json(serde_json::json!({
+            "error": "User profile not found"
+        })))
+    }
+}
+
+#[delete("/user_profiles/{user_id}")]
+async fn delete_user_profile(
+    user_id: web::Path<i32>,
+    db: web::Data<DatabaseConnection>,
+) -> Result<HttpResponse, Error> {
+    let deleted_count = userprofile::Entity::delete_many()
+        .filter(userprofile::Column::UserId.eq(user_id.into_inner()))
+        .exec(db.as_ref())
+        .await
+        .map_err(|e| {
+            eprintln!("Database deletion error: {:?}", e);
+            actix_web::error::ErrorInternalServerError("Database error")
+        })?
+        .rows_affected;
+
+    if deleted_count > 0 {
+        Ok(HttpResponse::Ok().json(serde_json::json!({
+            "message": "User profile deleted successfully"
+        })))
+    } else {
+        Ok(HttpResponse::NotFound().json(serde_json::json!({
+            "error": "User profile not found"
+        })))
     }
 }
 

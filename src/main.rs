@@ -102,7 +102,11 @@ async fn main() -> std::io::Result<()> {
             .service(controllers::get_tickets)
             .service(controllers::create_ticket)
             .service(controllers::update_ticket)  
-            .service(controllers::delete_ticket) ) 
+            .service(controllers::delete_ticket)
+            .service(controllers::create_user_profile) 
+            .service(controllers::get_user_profiles)   
+            .service(controllers::update_user_profile) 
+            .service(controllers::delete_user_profile)) 
  
     })
     .bind("0.0.0.0:8081")?  
