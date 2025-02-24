@@ -17,7 +17,7 @@ use crate::entities::settings::{self};
 use log::{error, info};
 use std::sync::Arc;
 use crate::entities::helpsupport::{self, Entity as SupportTicket};
-use sea_orm::ModelTrait; 
+ 
 use actix_web::Error;
 use crate::entities::cities::{self};
 
@@ -774,7 +774,11 @@ async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
     match SupportTicket::find().all(db_conn).await {
         Ok(tickets) => HttpResponse::Ok().json(ApiResponse {
             success: true,
-            message: if tickets.is_empty() { "No support tickets found.".to_string() } else { "Support tickets retrieved successfully.".to_string() },
+            message: if tickets.is_empty() {
+                "No support tickets found.".to_string()
+            } else {
+                "Support tickets retrieved successfully.".to_string()
+            },
             data: Some(tickets),
         }),
         Err(err) => {
@@ -789,7 +793,10 @@ async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
 }
 
 #[post("/tickets")]
-async fn create_ticket(db: web::Data<Arc<DatabaseConnection>>, new_ticket: web::Json<TicketInput>) -> impl Responder {
+async fn create_ticket(
+    db: web::Data<Arc<DatabaseConnection>>,
+    new_ticket: web::Json<TicketInput>,
+) -> impl Responder {
     let db_conn = db.as_ref().as_ref();
 
     let ticket = helpsupport::ActiveModel {
@@ -886,7 +893,8 @@ async fn delete_ticket(db: web::Data<Arc<DatabaseConnection>>, ticket_id: web::P
 
     match SupportTicket::find_by_id(id).one(db_conn).await {
         Ok(Some(ticket)) => {
-            match ticket.delete(db_conn).await {
+            let active_ticket: helpsupport::ActiveModel = ticket.into();
+            match active_ticket.delete(db_conn).await {
                 Ok(_) => HttpResponse::Ok().json(ApiResponse::<()> {
                     success: true,
                     message: "Support ticket deleted successfully.".to_string(),
@@ -917,6 +925,7 @@ async fn delete_ticket(db: web::Data<Arc<DatabaseConnection>>, ticket_id: web::P
         }
     }
 }
+
 
 // payment API
 

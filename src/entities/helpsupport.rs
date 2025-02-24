@@ -1,7 +1,7 @@
-use sea_orm::entity::prelude::*;
+use sea_orm::{entity::prelude::*, Set};
 use sea_orm::DeriveRelation;
 use serde::{Serialize, Deserialize};
-use chrono::NaiveDateTime;  
+use chrono::{NaiveDateTime, Utc};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "support_tickets")]
@@ -13,11 +13,20 @@ pub struct Model {
     pub description: String,
     pub status: String,
     pub priority: String,
-    pub created_at: NaiveDateTime,  
-    pub updated_at: NaiveDateTime,  
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
-impl ActiveModelBehavior for ActiveModel {}
+impl ActiveModelBehavior for ActiveModel {
+    fn new() -> Self {
+        let now = Utc::now().naive_utc();
+        Self {
+            created_at: Set(now),
+            updated_at: Set(now),
+            ..Default::default()
+        }
+    }
+}
