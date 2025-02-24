@@ -743,6 +743,7 @@ async fn delete_settings(
 
 
 
+
 #[derive(Debug, Deserialize, Serialize)]
 struct TicketInput {
     user_id: i32,
@@ -772,20 +773,23 @@ async fn get_tickets(db: web::Data<Arc<DatabaseConnection>>) -> impl Responder {
     let db_conn = db.as_ref().as_ref();
 
     match SupportTicket::find().all(db_conn).await {
-        Ok(tickets) => HttpResponse::Ok().json(ApiResponse {
-            success: true,
-            message: if tickets.is_empty() {
-                "No support tickets found.".to_string()
+        Ok(tickets) => {
+            if tickets.is_empty() {
+                println!("No support tickets found.");
             } else {
-                "Support tickets retrieved successfully.".to_string()
-            },
-            data: Some(tickets),
-        }),
+                println!(" Successfully retrieved {} support tickets.", tickets.len());
+            }
+            HttpResponse::Ok().json(ApiResponse {
+                success: true,
+                message: "Support tickets retrieved successfully.".to_string(),
+                data: Some(tickets),
+            })
+        }
         Err(err) => {
-            eprintln!("Error fetching tickets: {:?}", err);
+            eprintln!(" Error fetching tickets: {:?}", err);
             HttpResponse::InternalServerError().json(ApiResponse::<Vec<helpsupport::Model>> {
                 success: false,
-                message: "Failed to fetch support tickets.".to_string(),
+                message: format!("Failed to fetch support tickets: {:?}", err),
                 data: None,
             })
         }
@@ -811,13 +815,16 @@ async fn create_ticket(
     };
 
     match ticket.insert(db_conn).await {
-        Ok(ticket) => HttpResponse::Created().json(ApiResponse {
-            success: true,
-            message: "Support ticket created successfully.".to_string(),
-            data: Some(ticket),
-        }),
+        Ok(ticket) => {
+            println!("Support ticket created successfully: {:?}", ticket);
+            HttpResponse::Created().json(ApiResponse {
+                success: true,
+                message: "Support ticket created successfully.".to_string(),
+                data: Some(ticket),
+            })
+        }
         Err(err) => {
-            eprintln!("Error creating support ticket: {:?}", err);
+            eprintln!(" ERROR INSERTING TICKET: {:?}", err);
             HttpResponse::InternalServerError().json(ApiResponse::<helpsupport::Model> {
                 success: false,
                 message: format!("Failed to create support ticket: {:?}", err),
