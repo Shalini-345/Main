@@ -1,6 +1,6 @@
 use actix_web::{delete, get, post,put, web, HttpRequest, HttpResponse, Responder};
 use regex::Regex;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set };
 use bcrypt::{hash, DEFAULT_COST};
 use serde::{Deserialize, Serialize};
 use crate::auth::AuthTokenClaims;
@@ -16,7 +16,7 @@ use chrono::{DateTime as ChronoDateTime, Utc};
 use crate::entities::settings::{self};
 use log::{error, info};
 use crate::entities::helpsupport::NewTicketRequest;
- 
+
 use actix_web::Error;
 use crate::entities::cities::{self};
 
@@ -1022,14 +1022,15 @@ pub struct NewRecentLocationRequest {
     pub lat: f64,
     pub lng: f64,
     pub frequency: i32,
-    pub last_used: chrono::NaiveDateTime,
 }
 
 #[post("/recent-locations")]
 async fn add_recent_location(
     db: web::Data<DatabaseConnection>,
-    payload: web::Json<NewRecentLocationRequest>,
+    payload: web::Json<NewRecentLocationRequest>,  
 ) -> impl Responder {
+    let now = Utc::now().naive_utc(); 
+
     let new_location = recentlocation::ActiveModel {
         user_id: Set(payload.user_id),
         location_name: Set(payload.location_name.clone()),
@@ -1037,10 +1038,10 @@ async fn add_recent_location(
         lat: Set(payload.lat),
         lng: Set(payload.lng),
         frequency: Set(payload.frequency),
-        last_used: Set(payload.last_used),
-        created_at: Set(Utc::now().naive_utc()),
-        updated_at: Set(Utc::now().naive_utc()),
-        ..Default::default()
+        last_used: Set(now),  
+        created_at: Set(now), 
+        updated_at: Set(now), 
+        ..Default::default()  
     };
 
     match new_location.insert(db.get_ref()).await {
@@ -1061,6 +1062,7 @@ async fn add_recent_location(
         }
     }
 }
+
 
 #[get("/recent-locations/{user_id}")]
 async fn get_recent_locations(db: web::Data<DatabaseConnection>, user_id: web::Path<i32>) -> impl Responder {

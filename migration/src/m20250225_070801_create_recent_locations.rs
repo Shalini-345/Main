@@ -24,9 +24,9 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(RecentLocations::Lat).double().not_null())
                     .col(ColumnDef::new(RecentLocations::Lng).double().not_null())
                     .col(ColumnDef::new(RecentLocations::Frequency).integer().not_null())
-                    .col(ColumnDef::new(RecentLocations::LastUsed).timestamp().not_null())
-                    .col(ColumnDef::new(RecentLocations::CreatedAt).timestamp().not_null())
-                    .col(ColumnDef::new(RecentLocations::UpdatedAt).timestamp().not_null())
+                    .col(ColumnDef::new(RecentLocations::LastUsed).timestamp().not_null().default(Expr::current_timestamp())) // Default to now
+                    .col(ColumnDef::new(RecentLocations::CreatedAt).timestamp().not_null().default(Expr::current_timestamp())) // Default to now
+                    .col(ColumnDef::new(RecentLocations::UpdatedAt).timestamp().not_null().default(Expr::current_timestamp())) // Default to now
                     .to_owned(),
             )
             .await
