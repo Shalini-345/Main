@@ -1,7 +1,8 @@
 use sea_orm::entity::prelude::*;
 use sea_orm::DeriveRelation; 
+use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel , Serialize ,Deserialize)]
 #[sea_orm(table_name = "recent_locations")]
 pub struct Model {
     #[sea_orm(primary_key)]

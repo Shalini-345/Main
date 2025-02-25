@@ -1007,6 +1007,80 @@ async fn delete_ticket(db: web::Data<DatabaseConnection>, id: web::Path<i32>) ->
     }
 }
 
+//recentlocation API
+
+
+use crate::entities::recentlocation;
+
+
+
+#[derive(Deserialize)]
+pub struct NewRecentLocationRequest {
+    pub user_id: i32,
+    pub location_name: String,
+    pub address: String,
+    pub lat: f64,
+    pub lng: f64,
+    pub frequency: i32,
+    pub last_used: chrono::NaiveDateTime,
+}
+
+#[post("/recent-locations")]
+async fn add_recent_location(
+    db: web::Data<DatabaseConnection>,
+    payload: web::Json<NewRecentLocationRequest>,
+) -> impl Responder {
+    let new_location = recentlocation::ActiveModel {
+        user_id: Set(payload.user_id),
+        location_name: Set(payload.location_name.clone()),
+        address: Set(payload.address.clone()),
+        lat: Set(payload.lat),
+        lng: Set(payload.lng),
+        frequency: Set(payload.frequency),
+        last_used: Set(payload.last_used),
+        created_at: Set(Utc::now().naive_utc()),
+        updated_at: Set(Utc::now().naive_utc()),
+        ..Default::default()
+    };
+
+    match new_location.insert(db.get_ref()).await {
+        Ok(location) => {
+            let response = serde_json::json!({
+                "message": "Recent location added successfully",
+                "location": location
+            });
+            HttpResponse::Created().json(response)
+        }
+        Err(e) => {
+            error!("Failed to add recent location: {}", e);
+            let error_response = serde_json::json!({
+                "error": "Failed to add recent location",
+                "details": e.to_string()
+            });
+            HttpResponse::InternalServerError().json(error_response)
+        }
+    }
+}
+
+#[get("/recent-locations/{user_id}")]
+async fn get_recent_locations(db: web::Data<DatabaseConnection>, user_id: web::Path<i32>) -> impl Responder {
+    let user_id = user_id.into_inner();
+    match recentlocation::Entity::find()
+        .filter(recentlocation::Column::UserId.eq(user_id))
+        .all(db.get_ref())
+        .await
+    {
+        Ok(locations) if !locations.is_empty() => HttpResponse::Ok().json(locations),
+        Ok(_) => HttpResponse::NotFound().json(serde_json::json!({ "error": "No recent locations found" })),
+        Err(e) => {
+            error!("Failed to fetch recent locations: {}", e);
+            HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Failed to fetch recent locations",
+                "details": e.to_string()
+            }))
+        }
+    }
+}
 
 // payment API
 
