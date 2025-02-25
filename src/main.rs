@@ -106,7 +106,9 @@ async fn main() -> std::io::Result<()> {
             .service(controllers::create_user_profile) 
             .service(controllers::get_user_profiles)   
             .service(controllers::update_user_profile) 
-            .service(controllers::delete_user_profile)) 
+            .service(controllers::delete_user_profile)
+            .service(controllers::get_recent_locations)
+            .service(controllers::add_recent_location)) 
  
     })
     .bind("0.0.0.0:8081")?  
